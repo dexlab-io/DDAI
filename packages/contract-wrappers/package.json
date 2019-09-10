@@ -1,0 +1,9 @@
+{
+  "name": "@ddai/contract-wrappers",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "generate": "ts-node ./src/generate.ts"
+  }
+}
