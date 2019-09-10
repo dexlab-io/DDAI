@@ -60,8 +60,8 @@ contract DDAI is GSNRecipient, ERC777 {
         // Burn DDAI token
         _burn(_msgSender(), _msgSender(), _amount, "", "");
         // TODO ask if this calculation makes sense
-        uint256 burnAmount = _amount / moneyMarket.tokenPrice();
-        require(moneyMarket.burn(_receiver, burnAmount) > _amount, "DDAI.burn: BURN_FAILED");
+        uint256 burnAmount = _amount.mul(10**18).div(moneyMarket.tokenPrice());
+        require(moneyMarket.burn(_receiver, burnAmount) >= _amount, "DDAI.burn: BURN_FAILED");
     }
 
     function addRecipe(address _receiver, uint256 _ratio, bytes calldata _data) external returns(bool) {
@@ -94,7 +94,7 @@ contract DDAI is GSNRecipient, ERC777 {
 
         // Get interest on both already claimed intrest and balance
         uint256 totalBalance = balanceOf(_receiver).add(accountData.savedInterest);
-        uint256 interestEarned = totalBalance * (currentTokenPrice - accountData.lastTokenPrice);
+        uint256 interestEarned = totalBalance.mul(currentTokenPrice - accountData.lastTokenPrice).div(10 ** 18);
         accountData.savedInterest = accountData.savedInterest.add(interestEarned);
 
         accountData.lastTokenPrice = currentTokenPrice;
