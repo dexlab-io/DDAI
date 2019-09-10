@@ -1,0 +1,23 @@
+{
+  "name": "@ddai/contracts",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "watch": {
+    "compile:contracts": {
+      "patterns": [
+        "./contracts/**/*.sol"
+      ],
+      "extensions": "sol"
+    }
+  },
+  "scripts": {
+    "watch:contracts": "npm-watch compile:contracts",
+    "ganache": "ganache-cli --mnemonic test the system before going to production --deterministic -p 8545 -i 102030 --defaultBalanceEther 1000000000 -l 20000000",
+    "compile:contracts": "sol-compiler --contracts-dir ./contracts --artifacts-dir ./build/artifacts"
+  },
+  "dependencies": {
+    "@0x/sol-compiler": "^3.1.14",
+    "openzeppelin-solidity": "https://github.com/mickdegraaf/openzeppelin-contracts.git#261313b2279f1ca0ddc74396da1292bc81f9638f"
+  }
+}

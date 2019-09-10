@@ -1,0 +1,7 @@
+{
+    "private": true,
+    "name": "ddai-monorepo",
+    "workspaces": [
+        "packages/*"
+    ]
+}

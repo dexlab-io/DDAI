@@ -1,0 +1,43 @@
+{
+	"schemaVersion": "2.0.0",
+	"contractName": "DDAI",
+	"compilerOutput": {
+		"abi": [],
+		"evm": {
+			"bytecode": {
+				"linkReferences": {},
+				"object": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820b926fa1f06054c88049b18bed88b29855262cde225c91d8171d7eb8f87a9ea0e64736f6c634300050b0032",
+				"opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH1 0xF JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x3E DUP1 PUSH1 0x1D PUSH1 0x0 CODECOPY PUSH1 0x0 RETURN INVALID PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x0 DUP1 REVERT INVALID LOG2 PUSH6 0x627A7A723158 KECCAK256 0xb9 0x26 STATICCALL 0x1f MOD SDIV 0x4c DUP9 DIV SWAP12 XOR 0xbe 0xd8 DUP12 0x29 DUP6 MSTORE PUSH3 0xCDE225 0xc9 SAR DUP2 PUSH18 0xD7EB8F87A9EA0E64736F6C634300050B0032 ",
+				"sourceMap": "34:25:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;34:25:0;;;;;;;"
+			}
+		}
+	},
+	"sources": {
+		"DDAI.sol": {
+			"id": 0
+		}
+	},
+	"sourceCodes": {
+		"DDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ncontract DDAI {\n\n    \n\n\n}"
+	},
+	"sourceTreeHashHex": "0xa2678e25a49c1829f465590c33b50c1c639d0ee876ff6d8e038828cc2e2b23d2",
+	"compiler": {
+		"name": "solc",
+		"version": "soljson-v0.5.11+commit.c082d0b4.js",
+		"settings": {
+			"optimizer": {
+				"enabled": false
+			},
+			"outputSelection": {
+				"*": {
+					"*": [
+						"abi",
+						"evm.bytecode.object"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"networks": {}
+}
