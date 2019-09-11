@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class IKyberNetworkContract extends BaseContract {
-    public  = {
+    public trade = {
         async sendTransactionAsync(
             src: string,
             srcAmount: BigNumber,
@@ -42,7 +42,7 @@ export class IKyberNetworkContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.trade.estimateGasAsync.bind(
                     self,
                     src,
                     srcAmount,

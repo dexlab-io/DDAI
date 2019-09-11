@@ -36,7 +36,7 @@ export interface MockITokenApprovalEventArgs extends DecodedLogArgs {
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class MockITokenContract extends BaseContract {
-    public  = {
+    public assetBalanceOf = {
         async callAsync(
             _owner: string,
             callData: Partial<CallData> = {},
@@ -64,7 +64,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public claimLoanToken = {
         async sendTransactionAsync(
             txData: Partial<TxData> = {},
         ): Promise<string> {
@@ -77,7 +77,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.claimLoanToken.estimateGasAsync.bind(
                     self,
                 ),
             );
@@ -131,7 +131,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public approve = {
         async sendTransactionAsync(
             spender: string,
             amount: BigNumber,
@@ -148,7 +148,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.approve.estimateGasAsync.bind(
                     self,
                     spender,
                     amount
@@ -216,7 +216,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public totalSupply = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -242,7 +242,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public transferFrom = {
         async sendTransactionAsync(
             sender: string,
             recipient: string,
@@ -261,7 +261,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.transferFrom.estimateGasAsync.bind(
                     self,
                     sender,
                     recipient,
@@ -336,7 +336,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public increaseAllowance = {
         async sendTransactionAsync(
             spender: string,
             addedValue: BigNumber,
@@ -353,7 +353,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.increaseAllowance.estimateGasAsync.bind(
                     self,
                     spender,
                     addedValue
@@ -421,7 +421,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public mint = {
         async sendTransactionAsync(
             _receiver: string,
             _depositAmount: BigNumber,
@@ -438,7 +438,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.mint.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _depositAmount
@@ -506,7 +506,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public setTokenPrice = {
         async sendTransactionAsync(
             _tokenPrice: BigNumber,
             txData: Partial<TxData> = {},
@@ -521,7 +521,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.setTokenPrice.estimateGasAsync.bind(
                     self,
                     _tokenPrice
                 ),
@@ -582,7 +582,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public balanceOf = {
         async callAsync(
             account: string,
             callData: Partial<CallData> = {},
@@ -610,7 +610,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public tokenPrice = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -636,7 +636,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public burn = {
         async sendTransactionAsync(
             _receiver: string,
             _burnAmount: BigNumber,
@@ -653,7 +653,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.burn.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _burnAmount
@@ -721,7 +721,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public decreaseAllowance = {
         async sendTransactionAsync(
             spender: string,
             subtractedValue: BigNumber,
@@ -738,7 +738,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.decreaseAllowance.estimateGasAsync.bind(
                     self,
                     spender,
                     subtractedValue
@@ -806,7 +806,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public transfer = {
         async sendTransactionAsync(
             recipient: string,
             amount: BigNumber,
@@ -823,7 +823,7 @@ export class MockITokenContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.transfer.estimateGasAsync.bind(
                     self,
                     recipient,
                     amount
@@ -891,7 +891,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public allowance = {
         async callAsync(
             owner: string,
             spender: string,
@@ -921,7 +921,7 @@ export class MockITokenContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public token = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,

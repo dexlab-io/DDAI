@@ -88,7 +88,7 @@ export interface DDAIRelayHubChangedEventArgs extends DecodedLogArgs {
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class DDAIContract extends BaseContract {
-    public  = {
+    public defaultOperators = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -114,7 +114,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public name = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -140,7 +140,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public approve = {
         async sendTransactionAsync(
             spender: string,
             value: BigNumber,
@@ -157,7 +157,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.approve.estimateGasAsync.bind(
                     self,
                     spender,
                     value
@@ -225,7 +225,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public totalSupply = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -251,7 +251,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public transferFrom = {
         async sendTransactionAsync(
             holder: string,
             recipient: string,
@@ -270,7 +270,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.transferFrom.estimateGasAsync.bind(
                     self,
                     holder,
                     recipient,
@@ -345,7 +345,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public decimals = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -371,7 +371,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public mint = {
         async sendTransactionAsync(
             _receiver: string,
             _amount: BigNumber,
@@ -388,7 +388,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.mint.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _amount
@@ -456,7 +456,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public granularity = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -482,7 +482,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public addRecipe = {
         async sendTransactionAsync(
             _receiver: string,
             _ratio: BigNumber,
@@ -501,7 +501,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.addRecipe.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _ratio,
@@ -576,7 +576,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public operatorSend = {
         async sendTransactionAsync(
             sender: string,
             recipient: string,
@@ -599,7 +599,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.operatorSend.estimateGasAsync.bind(
                     self,
                     sender,
                     recipient,
@@ -688,15 +688,15 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public balanceOf = {
         async callAsync(
-            tokenHolder: string,
+            _account: string,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
             const self = this as any as DDAIContract;
-            const encodedData = self._strictEncodeArguments('balanceOf(address)', [tokenHolder
+            const encodedData = self._strictEncodeArguments('balanceOf(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -716,7 +716,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public getHubAddr = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -742,7 +742,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public preRelayedCall = {
         async sendTransactionAsync(
             context: string,
             txData: Partial<TxData> = {},
@@ -757,7 +757,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.preRelayedCall.estimateGasAsync.bind(
                     self,
                     context
                 ),
@@ -818,7 +818,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public removeRecipe = {
         async sendTransactionAsync(
             _index: BigNumber,
             txData: Partial<TxData> = {},
@@ -833,7 +833,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.removeRecipe.estimateGasAsync.bind(
                     self,
                     _index
                 ),
@@ -894,7 +894,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public acceptRelayedCall = {
         async callAsync(
             _relay: string,
             _from: string,
@@ -938,7 +938,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public claimInterest = {
         async sendTransactionAsync(
             _receiver: string,
             txData: Partial<TxData> = {},
@@ -953,7 +953,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.claimInterest.estimateGasAsync.bind(
                     self,
                     _receiver
                 ),
@@ -1014,7 +1014,35 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public getOutStandingInterest = {
+        async callAsync(
+            _account: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('getOutStandingInterest(address)', [_account
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('getOutStandingInterest(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public authorizeOperator = {
         async sendTransactionAsync(
             operator: string,
             txData: Partial<TxData> = {},
@@ -1029,7 +1057,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.authorizeOperator.estimateGasAsync.bind(
                     self,
                     operator
                 ),
@@ -1090,7 +1118,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public symbol = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -1116,7 +1144,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public send = {
         async sendTransactionAsync(
             recipient: string,
             amount: BigNumber,
@@ -1135,7 +1163,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.send.estimateGasAsync.bind(
                     self,
                     recipient,
                     amount,
@@ -1210,7 +1238,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public burn1 = {
         async sendTransactionAsync(
             _receiver: string,
             _amount: BigNumber,
@@ -1227,7 +1255,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.burn1.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _amount
@@ -1271,7 +1299,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<void
+        ): Promise<boolean
         > {
             const self = this as any as DDAIContract;
             const encodedData = self._strictEncodeArguments('burn(address,uint256)', [_receiver,
@@ -1289,13 +1317,13 @@ export class DDAIContract extends BaseContract {
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
             const abiEncoder = self._lookupAbiEncoder('burn(address,uint256)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
+            const result = abiEncoder.strictDecodeReturnValue<boolean
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
         },
     };
-    public  = {
+    public transfer = {
         async sendTransactionAsync(
             recipient: string,
             amount: BigNumber,
@@ -1312,7 +1340,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.transfer.estimateGasAsync.bind(
                     self,
                     recipient,
                     amount
@@ -1380,7 +1408,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public relayHubVersion = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -1406,7 +1434,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public payInterest = {
         async sendTransactionAsync(
             _account: string,
             txData: Partial<TxData> = {},
@@ -1421,7 +1449,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.payInterest.estimateGasAsync.bind(
                     self,
                     _account
                 ),
@@ -1482,7 +1510,35 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public getTotalBalance = {
+        async callAsync(
+            _account: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('getTotalBalance(address)', [_account
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('getTotalBalance(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public moneyMarket = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -1508,7 +1564,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public isOperatorFor = {
         async callAsync(
             operator: string,
             tokenHolder: string,
@@ -1538,7 +1594,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public allowance = {
         async callAsync(
             holder: string,
             spender: string,
@@ -1568,7 +1624,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public postRelayedCall = {
         async sendTransactionAsync(
             context: string,
             success: boolean,
@@ -1589,7 +1645,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.postRelayedCall.estimateGasAsync.bind(
                     self,
                     context,
                     success,
@@ -1671,7 +1727,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public revokeOperator = {
         async sendTransactionAsync(
             operator: string,
             txData: Partial<TxData> = {},
@@ -1686,7 +1742,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.revokeOperator.estimateGasAsync.bind(
                     self,
                     operator
                 ),
@@ -1747,7 +1803,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public token = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -1773,7 +1829,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public operatorBurn = {
         async sendTransactionAsync(
             account: string,
             amount: BigNumber,
@@ -1794,7 +1850,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.operatorBurn.estimateGasAsync.bind(
                     self,
                     account,
                     amount,
@@ -1876,7 +1932,7 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public burn2 = {
         async sendTransactionAsync(
             amount: BigNumber,
             data: string,
@@ -1893,7 +1949,7 @@ export class DDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.burn2.estimateGasAsync.bind(
                     self,
                     amount,
                     data

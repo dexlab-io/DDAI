@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class IDDAIContract extends BaseContract {
-    public  = {
+    public mint = {
         async sendTransactionAsync(
             _receiver: string,
             _amount: BigNumber,
@@ -32,7 +32,7 @@ export class IDDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.mint.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _amount
@@ -100,7 +100,7 @@ export class IDDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public addRecipe = {
         async sendTransactionAsync(
             _receiver: string,
             _ratio: BigNumber,
@@ -119,7 +119,7 @@ export class IDDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.addRecipe.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _ratio,
@@ -194,7 +194,7 @@ export class IDDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public balanceOf = {
         async sendTransactionAsync(
             _acount: string,
             txData: Partial<TxData> = {},
@@ -209,7 +209,7 @@ export class IDDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.balanceOf.estimateGasAsync.bind(
                     self,
                     _acount
                 ),
@@ -270,7 +270,7 @@ export class IDDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public removeRecipe = {
         async sendTransactionAsync(
             index: BigNumber,
             txData: Partial<TxData> = {},
@@ -285,7 +285,7 @@ export class IDDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.removeRecipe.estimateGasAsync.bind(
                     self,
                     index
                 ),
@@ -346,7 +346,7 @@ export class IDDAIContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public burn = {
         async sendTransactionAsync(
             _receiver: string,
             _amount: BigNumber,
@@ -363,7 +363,7 @@ export class IDDAIContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.burn.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _amount

@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class BuyEthRecipeContract extends BaseContract {
-    public  = {
+    public tokensReceived = {
         async sendTransactionAsync(
             _operator: string,
             _from: string,
@@ -40,7 +40,7 @@ export class BuyEthRecipeContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.tokensReceived.estimateGasAsync.bind(
                     self,
                     _operator,
                     _from,
@@ -136,7 +136,7 @@ export class BuyEthRecipeContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public underlying = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -162,7 +162,7 @@ export class BuyEthRecipeContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public kyberNetwork = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -188,7 +188,7 @@ export class BuyEthRecipeContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public token = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,

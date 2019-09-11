@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class IMoneyMarketContract extends BaseContract {
-    public  = {
+    public assetBalanceOf = {
         async callAsync(
             _owner: string,
             callData: Partial<CallData> = {},
@@ -43,7 +43,7 @@ export class IMoneyMarketContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public claimLoanToken = {
         async sendTransactionAsync(
             txData: Partial<TxData> = {},
         ): Promise<string> {
@@ -56,7 +56,7 @@ export class IMoneyMarketContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.claimLoanToken.estimateGasAsync.bind(
                     self,
                 ),
             );
@@ -110,7 +110,7 @@ export class IMoneyMarketContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public mint = {
         async sendTransactionAsync(
             receiver: string,
             depositAmount: BigNumber,
@@ -127,7 +127,7 @@ export class IMoneyMarketContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.mint.estimateGasAsync.bind(
                     self,
                     receiver,
                     depositAmount
@@ -195,7 +195,7 @@ export class IMoneyMarketContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public tokenPrice = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -221,7 +221,7 @@ export class IMoneyMarketContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public burn = {
         async sendTransactionAsync(
             receiver: string,
             burnAmount: BigNumber,
@@ -238,7 +238,7 @@ export class IMoneyMarketContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.burn.estimateGasAsync.bind(
                     self,
                     receiver,
                     burnAmount

@@ -36,7 +36,7 @@ export interface MockDaiApprovalEventArgs extends DecodedLogArgs {
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class MockDaiContract extends BaseContract {
-    public  = {
+    public approve = {
         async sendTransactionAsync(
             spender: string,
             amount: BigNumber,
@@ -53,7 +53,7 @@ export class MockDaiContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.approve.estimateGasAsync.bind(
                     self,
                     spender,
                     amount
@@ -121,7 +121,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public totalSupply = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -147,7 +147,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public transferFrom = {
         async sendTransactionAsync(
             sender: string,
             recipient: string,
@@ -166,7 +166,7 @@ export class MockDaiContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.transferFrom.estimateGasAsync.bind(
                     self,
                     sender,
                     recipient,
@@ -241,7 +241,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public increaseAllowance = {
         async sendTransactionAsync(
             spender: string,
             addedValue: BigNumber,
@@ -258,7 +258,7 @@ export class MockDaiContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.increaseAllowance.estimateGasAsync.bind(
                     self,
                     spender,
                     addedValue
@@ -326,7 +326,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public mintTo = {
         async sendTransactionAsync(
             _receiver: string,
             _amount: BigNumber,
@@ -343,7 +343,7 @@ export class MockDaiContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.mintTo.estimateGasAsync.bind(
                     self,
                     _receiver,
                     _amount
@@ -411,7 +411,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public balanceOf = {
         async callAsync(
             account: string,
             callData: Partial<CallData> = {},
@@ -439,7 +439,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public decreaseAllowance = {
         async sendTransactionAsync(
             spender: string,
             subtractedValue: BigNumber,
@@ -456,7 +456,7 @@ export class MockDaiContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.decreaseAllowance.estimateGasAsync.bind(
                     self,
                     spender,
                     subtractedValue
@@ -524,7 +524,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public transfer = {
         async sendTransactionAsync(
             recipient: string,
             amount: BigNumber,
@@ -541,7 +541,7 @@ export class MockDaiContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.transfer.estimateGasAsync.bind(
                     self,
                     recipient,
                     amount
@@ -609,7 +609,7 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public allowance = {
         async callAsync(
             owner: string,
             spender: string,

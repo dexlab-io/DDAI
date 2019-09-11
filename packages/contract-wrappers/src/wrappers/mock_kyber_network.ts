@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class MockKyberNetworkContract extends BaseContract {
-    public  = {
+    public searchBestRate = {
         async callAsync(
             src: string,
             dest: string,
@@ -49,7 +49,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public findBestRateOnlyPermission = {
         async callAsync(
             src: string,
             dest: string,
@@ -81,7 +81,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public REVERT_HINT = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
@@ -107,7 +107,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public getExpectedRate = {
         async callAsync(
             src: string,
             dest: string,
@@ -139,7 +139,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public findBestRate = {
         async callAsync(
             src: string,
             dest: string,
@@ -171,7 +171,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public pairRate = {
         async callAsync(
             index_0: string,
             callData: Partial<CallData> = {},
@@ -199,7 +199,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public trade = {
         async sendTransactionAsync(
             src: string,
             srcAmount: BigNumber,
@@ -226,7 +226,7 @@ export class MockKyberNetworkContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.trade.estimateGasAsync.bind(
                     self,
                     src,
                     srcAmount,
@@ -329,7 +329,7 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public  = {
+    public setPairRate = {
         async sendTransactionAsync(
             src: string,
             dest: string,
@@ -348,7 +348,7 @@ export class MockKyberNetworkContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self..estimateGasAsync.bind(
+                self.setPairRate.estimateGasAsync.bind(
                     self,
                     src,
                     dest,
