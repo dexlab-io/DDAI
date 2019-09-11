@@ -1,6 +1,6 @@
 pragma solidity >=0.4.21 <0.6.0;
 
- interface IDDAI {
+interface IDDAI {
     function mint(
         address _receiver,
         address _amount
@@ -28,4 +28,6 @@ pragma solidity >=0.4.21 <0.6.0;
     )
     external
     returns(bool);
- }
+
+    function balanceOf(address _acount) external returns(uint256);
+}
