@@ -3,14 +3,14 @@ pragma solidity >=0.4.21 <0.6.0;
 interface IDDAI {
     function mint(
         address _receiver,
-        address _amount
+        uint256 _amount
     )
     external
     returns (uint256);
 
     function burn(
         address _receiver,
-        address _amount
+        uint256 _amount
     )
     external
     returns (uint256);
