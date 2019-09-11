@@ -7,7 +7,9 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/GSN/GSNRecipient.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-
+// TODO Implement user pushing/pulling funds from stack
+// TODO Allow user to allow address to modify stack
+// TODO Allow user to receive funds to stack
 
 contract DDAI is GSNRecipient, ERC777 {
 
@@ -20,7 +22,7 @@ contract DDAI is GSNRecipient, ERC777 {
 
     struct AccountData {
         uint256 lastTokenPrice; // Last token price on which interest was claimed
-        uint256 savedInterest; // Interest is gathered in this variable to not have to call recipes on every transfer
+        uint256 stack; // balance available for recipes
         Recipe[] recipes;
         uint256 totalRatio;
     }
@@ -86,25 +88,30 @@ contract DDAI is GSNRecipient, ERC777 {
         }
 
         accountData.recipes.length --;
+
+        // If there are no recipes anymore set stack to zero
+        if(accountData.recipes.length == 0) {
+            accountData.stack = 0;
+        }
     }
 
     function claimInterest(address _receiver) public {
         AccountData storage accountData = accountDataOf[_receiver];
         uint256 currentTokenPrice = moneyMarket.tokenPrice();
-
-        // Get interest on both already claimed intrest and balance
-        uint256 totalBalance = balanceOf(_receiver).add(accountData.savedInterest);
-        uint256 interestEarned = totalBalance.mul(currentTokenPrice - accountData.lastTokenPrice).div(10 ** 18);
-        accountData.savedInterest = accountData.savedInterest.add(interestEarned);
-
+        uint256 interestEarned = getOutStandingInterest(_receiver);
+        // If any recipe is set push interest to the stack
+        if(accountData.recipes.length != 0) {
+            accountData.stack = accountData.stack.add(interestEarned);
+        }
+        _mint(address(this), _receiver, interestEarned, "", "");
         accountData.lastTokenPrice = currentTokenPrice;
     }
 
     // Claim interest move interest to DDAI token balance and pay the interest to the attached recipes
     function payInterest(address _account) public {
         claimInterest(_account);
-        uint256 interestAmount = interestToDDAI(_account);
-        payToRecipes(_account, interestAmount);
+        AccountData storage accountData = accountDataOf[_account];
+        _payToRecipes(_account, accountData.stack);
     }
 
     // GSN FUNCTIONALITY should be in a seperate file
@@ -120,7 +127,7 @@ contract DDAI is GSNRecipient, ERC777 {
         uint256 _maxPossibleCharge
     ) external view returns (uint256, bytes memory) {
 
-        if(balanceOf(_from) < _maxPossibleCharge) {
+        if(_balanceOf(_from) < _maxPossibleCharge) {
             return(1, "DDAI.acceptRelayedCall: NOT_ENOUGH_DDAI_BALANCE");
         }
         // TODO implement check maxPossibleCharge is enough to buy the eth to pay for the tx plus some extra margin
@@ -135,9 +142,9 @@ contract DDAI is GSNRecipient, ERC777 {
 
     }
 
-
-    function payToRecipes(address _account, uint256 _amount) internal returns(bool) {
+    function _payToRecipes(address _account, uint256 _amount) internal returns(bool) {
         AccountData storage accountData = accountDataOf[_account];
+        accountData.stack = accountData.stack.sub(_amount);
         if(accountData.recipes.length == 0) {
             return true;
         }
@@ -151,12 +158,22 @@ contract DDAI is GSNRecipient, ERC777 {
         return true;
     }
 
-    // Claims saved interest into DToken
-    function interestToDDAI(address _account) internal returns(uint256) {
+    function balanceOf(address _account) public view returns(uint256) {
+        // return balance minus what is reserved for recipes(stack)
+        return _balanceOf(_account).sub(accountDataOf[_account].stack);
+    }
+
+    function getTotalBalance(address _account) public view returns(uint256) {
+        return _balanceOf(_account);
+    }
+
+    function getOutStandingInterest(address _account) public view returns(uint256) {
         AccountData storage accountData = accountDataOf[_account];
-        uint256 interestAmount = accountData.savedInterest;
-        _mint(address(this), _account, interestAmount, "", "");
-        return interestAmount;
+        return _balanceOf(_account).mul(moneyMarket.tokenPrice() - accountData.lastTokenPrice).div(10 ** 18);
+    }
+
+    function _balanceOf(address _account) internal view returns(uint256) {
+        return super.balanceOf(_account);
     }
 
     function _move(
