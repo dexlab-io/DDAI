@@ -57,13 +57,14 @@ contract DDAI is GSNRecipient, ERC777 {
         _mint(_msgSender(), _receiver, _amount, "", "");
     }
 
-    function burn(address _receiver, uint256 _amount) external {
+    function burn(address _receiver, uint256 _amount) external returns(bool) {
         claimInterest(_receiver);
         // Burn DDAI token
         _burn(_msgSender(), _msgSender(), _amount, "", "");
         // TODO ask if this calculation makes sense
         uint256 burnAmount = _amount.mul(10**18).div(moneyMarket.tokenPrice());
         require(moneyMarket.burn(_receiver, burnAmount) >= _amount, "DDAI.burn: BURN_FAILED");
+        return true;
     }
 
     function addRecipe(address _receiver, uint256 _ratio, bytes calldata _data) external returns(bool) {

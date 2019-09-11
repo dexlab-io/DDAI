@@ -3,8 +3,13 @@
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "migrate": "ts-node ./src/run.ts"
+  },
   "dependencies": {
+    "@ddai/contract-artifacts": "0.1.0",
     "@ddai/contract-wrappers": "0.1.0",
-    "@ddai/contract-artifacts": "0.1.0"
+    "@ddai/utils": "0.1.0",
+    "web3": "^1.2.1"
   }
 }

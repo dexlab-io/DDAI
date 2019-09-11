@@ -1,0 +1,11 @@
+{
+  "name": "@ddai/utils",
+  "version": "0.1.0",
+  "main": "./src/index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "0x.js": "^7.0.1",
+    "@0x/sol-trace": "^2.0.19",
+    "@0x/web3-wrapper": "^6.0.12"
+  }
+}

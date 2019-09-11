@@ -1,2 +1,3 @@
-import {run} from './index';
+import { migrate } from './index';
 
+migrate();
