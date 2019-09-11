@@ -1,7 +1,7 @@
 {
   "name": "@ddai/contract-artifacts",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "./src/index.ts",
   "license": "MIT",
   "scripts": {
     "generate": "ts-node ./src/generate.ts"

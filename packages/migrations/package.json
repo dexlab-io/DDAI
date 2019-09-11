@@ -2,5 +2,9 @@
   "name": "@ddai/migrations",
   "version": "0.1.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@ddai/contract-wrappers": "0.1.0",
+    "@ddai/contract-artifacts": "0.1.0"
+  }
 }
