@@ -5,5 +5,9 @@
   "license": "MIT",
   "scripts": {
     "generate": "ts-node ./src/generate.ts"
+  },
+  "dependencies": {
+    "@types/node": "^12.7.5",
+    "fs": "^0.0.1-security"
   }
 }

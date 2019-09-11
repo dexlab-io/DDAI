@@ -42,7 +42,9 @@ contract BuyEthRecipe {
         underlying.approve(address(kyberNetwork), _amount);
         // TODO getting min conversionrate from makerdao or kyber price oracle
         // TODO set walletID for fees
+        uint256 minRate = 0;
+        address walletID = address(0);
         // exchange and send eth to from address
-        kyberNetwork.trade(address(underlying), _amount, ETH_TOKEN_ADDRESS, _from.toPayable(), uint256(-1), 0, address(0));
+        kyberNetwork.trade(address(underlying), _amount, ETH_TOKEN_ADDRESS, _from.toPayable(), uint256(-1), minRate, walletID);
     }
 }

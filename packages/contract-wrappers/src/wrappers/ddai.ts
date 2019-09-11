@@ -896,29 +896,29 @@ export class DDAIContract extends BaseContract {
     };
     public  = {
         async callAsync(
-            relay: string,
-            from: string,
-            encodedFunction: string,
-            transactionFee: BigNumber,
-            gasPrice: BigNumber,
-            gasLimit: BigNumber,
-            nonce: BigNumber,
-            approvalData: string,
-            maxPossibleCharge: BigNumber,
+            _relay: string,
+            _from: string,
+            _encodedFunction: string,
+            _transactionFee: BigNumber,
+            _gasPrice: BigNumber,
+            _gasLimit: BigNumber,
+            _nonce: BigNumber,
+            _approvalData: string,
+            _maxPossibleCharge: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<[BigNumber, string]
         > {
             const self = this as any as DDAIContract;
-            const encodedData = self._strictEncodeArguments('acceptRelayedCall(address,address,bytes,uint256,uint256,uint256,uint256,bytes,uint256)', [relay,
-        from,
-        encodedFunction,
-        transactionFee,
-        gasPrice,
-        gasLimit,
-        nonce,
-        approvalData,
-        maxPossibleCharge
+            const encodedData = self._strictEncodeArguments('acceptRelayedCall(address,address,bytes,uint256,uint256,uint256,uint256,bytes,uint256)', [_relay,
+        _from,
+        _encodedFunction,
+        _transactionFee,
+        _gasPrice,
+        _gasLimit,
+        _nonce,
+        _approvalData,
+        _maxPossibleCharge
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
