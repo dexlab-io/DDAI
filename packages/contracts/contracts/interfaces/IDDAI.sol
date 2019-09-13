@@ -8,7 +8,7 @@ interface IDDAI {
     external
     returns (uint256);
 
-    function burn(
+    function redeem(
         address _receiver,
         uint256 _amount
     )

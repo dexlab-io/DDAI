@@ -52,12 +52,12 @@ contract DDAI is GSNRecipient, ERC777 {
         // Approve money market to pull tokens
         token.approve(address(moneyMarket), _amount);
         // Mint money market tokens
-        moneyMarket.mint(_receiver, _amount);
+        moneyMarket.mint(address(this), _amount);
         // Mint DDAI
         _mint(_msgSender(), _receiver, _amount, "", "");
     }
 
-    function burn(address _receiver, uint256 _amount) external returns(bool) {
+    function redeem(address _receiver, uint256 _amount) external returns(bool) {
         claimInterest(_receiver);
         // Burn DDAI token
         _burn(_msgSender(), _msgSender(), _amount, "", "");
