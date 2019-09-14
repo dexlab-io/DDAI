@@ -47,6 +47,7 @@ contract DDAI is GSNRecipient, ERC777 {
     }
 
     function mint(address _receiver, uint256 _amount) external {
+        claimInterest(_receiver);
         // Pull underlying token
         require(token.transferFrom(_msgSender(), address(this), _amount), "DDAI.mint: TRANSFER_FAILED");
         // Approve money market to pull tokens
@@ -63,7 +64,9 @@ contract DDAI is GSNRecipient, ERC777 {
         _burn(_msgSender(), _msgSender(), _amount, "", "");
         // TODO ask if this calculation makes sense
         uint256 burnAmount = _amount.mul(10**18).div(moneyMarket.tokenPrice());
-        require(moneyMarket.burn(_receiver, burnAmount) >= _amount, "DDAI.burn: BURN_FAILED");
+        // uint256 burnAmount = 1 ether;
+        moneyMarket.burn(_receiver, burnAmount);
+        // require(moneyMarket.burn(_receiver, burnAmount) >= _amount, "DDAI.redeem: REDEEM_FAILED");
         return true;
     }
 

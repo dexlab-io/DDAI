@@ -3,7 +3,7 @@ import { Web3Wrapper, AbiDefinition, TxData, Web3JsV1Provider } from '@0x/web3-w
 import { RevertTraceSubprovider, SolCompilerArtifactAdapter } from '@0x/sol-trace';
 import path from 'path';
 
-export const getProvider = async(solTrace: boolean) => {
+export const getProvider = (solTrace: boolean) => {
     const pe: Web3ProviderEngine = new Web3ProviderEngine();
 
     if(solTrace) {
@@ -26,4 +26,8 @@ export const getProvider = async(solTrace: boolean) => {
     pe.start();
     const web3: Web3Wrapper = new Web3Wrapper(pe);
     return {pe, web3};
+}
+
+export const toWei = (amount: number | string | BigNumber) => {
+    return Web3Wrapper.toWei(new BigNumber(amount));
 }

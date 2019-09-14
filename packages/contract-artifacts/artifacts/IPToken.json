@@ -51,7 +51,7 @@
 	},
 	"sources": {
 		"interfaces/IPToken.sol": {
-			"id": 0
+			"id": 18
 		}
 	},
 	"sourceCodes": {
@@ -73,7 +73,9 @@
 					]
 				}
 			},
-			"remappings": []
+			"remappings": [
+				"openzeppelin-solidity=/Users/mickdegraaf/DDAI/node_modules/openzeppelin-solidity"
+			]
 		}
 	},
 	"networks": {}

@@ -1,7 +1,7 @@
 {
   "name": "@ddai/migrations",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "./src/index.ts",
   "license": "MIT",
   "scripts": {
     "migrate": "ts-node ./src/run.ts"

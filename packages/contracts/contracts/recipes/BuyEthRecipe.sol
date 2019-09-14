@@ -28,7 +28,7 @@ contract BuyEthRecipe is BaseRecipe {
     ) external {
         _tokensReceived();
         // burn ddai
-        token.burn(address(this), _amount);
+        token.redeem(address(this), _amount);
         // approve underlying asset (dai)
         underlying.approve(address(kyberNetwork), _amount);
         // TODO getting min conversionrate from makerdao or kyber price oracle

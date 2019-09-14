@@ -24,14 +24,15 @@ contract MockIToken is IMoneyMarket, ERC20 {
         // TODO implement incomplete loan payment
     }
 
+    
+
     function claimLoanToken() external returns (uint256 claimedAmount) {
         // We dont care about this yet
         return 42;
     }
 
     function assetBalanceOf(address _owner) external view returns (uint256) {
-        // We dont care for this yet
-        return 1337;
+        return balanceOf(_owner).mul(currentTokenPrice).div(10**18);
     }
 
     function setTokenPrice(uint256 _tokenPrice) external {

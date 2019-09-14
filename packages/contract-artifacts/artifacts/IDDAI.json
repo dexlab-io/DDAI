@@ -17,6 +17,32 @@
 						"type": "uint256"
 					}
 				],
+				"name": "redeem",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
 				"name": "mint",
 				"outputs": [
 					{
@@ -101,32 +127,6 @@
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
-			},
-			{
-				"constant": false,
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_receiver",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
-					}
-				],
-				"name": "burn",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
 			}
 		],
 		"evm": {
@@ -144,9 +144,9 @@
 		}
 	},
 	"sourceCodes": {
-		"interfaces/IDDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IDDAI {\n    function mint(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function burn(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function addRecipe(\n        address _receiver,\n        uint256 _ratio,\n        bytes calldata _data\n    )\n    external\n    returns(bool);\n\n    function removeRecipe(\n        uint256 index\n    )\n    external\n    returns(bool);\n\n    function balanceOf(address _acount) external returns(uint256);\n}"
+		"interfaces/IDDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IDDAI {\n    function mint(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function redeem(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function addRecipe(\n        address _receiver,\n        uint256 _ratio,\n        bytes calldata _data\n    )\n    external\n    returns(bool);\n\n    function removeRecipe(\n        uint256 index\n    )\n    external\n    returns(bool);\n\n    function balanceOf(address _acount) external returns(uint256);\n}"
 	},
-	"sourceTreeHashHex": "0xd9005b22f6f00ca7b8f193111eb166b11f0520184599d41ed290b21c2e19f9c7",
+	"sourceTreeHashHex": "0x4a5a1da7c58b4bba05cfffa5e50ab5adb55dd6f38d63d9929aed6c29d13da6fb",
 	"compiler": {
 		"name": "solc",
 		"version": "soljson-v0.5.11+commit.c082d0b4.js",
