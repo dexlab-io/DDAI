@@ -5,8 +5,7 @@ interface IDDAI {
         address _receiver,
         uint256 _amount
     )
-    external
-    returns (uint256);
+    external;
 
     function redeem(
         address _receiver,
@@ -29,5 +28,12 @@ interface IDDAI {
     external
     returns(bool);
 
-    function balanceOf(address _acount) external returns(uint256);
+    function balanceOf(address _acount) external view returns(uint256);
+
+    event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);
+    event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);
+    event RecipeAdded(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);
+    event RecipeRemoved(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);
+    event InterestClaimed(address indexed _receiver, uint256 _interestEarned);
+    event StackDistributed(address indexed _receiver, uint256 _amount);
 }

@@ -74,7 +74,7 @@ describe("DDAI", function( ){
         expect(ddaiITokenBalance, "Ddai money market balance invalid").to.bignumber.eq(mintAmount);
     })
     
-    it.only("Burning DDAI should work", async() => {
+    it("Redeeming DDAI should work", async() => {
         const mintAmount = toWei(1);
 
         await mockDai.approve.sendTransactionAsync(ddai.address, mintAmount);
@@ -93,10 +93,12 @@ describe("DDAI", function( ){
         
         const userDdaiBalance = await ddai.balanceOf.callAsync(user);
         const userDaiBalance = await mockDai.balanceOf.callAsync(user);
+        const ddaiSupply = await ddai.totalSupply.callAsync();
 
         expect(userDdaiBalance, "User ddai balance should be only interest").to.bignumber.eq(toWei(0.1));
         // There is a 1 wei rounding error
         expect(userDaiBalance, "Dai balance invalid").to.bignumber.eq(initialDaiAmount.minus(1));
+        expect(ddaiSupply, "Total ddai supply should be only interest").to.bignumber.eq(toWei(0.1));
     })
     
 })

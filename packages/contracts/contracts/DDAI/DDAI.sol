@@ -6,14 +6,16 @@ import "openzeppelin-solidity/contracts/token/ERC777/ERC777.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/GSN/GSNRecipient.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/math/Math.sol";
 
 // TODO Implement user pushing/pulling funds from stack
 // TODO Allow user to allow address to modify stack
 // TODO Allow user to receive funds to stack
 
-contract DDAI is GSNRecipient, ERC777 {
+contract DDAI is IDDAI, GSNRecipient, ERC777 {
 
     using SafeMath for uint256;
+    using Math for uint256;
 
     IERC20 public token;
     IMoneyMarket public moneyMarket;
@@ -56,18 +58,21 @@ contract DDAI is GSNRecipient, ERC777 {
         moneyMarket.mint(address(this), _amount);
         // Mint DDAI
         _mint(_msgSender(), _receiver, _amount, "", "");
+        emit DDAIMinted(_receiver, _amount, _msgSender());
     }
 
-    function redeem(address _receiver, uint256 _amount) external returns(bool) {
-        claimInterest(_receiver);
-        // Burn DDAI token
-        _burn(_msgSender(), _msgSender(), _amount, "", "");
-        // TODO ask if this calculation makes sense
+    function redeem(address _receiver, uint256 _amount) external returns(uint256) {
+        claimInterest(_msgSender());
+
+        uint256 redeemAmount = _amount.max(_balanceOf(_msgSender()));
+        _burn(_msgSender(), _msgSender(), redeemAmount, "", "");
+
         uint256 burnAmount = _amount.mul(10**18).div(moneyMarket.tokenPrice());
-        // uint256 burnAmount = 1 ether;
         moneyMarket.burn(_receiver, burnAmount);
-        // require(moneyMarket.burn(_receiver, burnAmount) >= _amount, "DDAI.redeem: REDEEM_FAILED");
-        return true;
+
+        emit DDAIRedeemed(_receiver, redeemAmount, _msgSender());
+
+        return redeemAmount;
     }
 
     function addRecipe(address _receiver, uint256 _ratio, bytes calldata _data) external returns(bool) {
@@ -80,10 +85,17 @@ contract DDAI is GSNRecipient, ERC777 {
         }));
 
         accountData.totalRatio.add(_ratio);
+        emit RecipeAdded(_msgSender(), _receiver, _ratio, _data, accountData.recipes.length - 1);
     }
 
     function removeRecipe(uint256 _index) external returns(bool) {
         AccountData storage accountData = accountDataOf[_msgSender()];
+
+        Recipe storage recipe = accountData.recipes[_index];
+
+        // Emit now data is still available
+        emit RecipeRemoved(_msgSender(), recipe.receiver, recipe.ratio, recipe.data, _index);
+
         // Substract ratio of recipe from total recipe
         accountData.totalRatio = accountData.totalRatio.sub(accountData.recipes[_index].ratio);
         // Remove recipe from recipes array
@@ -109,12 +121,15 @@ contract DDAI is GSNRecipient, ERC777 {
         }
         _mint(address(this), _receiver, interestEarned, "", "");
         accountData.lastTokenPrice = currentTokenPrice;
+
+        emit InterestClaimed(_receiver, interestEarned);
     }
 
     // Claim interest move interest to DDAI token balance and pay the interest to the attached recipes
-    function payInterest(address _account) public {
+    function distributeStack(address _account) public {
         claimInterest(_account);
         AccountData storage accountData = accountDataOf[_account];
+        emit StackDistributed(_account, accountData.stack);
         _payToRecipes(_account, accountData.stack);
     }
 
@@ -164,6 +179,7 @@ contract DDAI is GSNRecipient, ERC777 {
 
     function balanceOf(address _account) public view returns(uint256) {
         // return balance minus what is reserved for recipes(stack)
+        // TODO handle bigger than balance stack
         return _balanceOf(_account).sub(accountDataOf[_account].stack);
     }
 
