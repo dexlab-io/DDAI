@@ -44,13 +44,7 @@
 					}
 				],
 				"name": "mint",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
+				"outputs": [],
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -87,7 +81,7 @@
 				"type": "function"
 			},
 			{
-				"constant": false,
+				"constant": true,
 				"inputs": [
 					{
 						"internalType": "address",
@@ -104,7 +98,7 @@
 					}
 				],
 				"payable": false,
-				"stateMutability": "nonpayable",
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -127,6 +121,168 @@
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_operator",
+						"type": "address"
+					}
+				],
+				"name": "DDAIMinted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_operator",
+						"type": "address"
+					}
+				],
+				"name": "DDAIRedeemed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_ratio",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes",
+						"name": "_data",
+						"type": "bytes"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_index",
+						"type": "uint256"
+					}
+				],
+				"name": "RecipeAdded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_ratio",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes",
+						"name": "_data",
+						"type": "bytes"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_index",
+						"type": "uint256"
+					}
+				],
+				"name": "RecipeRemoved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_interestEarned",
+						"type": "uint256"
+					}
+				],
+				"name": "InterestClaimed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "StackDistributed",
+				"type": "event"
 			}
 		],
 		"evm": {
@@ -144,9 +300,9 @@
 		}
 	},
 	"sourceCodes": {
-		"interfaces/IDDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IDDAI {\n    function mint(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function redeem(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function addRecipe(\n        address _receiver,\n        uint256 _ratio,\n        bytes calldata _data\n    )\n    external\n    returns(bool);\n\n    function removeRecipe(\n        uint256 index\n    )\n    external\n    returns(bool);\n\n    function balanceOf(address _acount) external returns(uint256);\n}"
+		"interfaces/IDDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IDDAI {\n    function mint(\n        address _receiver,\n        uint256 _amount\n    )\n    external;\n\n    function redeem(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function addRecipe(\n        address _receiver,\n        uint256 _ratio,\n        bytes calldata _data\n    )\n    external\n    returns(bool);\n\n    function removeRecipe(\n        uint256 index\n    )\n    external\n    returns(bool);\n\n    function balanceOf(address _acount) external view returns(uint256);\n\n    event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);\n    event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);\n    event RecipeAdded(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);\n    event RecipeRemoved(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);\n    event InterestClaimed(address indexed _receiver, uint256 _interestEarned);\n    event StackDistributed(address indexed _receiver, uint256 _amount);\n}"
 	},
-	"sourceTreeHashHex": "0x4a5a1da7c58b4bba05cfffa5e50ab5adb55dd6f38d63d9929aed6c29d13da6fb",
+	"sourceTreeHashHex": "0x981fed7821967cd5d67eeb354b359ae02be33653b8abfec8c5d81d54bf265ce7",
 	"compiler": {
 		"name": "solc",
 		"version": "soljson-v0.5.11+commit.c082d0b4.js",

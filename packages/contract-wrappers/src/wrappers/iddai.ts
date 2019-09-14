@@ -10,6 +10,61 @@ import * as ethers from 'ethers';
 import * as _ from 'lodash';
 // tslint:enable:no-unused-variable
 
+export type IDDAIEventArgs =
+    | IDDAIDDAIMintedEventArgs
+    | IDDAIDDAIRedeemedEventArgs
+    | IDDAIRecipeAddedEventArgs
+    | IDDAIRecipeRemovedEventArgs
+    | IDDAIInterestClaimedEventArgs
+    | IDDAIStackDistributedEventArgs;
+
+export enum IDDAIEvents {
+    DDAIMinted = 'DDAIMinted',
+    DDAIRedeemed = 'DDAIRedeemed',
+    RecipeAdded = 'RecipeAdded',
+    RecipeRemoved = 'RecipeRemoved',
+    InterestClaimed = 'InterestClaimed',
+    StackDistributed = 'StackDistributed',
+}
+
+export interface IDDAIDDAIMintedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+    _operator: string;
+}
+
+export interface IDDAIDDAIRedeemedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+    _operator: string;
+}
+
+export interface IDDAIRecipeAddedEventArgs extends DecodedLogArgs {
+    _account: string;
+    _receiver: string;
+    _ratio: BigNumber;
+    _data: string;
+    _index: BigNumber;
+}
+
+export interface IDDAIRecipeRemovedEventArgs extends DecodedLogArgs {
+    _account: string;
+    _receiver: string;
+    _ratio: BigNumber;
+    _data: string;
+    _index: BigNumber;
+}
+
+export interface IDDAIInterestClaimedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _interestEarned: BigNumber;
+}
+
+export interface IDDAIStackDistributedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+}
+
 
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
@@ -161,7 +216,7 @@ export class IDDAIContract extends BaseContract {
             _amount: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<BigNumber
+        ): Promise<void
         > {
             const self = this as any as IDDAIContract;
             const encodedData = self._strictEncodeArguments('mint(address,uint256)', [_receiver,
@@ -179,7 +234,7 @@ export class IDDAIContract extends BaseContract {
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
             const abiEncoder = self._lookupAbiEncoder('mint(address,uint256)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -280,54 +335,6 @@ export class IDDAIContract extends BaseContract {
         },
     };
     public balanceOf = {
-        async sendTransactionAsync(
-            _acount: string,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as IDDAIContract;
-            const encodedData = self._strictEncodeArguments('balanceOf(address)', [_acount
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.balanceOf.estimateGasAsync.bind(
-                    self,
-                    _acount
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            _acount: string,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as IDDAIContract;
-            const encodedData = self._strictEncodeArguments('balanceOf(address)', [_acount
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            _acount: string,
-        ): string {
-            const self = this as any as IDDAIContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('balanceOf(address)', [_acount
-    ]);
-            return abiEncodedTransactionData;
-        },
         async callAsync(
             _acount: string,
             callData: Partial<CallData> = {},
