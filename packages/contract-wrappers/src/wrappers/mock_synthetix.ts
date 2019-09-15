@@ -100,13 +100,19 @@ export class MockSynthetixContract extends BaseContract {
             return result;
         },
     };
-    public issueMaxSynths = {
+    public exchange = {
         async sendTransactionAsync(
-            _currencyKey: string,
+            _sourceCurrencyKey: string,
+            _sourceAmount: BigNumber,
+            _destinationCurrencyKey: string,
+            _destinationAddress: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
             const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('issueMaxSynths(bytes4)', [_currencyKey
+            const encodedData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+    _sourceAmount,
+    _destinationCurrencyKey,
+    _destinationAddress
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -115,20 +121,29 @@ export class MockSynthetixContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self.issueMaxSynths.estimateGasAsync.bind(
+                self.exchange.estimateGasAsync.bind(
                     self,
-                    _currencyKey
+                    _sourceCurrencyKey,
+                    _sourceAmount,
+                    _destinationCurrencyKey,
+                    _destinationAddress
                 ),
             );
             const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
             return txHash;
         },
         async estimateGasAsync(
-            _currencyKey: string,
+            _sourceCurrencyKey: string,
+            _sourceAmount: BigNumber,
+            _destinationCurrencyKey: string,
+            _destinationAddress: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
             const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('issueMaxSynths(bytes4)', [_currencyKey
+            const encodedData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+    _sourceAmount,
+    _destinationCurrencyKey,
+    _destinationAddress
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -142,21 +157,33 @@ export class MockSynthetixContract extends BaseContract {
             return gas;
         },
         getABIEncodedTransactionData(
-            _currencyKey: string,
+            _sourceCurrencyKey: string,
+            _sourceAmount: BigNumber,
+            _destinationCurrencyKey: string,
+            _destinationAddress: string,
         ): string {
             const self = this as any as MockSynthetixContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('issueMaxSynths(bytes4)', [_currencyKey
+            const abiEncodedTransactionData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+    _sourceAmount,
+    _destinationCurrencyKey,
+    _destinationAddress
     ]);
             return abiEncodedTransactionData;
         },
         async callAsync(
-            _currencyKey: string,
+            _sourceCurrencyKey: string,
+            _sourceAmount: BigNumber,
+            _destinationCurrencyKey: string,
+            _destinationAddress: string,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<void
+        ): Promise<boolean
         > {
             const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('issueMaxSynths(bytes4)', [_currencyKey
+            const encodedData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+        _sourceAmount,
+        _destinationCurrencyKey,
+        _destinationAddress
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -168,9 +195,9 @@ export class MockSynthetixContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('issueMaxSynths(bytes4)');
+            const abiEncoder = self._lookupAbiEncoder('exchange(bytes4,uint256,bytes4,address)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
+            const result = abiEncoder.strictDecodeReturnValue<boolean
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -227,6 +254,32 @@ export class MockSynthetixContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('keyToToken(bytes4)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public COLLATERAL_RATIO = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as MockSynthetixContract;
+            const encodedData = self._strictEncodeArguments('COLLATERAL_RATIO()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('COLLATERAL_RATIO()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

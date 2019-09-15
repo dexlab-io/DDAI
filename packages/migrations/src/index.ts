@@ -11,7 +11,7 @@ export const migrate = async () => {
     const accounts = await web3.getAvailableAddressesAsync();
     const txDefaults = {
         from: accounts[0],
-        gas: 6000000,
+        gas: 8000000,
     }
     console.log("Starting Migrations");
 

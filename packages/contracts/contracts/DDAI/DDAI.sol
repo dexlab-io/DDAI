@@ -64,11 +64,11 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
     function redeem(address _receiver, uint256 _amount) external returns(uint256) {
         claimInterest(_msgSender());
 
-        uint256 redeemAmount = _amount.max(_balanceOf(_msgSender()));
+        uint256 redeemAmount = _amount.min(_balanceOf(_msgSender()));
         _burn(_msgSender(), _msgSender(), redeemAmount, "", "");
 
-        uint256 burnAmount = _amount.mul(10**18).div(moneyMarket.tokenPrice());
-        moneyMarket.burn(_receiver, burnAmount);
+        uint256 burnAmount = redeemAmount.mul(10**18).div(moneyMarket.tokenPrice());
+        require(moneyMarket.burn(_receiver, burnAmount) >= redeemAmount - 1, "DDAI.redeem: MONEY_MARKET_NOT_LIQUID");
 
         emit DDAIRedeemed(_receiver, redeemAmount, _msgSender());
 

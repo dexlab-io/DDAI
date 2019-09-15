@@ -2,7 +2,6 @@ import * as BaseRecipe from "../artifacts/BaseRecipe.json";
 import * as BuyEthRecipe from "../artifacts/BuyEthRecipe.json";
 import * as BuyPTokenRecipe from "../artifacts/BuyPTokenRecipe.json";
 import * as DDAI from "../artifacts/DDAI.json";
-import * as DDAIEvents from "../artifacts/DDAIEvents.json";
 import * as IDDAI from "../artifacts/IDDAI.json";
 import * as IKyberNetwork from "../artifacts/IKyberNetwork.json";
 import * as IMoneyMarket from "../artifacts/IMoneyMarket.json";
@@ -19,7 +18,6 @@ export{
     BuyEthRecipe,
     BuyPTokenRecipe,
     DDAI,
-    DDAIEvents,
     IDDAI,
     IKyberNetwork,
     IMoneyMarket,

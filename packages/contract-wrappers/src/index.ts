@@ -1,7 +1,6 @@
 export * from "./wrappers/base_recipe";
 export * from "./wrappers/buy_eth_recipe";
 export * from "./wrappers/buy_p_token_recipe";
-export * from "./wrappers/d_d_a_i_events";
 export * from "./wrappers/ddai";
 export * from "./wrappers/i_kyber_network";
 export * from "./wrappers/i_money_market";
