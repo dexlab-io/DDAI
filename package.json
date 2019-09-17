@@ -5,6 +5,7 @@
         "packages/*"
     ],
     "dependencies": {
-        "react-rainbow-components": "^1.4.0"
+        "react-rainbow-components": "^1.4.0",
+        "react-router-dom": "^5.0.1"
     }
 }
