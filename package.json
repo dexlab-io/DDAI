@@ -3,5 +3,8 @@
     "name": "ddai-monorepo",
     "workspaces": [
         "packages/*"
-    ]
+    ],
+    "dependencies": {
+        "react-rainbow-components": "^1.4.0"
+    }
 }
