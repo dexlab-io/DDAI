@@ -9,8 +9,11 @@ class App extends Component {
     render() {
         return (
             <Application>
-                <div className="react-rainbow-admin-app_router-container">
-                    <Routes />
+                <div>
+                    <div className="header">DDAI - some cool token</div>
+                    <div className="mainContainer">
+                        <Routes />
+                    </div>
                 </div>
             </Application>
     );
