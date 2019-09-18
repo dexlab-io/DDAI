@@ -1,4 +1,5 @@
 pragma solidity >=0.4.21 <0.6.0;
+pragma experimental ABIEncoderV2;
 
 import "../interfaces/IDDAI.sol";
 import "../interfaces/IMoneyMarket.sol";
@@ -20,7 +21,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
     IERC20 public token;
     IMoneyMarket public moneyMarket;
 
-    mapping(address => AccountData) accountDataOf;
+    mapping(address => AccountData) public accountDataOf;
 
     struct AccountData {
         uint256 lastTokenPrice; // Last token price on which interest was claimed
@@ -75,7 +76,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         return redeemAmount;
     }
 
-    function addRecipe(address _receiver, uint256 _ratio, bytes calldata _data) external returns(bool) {
+    function addRecipe(address _receiver, uint256 _ratio, bytes memory _data) public returns(bool) {
         AccountData storage accountData = accountDataOf[_msgSender()];
 
         accountData.recipes.push(Recipe({
@@ -84,7 +85,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
             data: _data
         }));
 
-        accountData.totalRatio.add(_ratio);
+        accountData.totalRatio = accountData.totalRatio.add(_ratio);
         emit RecipeAdded(_msgSender(), _receiver, _ratio, _data, accountData.recipes.length - 1);
     }
 
@@ -108,6 +109,19 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         // If there are no recipes anymore set stack to zero
         if(accountData.recipes.length == 0) {
             accountData.stack = 0;
+        }
+    }
+
+    function clearRecipes() public {
+        AccountData storage accountData = accountDataOf[_msgSender()];
+        accountData.recipes.length = 0;
+        accountData.totalRatio = 0;
+    }
+
+    function setRecipes(address[] memory _receivers, uint256[] memory _ratios, bytes[] memory _data) public {
+        clearRecipes();
+        for(uint256 i = 0; i < _receivers.length; i ++) {
+            addRecipe(_receivers[i], _ratios[i], _data[i]);
         }
     }
 
@@ -175,6 +189,12 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         }
 
         return true;
+    }
+
+    function getRecipesOf(address _account) public view returns(Recipe[] memory recipes, uint256 totalRatio) {
+        AccountData storage accountData = accountDataOf[_account];
+        recipes = accountData.recipes;
+        totalRatio = accountData.totalRatio;
     }
 
     function balanceOf(address _account) public view returns(uint256) {

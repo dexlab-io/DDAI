@@ -30,6 +30,25 @@ let {pe, web3} = getProvider(false);
 
 const initialDaiAmount = toWei(1000);
 
+const mockRecipes = [
+    {
+        address: "0x0000000000000000000000000000000000000001",
+        ratio: new BigNumber(1000),
+        data: "0x1337"
+    },
+    {
+        address: "0x0000000000000000000000000000000000000002",
+        ratio: new BigNumber(100),
+        data: "0x42"
+    },
+    {
+        address: "0x0000000000000000000000000000000000000003",
+        ratio: new BigNumber(1000),
+        data: "0xdede"
+    },
+]
+
+
 describe("DDAI", function( ){
     this.timeout(30000);
 
@@ -175,8 +194,147 @@ describe("DDAI", function( ){
         const outstandingInterest = await ddai.getOutStandingInterest.callAsync(user);
         expect(outstandingInterest, "Outstanding interest amount incorrect", interestAmount);
     })
+
+    it("Adding a recipe when there are no recipes should work", async() => {
+        const recipe = mockRecipes[0];
+        await ddai.addRecipe.sendTransactionAsync(recipe.address, recipe.ratio, recipe.data);
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0][0].receiver, "Receiver incorrect").to.eq(recipe.address);
+        expect(recipes[0][0].ratio, "Ratio incorrect").to.bignumber.eq(recipe.ratio);
+        expect(recipes[0][0].data, "Data incorrect").to.eq(recipe.data);
+        expect(recipes[1], "Total ratio incorrect").to.bignumber.eq(recipe.ratio);
+    })
+
+    it("Adding a recipe when there is already a recipe should work", async() => {
+        const recipe1 = mockRecipes[0];
+        const recipe2 = mockRecipes[1];
+
+        await ddai.addRecipe.sendTransactionAsync(recipe1.address, recipe1.ratio, recipe1.data);
+        await ddai.addRecipe.sendTransactionAsync(recipe2.address, recipe2.ratio, recipe2.data);
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0][0].receiver, "Receiver incorrect").to.eq(recipe1.address);
+        expect(recipes[0][0].ratio, "Ratio incorrect").to.bignumber.eq(recipe1.ratio);
+        expect(recipes[0][0].data, "Data incorrect").to.eq(recipe1.data);
+
+        expect(recipes[0][1].receiver, "Receiver incorrect").to.eq(recipe2.address);
+        expect(recipes[0][1].ratio, "Ratio incorrect").to.bignumber.eq(recipe2.ratio);
+        expect(recipes[0][1].data, "Data incorrect").to.eq(recipe2.data);
+        expect(recipes[1], "Total ratio incorrect").to.bignumber.eq(recipe1.ratio.plus(recipe2.ratio));
+    })
+
+    it("Removing a recipe when there is only one should work", async() => {
+        const recipe = mockRecipes[0];
+       
+        await ddai.addRecipe.sendTransactionAsync(recipe.address, recipe.ratio, recipe.data);
+        await ddai.removeRecipe.sendTransactionAsync(new BigNumber(0));
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0].length, "Recipes length should be zero").to.eq(0);
+        expect(recipes[1], "Total ratio should be zero").to.bignumber.eq(0);
+    })
+
+    it("Removing a recipe from a other position than the end should work", async() => {
+        const recipe1 = mockRecipes[0];
+        const recipe2 = mockRecipes[1];
+        const recipe3 = mockRecipes[2];
+
+        await ddai.addRecipe.sendTransactionAsync(recipe1.address, recipe1.ratio, recipe1.data);
+        await ddai.addRecipe.sendTransactionAsync(recipe2.address, recipe2.ratio, recipe2.data);
+        await ddai.addRecipe.sendTransactionAsync(recipe3.address, recipe3.ratio, recipe3.data);
+
+        await ddai.removeRecipe.sendTransactionAsync(new BigNumber(1));
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0].length, "There should now be 2 recipes").to.equal(2);
+        
+        expect(recipes[0][0].receiver, "Receiver incorrect").to.eq(recipe1.address);
+        expect(recipes[0][0].ratio, "Ratio incorrect").to.bignumber.eq(recipe1.ratio);
+        expect(recipes[0][0].data, "Data incorrect").to.eq(recipe1.data);
+
+        expect(recipes[0][1].receiver, "Receiver incorrect").to.eq(recipe3.address);
+        expect(recipes[0][1].ratio, "Ratio incorrect").to.bignumber.eq(recipe3.ratio);
+        expect(recipes[0][1].data, "Data incorrect").to.eq(recipe3.data);
+
+        expect(recipes[1]).to.bignumber.eq(recipe1.ratio.plus(recipe3.ratio));
+    })
+
+    it("Removing a recipe from the end should work", async() => {
+        const recipe1 = mockRecipes[0];
+        const recipe2 = mockRecipes[1];
+        const recipe3 = mockRecipes[2];
+
+        await ddai.addRecipe.sendTransactionAsync(recipe1.address, recipe1.ratio, recipe1.data);
+        await ddai.addRecipe.sendTransactionAsync(recipe2.address, recipe2.ratio, recipe2.data);
+        await ddai.addRecipe.sendTransactionAsync(recipe3.address, recipe3.ratio, recipe3.data);
+
+        await ddai.removeRecipe.sendTransactionAsync(new BigNumber(1));
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0].length, "There should now be 2 recipes").to.equal(2);
+        
+        expect(recipes[0][0].receiver, "Receiver incorrect").to.eq(recipe1.address);
+        expect(recipes[0][0].ratio, "Ratio incorrect").to.bignumber.eq(recipe1.ratio);
+        expect(recipes[0][0].data, "Data incorrect").to.eq(recipe1.data);
+
+        expect(recipes[0][1].receiver, "Receiver incorrect").to.eq(recipe3.address);
+        expect(recipes[0][1].ratio, "Ratio incorrect").to.bignumber.eq(recipe3.ratio);
+        expect(recipes[0][1].data, "Data incorrect").to.eq(recipe3.data);
+
+        expect(recipes[1]).to.bignumber.eq(recipe1.ratio.plus(recipe3.ratio));
+    })
     
+    it("Setting multiple recipes at once should work", async() => {
+        await setRecipes(3);
+
+        const recipe1 = mockRecipes[0];
+        const recipe2 = mockRecipes[1];
+        const recipe3 = mockRecipes[2];
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0].length, "There should be 3 recipes").to.eq(3);
+        
+        expect(recipes[0][0].receiver, "Receiver incorrect").to.eq(recipe1.address);
+        expect(recipes[0][0].ratio, "Ratio incorrect").to.bignumber.eq(recipe1.ratio);
+        expect(recipes[0][0].data, "Data incorrect").to.eq(recipe1.data);
+
+        expect(recipes[0][1].receiver, "Receiver incorrect").to.eq(recipe2.address);
+        expect(recipes[0][1].ratio, "Ratio incorrect").to.bignumber.eq(recipe2.ratio);
+        expect(recipes[0][1].data, "Data incorrect").to.eq(recipe2.data);
+
+        expect(recipes[0][2].receiver, "Receiver incorrect").to.eq(recipe3.address);
+        expect(recipes[0][2].ratio, "Ratio incorrect").to.bignumber.eq(recipe3.ratio);
+        expect(recipes[0][2].data, "Data incorrect").to.eq(recipe3.data);
+
+        expect(recipes[1]).to.bignumber.eq(recipe1.ratio.plus(recipe3.ratio).plus(recipe2.ratio));
+    })
+
+    it("Removing all recipes at once should work", async() => {
+        await setRecipes(3);
+        await ddai.clearRecipes.sendTransactionAsync();
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+
+        expect(recipes[0].length, "Recipes length should be zero").to.eq(0);
+        expect(recipes[1], "Total ratio should be zero").to.bignumber.eq(0);
+    })
 })
+
+async function setRecipes(count: number) {
+
+    const addresses:string[] = [];
+    const ratios:BigNumber[] = [];
+    const data:string[] = [];
+
+    for(let i = 0; i < count; i ++) {
+        addresses.push(mockRecipes[i].address);
+        ratios.push(mockRecipes[i].ratio);
+        data.push(mockRecipes[i].data);
+    }
+
+    await ddai.setRecipes.sendTransactionAsync(addresses, ratios, data);
+}
 
 async function mintDDAI(amount: number | BigNumber | string, receiver: string = user ) {
     const mintAmount = new BigNumber(amount);
