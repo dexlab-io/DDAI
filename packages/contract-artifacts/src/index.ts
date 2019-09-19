@@ -9,6 +9,7 @@ import * as IPToken from "../artifacts/IPToken.json";
 import * as MockDai from "../artifacts/MockDai.json";
 import * as MockIToken from "../artifacts/MockIToken.json";
 import * as MockKyberNetwork from "../artifacts/MockKyberNetwork.json";
+import * as MockRecipe from "../artifacts/MockRecipe.json";
 import * as MockSnx from "../artifacts/MockSnx.json";
 import * as MockSynthetix from "../artifacts/MockSynthetix.json";
 import * as MockToken from "../artifacts/MockToken.json";
@@ -25,6 +26,7 @@ export{
     MockDai,
     MockIToken,
     MockKyberNetwork,
+    MockRecipe,
     MockSnx,
     MockSynthetix,
     MockToken

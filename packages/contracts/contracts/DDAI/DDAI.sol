@@ -22,6 +22,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
     IMoneyMarket public moneyMarket;
 
     mapping(address => AccountData) public accountDataOf;
+    mapping (address => mapping (address => bool)) stackPushAllowed;
 
     struct AccountData {
         uint256 lastTokenPrice; // Last token price on which interest was claimed
@@ -147,6 +148,12 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         _payToRecipes(_account, accountData.stack);
     }
 
+    function setStack(address _account, uint256 _amount) public {
+        require(_msgSender() == _account || stackPushAllowed[_account][_msgSender()], "DDAI.pushToStack: NOT_ALLOWED");
+        AccountData storage accountData = accountDataOf[_account];
+        accountData.stack = _amount;
+    }
+
     // GSN FUNCTIONALITY should be in a seperate file
     function acceptRelayedCall(
         address _relay,
@@ -185,7 +192,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         for(uint256 i = 0;  i < accountData.recipes.length; i ++) {
             Recipe memory recipe = accountData.recipes[i];
             uint256 recipeAmount = _amount * recipe.ratio / accountData.totalRatio;
-            _send(_msgSender(), _account, recipe.receiver, recipeAmount, recipe.data, "", false);
+            _send(address(this), _account, recipe.receiver, recipeAmount, recipe.data, "", false);
         }
 
         return true;
@@ -198,13 +205,20 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
     }
 
     function balanceOf(address _account) public view returns(uint256) {
-        // return balance minus what is reserved for recipes(stack)
-        // TODO handle bigger than balance stack
-        return _balanceOf(_account).sub(accountDataOf[_account].stack);
+        AccountData storage accountData = accountDataOf[_account];
+        uint256 balance = _balanceOf(_account);
+        if(accountData.stack >= balance) {
+            return 0;
+        }
+        return (_balanceOf(_account) - accountDataOf[_account].stack);
     }
 
     function getTotalBalance(address _account) public view returns(uint256) {
         return _balanceOf(_account);
+    }
+
+    function getStack(address _account) public view returns(uint256) {
+        return accountDataOf[_account].stack;
     }
 
     function getOutStandingInterest(address _account) public view returns(uint256) {

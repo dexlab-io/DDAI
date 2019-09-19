@@ -9,6 +9,7 @@ import { getProvider, toWei } from '@ddai/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { AssertionError } from 'assert';
 import { isRejected } from 'q';
+import { IMoneyMarket } from '@ddai/contract-artifacts';
 
 
 chai.use(chaiAsPromised);
@@ -20,6 +21,7 @@ let mockKyberNetwork: wrappers.MockKyberNetworkContract;
 let ddai: wrappers.DDAIContract;
 let buyEthRecipe: wrappers.BuyEthRecipeContract;
 let buyPTokenRecipe: wrappers.BuyPTokenRecipeContract;
+let mockRecipe: wrappers.MockRecipeContract;
 let snapshot: number;
 let accounts: string[];
 let user: string;
@@ -53,7 +55,7 @@ describe("DDAI", function( ){
     this.timeout(30000);
 
     before(async () => {
-        ({mockDai, mockIToken, mockKyberNetwork, ddai, buyEthRecipe, buyPTokenRecipe} = (await migrate()).contractInstances);
+        ({mockDai, mockIToken, mockKyberNetwork, ddai, buyEthRecipe, buyPTokenRecipe, mockRecipe} = (await migrate()).contractInstances);
         accounts = await web3.getAvailableAddressesAsync();
         user = accounts[0];
         await mockDai.mintTo.sendTransactionAsync(user, initialDaiAmount);
@@ -319,10 +321,111 @@ describe("DDAI", function( ){
         expect(recipes[0].length, "Recipes length should be zero").to.eq(0);
         expect(recipes[1], "Total ratio should be zero").to.bignumber.eq(0);
     })
+
+    it("Claiming interest with no active recipes should work", async() => {
+        const mintAmount = toWei(222.338);
+        const newTokenPrice = toWei(2.349);
+        await mintDDAI(mintAmount, accounts[1]);
+
+        await mockIToken.setTokenPrice.sendTransactionAsync(newTokenPrice);
+        await ddai.claimInterest.sendTransactionAsync(accounts[1]);
+
+        const ddaiBalance = await ddai.balanceOf.callAsync(accounts[1]);
+        const totalSupply = await ddai.balanceOf.callAsync(accounts[1]);
+
+        const expectedAmount = mintAmount.times(newTokenPrice).div(10 ** 18);
+        const stackSize = await ddai.getStack.callAsync(user);
+        expect(ddaiBalance, "DDAI balance incorrect").to.bignumber.eq(expectedAmount);
+        expect(totalSupply, "DDAI supply incorrect").to.bignumber.eq(expectedAmount);
+        expect(stackSize, "Stack should be zero").to.bignumber.eq(0);
+    })
+
+    it("Claiming interest with an active recipe should push it to stack", async() => {
+        const mintAmount = toWei(23.33993);
+        const newTokenPrice = toWei(7.2);
+        await mintDDAI(mintAmount);
+
+        await setRecipes(1);
+        await mockIToken.setTokenPrice.sendTransactionAsync(newTokenPrice);
+        await ddai.claimInterest.sendTransactionAsync(user);
+
+        const ddaiBalance = await ddai.balanceOf.callAsync(user);
+        const stackSize = await ddai.getStack.callAsync(user);
+        const totalSupply = await ddai.totalSupply.callAsync();
+        const expectedAmount = mintAmount.times(newTokenPrice).div(10 ** 18);
+
+        expect(ddaiBalance, "DDAI balance incorrect").to.bignumber.eq(mintAmount); 
+        expect(stackSize, "Stacksize incorrect").to.bignumber.eq(expectedAmount.minus(mintAmount));
+        expect(totalSupply, "DDAI supply incorrect").to.bignumber.eq(expectedAmount);
+    })
+    
+    it("Distributing stack to non smart contract addresses should work", async() => {
+        const mintAmount = toWei(14.39448);
+        const newTokenPrice = toWei(4.348453);
+        const recipe1 = mockRecipes[0];
+        const recipe2 = mockRecipes[1];
+        const recipe3 = mockRecipes[2];
+        await mintDDAI(mintAmount);
+
+        await setRecipes(3);
+        await mockIToken.setTokenPrice.sendTransactionAsync(newTokenPrice);
+        await ddai.distributeStack.sendTransactionAsync(user);
+
+        const ddaiBalance = await ddai.balanceOf.callAsync(user);
+        const stackSize = await ddai.getStack.callAsync(user);
+        const totalSupply = await ddai.totalSupply.callAsync();
+        const expectedAmount = mintAmount.times(newTokenPrice).div(10 ** 18);
+        const distributedStack = expectedAmount.minus(mintAmount);
+
+        const recipe1Balance = await ddai.balanceOf.callAsync(recipe1.address);
+        const recipe2Balance = await ddai.balanceOf.callAsync(recipe2.address);
+        const recipe3Balance = await ddai.balanceOf.callAsync(recipe3.address);
+
+        const totalRatio = recipe1.ratio.plus(recipe2.ratio).plus(recipe3.ratio);
+        // TODO check if these rounding errors are a problem or not
+        // 2 off because of rounding
+        expect(ddaiBalance, "DDAI balance incorrect").to.bignumber.eq(mintAmount.plus(2));
+        expect(stackSize, "Stack size incorrect").to.bignumber.eq(0);
+        expect(totalSupply, "Total supply incorrect").to.bignumber.eq(expectedAmount);
+        expect(recipe1Balance, "Recipe 1 balance incorrect").to.bignumber.eq(distributedStack.times(recipe1.ratio).div(totalRatio).integerValue(BigNumber.ROUND_DOWN));
+        expect(recipe2Balance, "Recipe 2 balance incorrect").to.bignumber.eq(distributedStack.times(recipe2.ratio).div(totalRatio).integerValue(BigNumber.ROUND_DOWN));
+        expect(recipe3Balance, "Recipe 3 balance incorrect").to.bignumber.eq(distributedStack.times(recipe3.ratio).div(totalRatio).integerValue(BigNumber.ROUND_DOWN));
+    })
+
+    it("Distributing the stack to a smart contract address which registered a callback should work", async() => {
+        const mintAmount = toWei(100);
+        const newTokenPrice = toWei(2.43);
+        const ratio = new BigNumber(100);
+        const data = "0x1337dede"
+
+        const expectedAmount = mintAmount.times(newTokenPrice).div(10 ** 18);
+        const stackAmount = expectedAmount.minus(mintAmount);
+        
+        await ddai.addRecipe.sendTransactionAsync(mockRecipe.address, ratio, data);
+        await mintDDAI(mintAmount);
+        await mockIToken.setTokenPrice.sendTransactionAsync(newTokenPrice);
+        await ddai.distributeStack.sendTransactionAsync(user);
+
+        const recipeBalance = await ddai.balanceOf.callAsync(mockRecipe.address);
+    
+        const operator = await mockRecipe.operator.callAsync();
+        const from = await mockRecipe.from.callAsync();
+        const to = await mockRecipe.to.callAsync();
+        const amount = await mockRecipe.amount.callAsync();
+        const userData = await mockRecipe.userData.callAsync();
+        const operatorData = await mockRecipe.operatorData.callAsync();
+
+        expect(operator, "Operator incorrect").to.eq(ddai.address);
+        expect(from, "From incorrect").to.eq(user);
+        expect(to, "To incorrect").to.eq(mockRecipe.address);
+        expect(amount, "Amount incorrect").to.bignumber.eq(stackAmount);
+        expect(userData, "UserData incorrect").to.eq(data);
+        expect(operatorData, "OperatorData incorrect").to.eq("0x");
+        expect(recipeBalance).to.bignumber.eq(stackAmount);
+    })
 })
 
 async function setRecipes(count: number) {
-
     const addresses:string[] = [];
     const ratios:BigNumber[] = [];
     const data:string[] = [];
