@@ -154,6 +154,10 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         accountData.stack = _amount;
     }
 
+    function setStackApproved(address _account, bool _allowed) external {
+        stackPushAllowed[_msgSender()][_account] = true;
+    }
+
     // GSN FUNCTIONALITY should be in a seperate file
     function acceptRelayedCall(
         address _relay,

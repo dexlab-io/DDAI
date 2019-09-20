@@ -677,6 +677,91 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public setStackApproved = {
+        async sendTransactionAsync(
+            _account: string,
+            _allowed: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+    _allowed
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setStackApproved.estimateGasAsync.bind(
+                    self,
+                    _account,
+                    _allowed
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _account: string,
+            _allowed: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+    _allowed
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _account: string,
+            _allowed: boolean,
+        ): string {
+            const self = this as any as DDAIContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+    _allowed
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _account: string,
+            _allowed: boolean,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+        _allowed
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setStackApproved(address,bool)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public mint = {
         async sendTransactionAsync(
             _receiver: string,

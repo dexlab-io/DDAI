@@ -423,6 +423,29 @@ describe("DDAI", function( ){
         expect(operatorData, "OperatorData incorrect").to.eq("0x");
         expect(recipeBalance).to.bignumber.eq(stackAmount);
     })
+
+    it("Setting stack from same address should work", async() => {
+        const stackAmount = toWei(100);
+        await ddai.setStack.sendTransactionAsync(user, stackAmount);
+
+        const stackSize = await ddai.getStack.callAsync(user);
+        expect(stackSize, "Stack size incorrect").to.bignumber.eq(stackAmount);
+    })
+
+    it("Setting stack for another address when not allowed should fail", async() => {
+        const stackAmount = toWei(100);
+        const promise = ddai.setStack.sendTransactionAsync(accounts[1], stackAmount);
+        return assert.isRejected(promise);
+    })
+
+    it("Setting stack for another address when allowed should work", async() => {
+        const stackAmount = toWei(100);
+        await ddai.setStackApproved.sendTransactionAsync(user, true, {from: accounts[1]});
+        await ddai.setStack.sendTransactionAsync(accounts[1], stackAmount);
+
+        const stackSize = await ddai.getStack.callAsync(accounts[1]);
+        expect(stackSize, "Stack size invalid").to.bignumber.eq(stackAmount);
+    })
 })
 
 async function setRecipes(count: number) {
