@@ -301,6 +301,73 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public clearRecipes = {
+        async sendTransactionAsync(
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('clearRecipes()', []);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.clearRecipes.estimateGasAsync.bind(
+                    self,
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('clearRecipes()', []);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+        ): string {
+            const self = this as any as DDAIContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('clearRecipes()', []);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('clearRecipes()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('clearRecipes()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public redeem = {
         async sendTransactionAsync(
             _receiver: string,
@@ -556,6 +623,34 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public getStack = {
+        async callAsync(
+            _account: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('getStack(address)', [_account
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('getStack(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public decimals = {
         async callAsync(
             callData: Partial<CallData> = {},
@@ -577,6 +672,91 @@ export class DDAIContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('decimals()');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public setStackApproved = {
+        async sendTransactionAsync(
+            _account: string,
+            _allowed: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+    _allowed
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setStackApproved.estimateGasAsync.bind(
+                    self,
+                    _account,
+                    _allowed
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _account: string,
+            _allowed: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+    _allowed
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _account: string,
+            _allowed: boolean,
+        ): string {
+            const self = this as any as DDAIContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+    _allowed
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _account: string,
+            _allowed: boolean,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
+        _allowed
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setStackApproved(address,bool)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -953,6 +1133,34 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public accountDataOf = {
+        async callAsync(
+            index_0: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<[BigNumber, BigNumber, BigNumber]
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('accountDataOf(address)', [index_0
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('accountDataOf(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber, BigNumber]
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public preRelayedCall = {
         async sendTransactionAsync(
             context: string,
@@ -1225,6 +1433,91 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public setStack = {
+        async sendTransactionAsync(
+            _account: string,
+            _amount: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
+    _amount
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setStack.estimateGasAsync.bind(
+                    self,
+                    _account,
+                    _amount
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _account: string,
+            _amount: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
+    _amount
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _account: string,
+            _amount: BigNumber,
+        ): string {
+            const self = this as any as DDAIContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
+    _amount
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _account: string,
+            _amount: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
+        _amount
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setStack(address,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public getOutStandingInterest = {
         async callAsync(
             _account: string,
@@ -1449,6 +1742,100 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public setRecipes = {
+        async sendTransactionAsync(
+            _receivers: string[],
+            _ratios: BigNumber[],
+            _data: string[],
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
+    _ratios,
+    _data
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setRecipes.estimateGasAsync.bind(
+                    self,
+                    _receivers,
+                    _ratios,
+                    _data
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _receivers: string[],
+            _ratios: BigNumber[],
+            _data: string[],
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
+    _ratios,
+    _data
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _receivers: string[],
+            _ratios: BigNumber[],
+            _data: string[],
+        ): string {
+            const self = this as any as DDAIContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
+    _ratios,
+    _data
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _receivers: string[],
+            _ratios: BigNumber[],
+            _data: string[],
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
+        _ratios,
+        _data
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setRecipes(address[],uint256[],bytes[])');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public transfer = {
         async sendTransactionAsync(
             recipient: string,
@@ -1555,6 +1942,34 @@ export class DDAIContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('relayHubVersion()');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public getRecipesOf = {
+        async callAsync(
+            _account: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<[Array<{receiver: string;ratio: BigNumber;data: string}>, BigNumber]
+        > {
+            const self = this as any as DDAIContract;
+            const encodedData = self._strictEncodeArguments('getRecipesOf(address)', [_account
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('getRecipesOf(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<[Array<{receiver: string;ratio: BigNumber;data: string}>, BigNumber]
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

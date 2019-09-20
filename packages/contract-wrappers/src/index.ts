@@ -9,6 +9,7 @@ export * from "./wrappers/iddai";
 export * from "./wrappers/mock_dai";
 export * from "./wrappers/mock_i_token";
 export * from "./wrappers/mock_kyber_network";
+export * from "./wrappers/mock_recipe";
 export * from "./wrappers/mock_snx";
 export * from "./wrappers/mock_synthetix";
 export * from "./wrappers/mock_token";

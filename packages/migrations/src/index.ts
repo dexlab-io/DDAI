@@ -51,6 +51,15 @@ export const migrate = async () => {
     )
     console.log(`Deployed DDAI at: ${ddai.address}`);
 
+    const mockRecipe = await wrappers.MockRecipeContract.deployFrom0xArtifactAsync(
+        artifacts.MockRecipe,
+        pe,
+        txDefaults,
+        ddai.address,
+        mockDai.address
+    )
+    console.log(`Deployed MockRecipe: ${mockRecipe.address}`);
+
     const buyEthRecipe = await wrappers.BuyEthRecipeContract.deployFrom0xArtifactAsync(
         artifacts.BuyEthRecipe,
         pe,
@@ -76,7 +85,8 @@ export const migrate = async () => {
         mockKyberNetwork: mockKyberNetwork.address,
         ddai: ddai.address,
         buyEthRecipe: buyEthRecipe.address,
-        buyPTokenRecipe: buyPTokenRecipe.address
+        buyPTokenRecipe: buyPTokenRecipe.address,
+        mockRecipe: mockRecipe.address,
     }
 
     const contractInstances = {
@@ -85,7 +95,8 @@ export const migrate = async () => {
         mockKyberNetwork: mockKyberNetwork,
         ddai: ddai,
         buyEthRecipe: buyEthRecipe,
-        buyPTokenRecipe: buyPTokenRecipe
+        buyPTokenRecipe: buyPTokenRecipe,
+        mockRecipe: mockRecipe,
     }
 
     pe.stop();

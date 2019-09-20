@@ -1,4 +1,5 @@
 pragma solidity >=0.4.21 <0.6.0;
+pragma experimental ABIEncoderV2;
 
 import "../interfaces/IDDAI.sol";
 import "../interfaces/IMoneyMarket.sol";
@@ -20,7 +21,8 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
     IERC20 public token;
     IMoneyMarket public moneyMarket;
 
-    mapping(address => AccountData) accountDataOf;
+    mapping(address => AccountData) public accountDataOf;
+    mapping (address => mapping (address => bool)) stackPushAllowed;
 
     struct AccountData {
         uint256 lastTokenPrice; // Last token price on which interest was claimed
@@ -75,7 +77,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         return redeemAmount;
     }
 
-    function addRecipe(address _receiver, uint256 _ratio, bytes calldata _data) external returns(bool) {
+    function addRecipe(address _receiver, uint256 _ratio, bytes memory _data) public returns(bool) {
         AccountData storage accountData = accountDataOf[_msgSender()];
 
         accountData.recipes.push(Recipe({
@@ -84,7 +86,7 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
             data: _data
         }));
 
-        accountData.totalRatio.add(_ratio);
+        accountData.totalRatio = accountData.totalRatio.add(_ratio);
         emit RecipeAdded(_msgSender(), _receiver, _ratio, _data, accountData.recipes.length - 1);
     }
 
@@ -111,6 +113,19 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         }
     }
 
+    function clearRecipes() public {
+        AccountData storage accountData = accountDataOf[_msgSender()];
+        accountData.recipes.length = 0;
+        accountData.totalRatio = 0;
+    }
+
+    function setRecipes(address[] memory _receivers, uint256[] memory _ratios, bytes[] memory _data) public {
+        clearRecipes();
+        for(uint256 i = 0; i < _receivers.length; i ++) {
+            addRecipe(_receivers[i], _ratios[i], _data[i]);
+        }
+    }
+
     function claimInterest(address _receiver) public {
         AccountData storage accountData = accountDataOf[_receiver];
         uint256 currentTokenPrice = moneyMarket.tokenPrice();
@@ -131,6 +146,16 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         AccountData storage accountData = accountDataOf[_account];
         emit StackDistributed(_account, accountData.stack);
         _payToRecipes(_account, accountData.stack);
+    }
+
+    function setStack(address _account, uint256 _amount) public {
+        require(_msgSender() == _account || stackPushAllowed[_account][_msgSender()], "DDAI.pushToStack: NOT_ALLOWED");
+        AccountData storage accountData = accountDataOf[_account];
+        accountData.stack = _amount;
+    }
+
+    function setStackApproved(address _account, bool _allowed) external {
+        stackPushAllowed[_msgSender()][_account] = true;
     }
 
     // GSN FUNCTIONALITY should be in a seperate file
@@ -171,20 +196,33 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         for(uint256 i = 0;  i < accountData.recipes.length; i ++) {
             Recipe memory recipe = accountData.recipes[i];
             uint256 recipeAmount = _amount * recipe.ratio / accountData.totalRatio;
-            _send(_msgSender(), _account, recipe.receiver, recipeAmount, recipe.data, "", false);
+            _send(address(this), _account, recipe.receiver, recipeAmount, recipe.data, "", false);
         }
 
         return true;
     }
 
+    function getRecipesOf(address _account) public view returns(Recipe[] memory recipes, uint256 totalRatio) {
+        AccountData storage accountData = accountDataOf[_account];
+        recipes = accountData.recipes;
+        totalRatio = accountData.totalRatio;
+    }
+
     function balanceOf(address _account) public view returns(uint256) {
-        // return balance minus what is reserved for recipes(stack)
-        // TODO handle bigger than balance stack
-        return _balanceOf(_account).sub(accountDataOf[_account].stack);
+        AccountData storage accountData = accountDataOf[_account];
+        uint256 balance = _balanceOf(_account);
+        if(accountData.stack >= balance) {
+            return 0;
+        }
+        return (_balanceOf(_account) - accountDataOf[_account].stack);
     }
 
     function getTotalBalance(address _account) public view returns(uint256) {
         return _balanceOf(_account);
+    }
+
+    function getStack(address _account) public view returns(uint256) {
+        return accountDataOf[_account].stack;
     }
 
     function getOutStandingInterest(address _account) public view returns(uint256) {
