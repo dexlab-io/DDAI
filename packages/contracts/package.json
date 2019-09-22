@@ -21,6 +21,7 @@
     "watch:contracts": "npm-watch compile:contracts",
     "watch:contracts:complete": "npm-watch export-artifacts-and-wrappers",
     "ganache": "ganache-cli --mnemonic test the system before going to production --deterministic -p 8545 -i 102030 --defaultBalanceEther 1000000000 -l 20000000",
+    "clean": "rm -rf ./build",
     "compile:contracts": "sol-compiler --contracts-dir ./contracts --artifacts-dir ./build/artifacts",
     "generate:wrappers": "abi-gen --abis './build/artifacts/*.json' --out 'build/wrappers/' --template contract-templates/contract.handlebars --partials './contract-templates/partials/**/*.handlebars'",
     "export-artifacts-and-wrappers": "yarn compile:contracts && yarn generate:wrappers && cd ../contract-artifacts && yarn generate && cd ../contract-wrappers && yarn generate && cd ../contracts",
@@ -29,6 +30,7 @@
   "dependencies": {
     "@0x/abi-gen": "2.0.10",
     "@0x/sol-compiler": "^3.1.14",
+    "@0x/sol-coverage": "^3.0.12",
     "@ddai/migrations": "0.1.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",

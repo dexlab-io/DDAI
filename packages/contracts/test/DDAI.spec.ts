@@ -28,7 +28,7 @@ let user: string;
 let txData;
 
 // TODO fix sol-trace
-let {pe, web3} = getProvider(false);
+let {pe, web3, coverageSubProvider} = getProvider(false, true);
 
 const initialDaiAmount = toWei(1000);
 
@@ -73,6 +73,7 @@ describe("DDAI", function( ){
     })
 
     after(async () => {
+        await coverageSubProvider.writeCoverageAsync();
         pe.stop();
     })
 

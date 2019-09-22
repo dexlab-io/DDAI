@@ -1,23 +1,34 @@
 import { Web3ProviderEngine, RPCSubprovider, BigNumber, ContractWrappers } from "0x.js";
 import { Web3Wrapper, AbiDefinition, TxData, Web3JsV1Provider } from '@0x/web3-wrapper';
 import { RevertTraceSubprovider, SolCompilerArtifactAdapter } from '@0x/sol-trace';
+import { CoverageSubprovider } from '@0x/sol-coverage';
 import path from 'path';
 
-export const getProvider = (solTrace: boolean) => {
+export const getProvider = (solTrace: boolean = false, solCoverage: boolean = false) => {
     const pe: Web3ProviderEngine = new Web3ProviderEngine();
 
-    if(solTrace) {
-        console.log("reverting trace");
-        // TODO should not use hard coded address
-        const defaultFromAddress = "0x26006236eab6409d9fdecb16ed841033d6b4a6bc";
+    let artifactAdapter: SolCompilerArtifactAdapter;
+    const defaultFromAddress = "0x26006236eab6409d9fdecb16ed841033d6b4a6bc";
+    let coverageSubProvider: CoverageSubprovider;
+    if(solCoverage || solTrace) {
+        console.log("Setting up artifacts adapter");
         const projectRoot = path.dirname(require.resolve('@ddai/contracts/package.json'));
-
         console.log(projectRoot);
-        // const solcVersion = "0.5.11";
-        const artifactAdapter = new SolCompilerArtifactAdapter(`${projectRoot}/build/artifacts`, `${projectRoot}/contracts`);
+        artifactAdapter = new SolCompilerArtifactAdapter(`${projectRoot}/build/artifacts`, `${projectRoot}/contracts`);
+        artifactAdapter.collectContractsDataAsync().then(console.log);
+    }
+    if(solCoverage) {
+        console.log("Setting up sol-coverage");
+        coverageSubProvider = new CoverageSubprovider(artifactAdapter, defaultFromAddress, {
+            isVerbose: true
+        });
+        pe.addProvider(coverageSubProvider);
+    }
+    if(solTrace) {
+        console.log("Setting up sol-trace");
+        // TODO should not use hard coded address
         const isVerbose = true;
         const revertTraceSubprovider = new RevertTraceSubprovider(artifactAdapter, defaultFromAddress, isVerbose);
-    
         pe.addProvider(revertTraceSubprovider)    
     }
     // const rpcSubProvider = new SubscriptionsSubProvider();
@@ -25,7 +36,7 @@ export const getProvider = (solTrace: boolean) => {
     // pe.addProvider(rpcSubProvider);
     pe.start();
     const web3: Web3Wrapper = new Web3Wrapper(pe);
-    return {pe, web3};
+    return {pe, web3, coverageSubProvider};
 }
 
 export const toWei = (amount: number | string | BigNumber) => {

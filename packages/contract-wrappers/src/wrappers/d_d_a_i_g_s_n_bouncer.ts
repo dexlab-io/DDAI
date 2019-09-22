@@ -10,23 +10,23 @@ import * as ethers from 'ethers';
 import * as _ from 'lodash';
 // tslint:enable:no-unused-variable
 
-export type DDAIEventArgs =
-    | DDAITransferEventArgs
-    | DDAIApprovalEventArgs
-    | DDAISentEventArgs
-    | DDAIMintedEventArgs
-    | DDAIBurnedEventArgs
-    | DDAIAuthorizedOperatorEventArgs
-    | DDAIRevokedOperatorEventArgs
-    | DDAIRelayHubChangedEventArgs
-    | DDAIDDAIMintedEventArgs
-    | DDAIDDAIRedeemedEventArgs
-    | DDAIRecipeAddedEventArgs
-    | DDAIRecipeRemovedEventArgs
-    | DDAIInterestClaimedEventArgs
-    | DDAIStackDistributedEventArgs;
+export type DDAIGSNBouncerEventArgs =
+    | DDAIGSNBouncerTransferEventArgs
+    | DDAIGSNBouncerApprovalEventArgs
+    | DDAIGSNBouncerSentEventArgs
+    | DDAIGSNBouncerMintedEventArgs
+    | DDAIGSNBouncerBurnedEventArgs
+    | DDAIGSNBouncerAuthorizedOperatorEventArgs
+    | DDAIGSNBouncerRevokedOperatorEventArgs
+    | DDAIGSNBouncerRelayHubChangedEventArgs
+    | DDAIGSNBouncerDDAIMintedEventArgs
+    | DDAIGSNBouncerDDAIRedeemedEventArgs
+    | DDAIGSNBouncerRecipeAddedEventArgs
+    | DDAIGSNBouncerRecipeRemovedEventArgs
+    | DDAIGSNBouncerInterestClaimedEventArgs
+    | DDAIGSNBouncerStackDistributedEventArgs;
 
-export enum DDAIEvents {
+export enum DDAIGSNBouncerEvents {
     Transfer = 'Transfer',
     Approval = 'Approval',
     Sent = 'Sent',
@@ -43,19 +43,19 @@ export enum DDAIEvents {
     StackDistributed = 'StackDistributed',
 }
 
-export interface DDAITransferEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerTransferEventArgs extends DecodedLogArgs {
     from: string;
     to: string;
     value: BigNumber;
 }
 
-export interface DDAIApprovalEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerApprovalEventArgs extends DecodedLogArgs {
     owner: string;
     spender: string;
     value: BigNumber;
 }
 
-export interface DDAISentEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerSentEventArgs extends DecodedLogArgs {
     operator: string;
     from: string;
     to: string;
@@ -64,7 +64,7 @@ export interface DDAISentEventArgs extends DecodedLogArgs {
     operatorData: string;
 }
 
-export interface DDAIMintedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerMintedEventArgs extends DecodedLogArgs {
     operator: string;
     to: string;
     amount: BigNumber;
@@ -72,7 +72,7 @@ export interface DDAIMintedEventArgs extends DecodedLogArgs {
     operatorData: string;
 }
 
-export interface DDAIBurnedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerBurnedEventArgs extends DecodedLogArgs {
     operator: string;
     from: string;
     amount: BigNumber;
@@ -80,34 +80,34 @@ export interface DDAIBurnedEventArgs extends DecodedLogArgs {
     operatorData: string;
 }
 
-export interface DDAIAuthorizedOperatorEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerAuthorizedOperatorEventArgs extends DecodedLogArgs {
     operator: string;
     tokenHolder: string;
 }
 
-export interface DDAIRevokedOperatorEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerRevokedOperatorEventArgs extends DecodedLogArgs {
     operator: string;
     tokenHolder: string;
 }
 
-export interface DDAIRelayHubChangedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerRelayHubChangedEventArgs extends DecodedLogArgs {
     oldRelayHub: string;
     newRelayHub: string;
 }
 
-export interface DDAIDDAIMintedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerDDAIMintedEventArgs extends DecodedLogArgs {
     _receiver: string;
     _amount: BigNumber;
     _operator: string;
 }
 
-export interface DDAIDDAIRedeemedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerDDAIRedeemedEventArgs extends DecodedLogArgs {
     _receiver: string;
     _amount: BigNumber;
     _operator: string;
 }
 
-export interface DDAIRecipeAddedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerRecipeAddedEventArgs extends DecodedLogArgs {
     _account: string;
     _receiver: string;
     _ratio: BigNumber;
@@ -115,7 +115,7 @@ export interface DDAIRecipeAddedEventArgs extends DecodedLogArgs {
     _index: BigNumber;
 }
 
-export interface DDAIRecipeRemovedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerRecipeRemovedEventArgs extends DecodedLogArgs {
     _account: string;
     _receiver: string;
     _ratio: BigNumber;
@@ -123,12 +123,12 @@ export interface DDAIRecipeRemovedEventArgs extends DecodedLogArgs {
     _index: BigNumber;
 }
 
-export interface DDAIInterestClaimedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerInterestClaimedEventArgs extends DecodedLogArgs {
     _receiver: string;
     _interestEarned: BigNumber;
 }
 
-export interface DDAIStackDistributedEventArgs extends DecodedLogArgs {
+export interface DDAIGSNBouncerStackDistributedEventArgs extends DecodedLogArgs {
     _receiver: string;
     _amount: BigNumber;
 }
@@ -137,14 +137,14 @@ export interface DDAIStackDistributedEventArgs extends DecodedLogArgs {
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
-export class DDAIContract extends BaseContract {
+export class DDAIGSNBouncerContract extends BaseContract {
     public defaultOperators = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<string[]
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('defaultOperators()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -170,7 +170,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('name()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -196,7 +196,7 @@ export class DDAIContract extends BaseContract {
             value: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('approve(address,uint256)', [spender,
     value
     ]);
@@ -221,7 +221,7 @@ export class DDAIContract extends BaseContract {
             value: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('approve(address,uint256)', [spender,
     value
     ]);
@@ -240,7 +240,7 @@ export class DDAIContract extends BaseContract {
             spender: string,
             value: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('approve(address,uint256)', [spender,
     value
     ]);
@@ -253,7 +253,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<boolean
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('approve(address,uint256)', [spender,
         value
         ]);
@@ -281,7 +281,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('totalSupply()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -305,7 +305,7 @@ export class DDAIContract extends BaseContract {
         async sendTransactionAsync(
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('clearRecipes()', []);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -324,7 +324,7 @@ export class DDAIContract extends BaseContract {
         async estimateGasAsync(
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('clearRecipes()', []);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -339,7 +339,7 @@ export class DDAIContract extends BaseContract {
         },
         getABIEncodedTransactionData(
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('clearRecipes()', []);
             return abiEncodedTransactionData;
         },
@@ -348,7 +348,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('clearRecipes()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -374,7 +374,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('redeem(address,uint256)', [_receiver,
     _amount
     ]);
@@ -399,7 +399,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('redeem(address,uint256)', [_receiver,
     _amount
     ]);
@@ -418,7 +418,7 @@ export class DDAIContract extends BaseContract {
             _receiver: string,
             _amount: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('redeem(address,uint256)', [_receiver,
     _amount
     ]);
@@ -431,7 +431,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('redeem(address,uint256)', [_receiver,
         _amount
         ]);
@@ -458,7 +458,7 @@ export class DDAIContract extends BaseContract {
             _account: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('distributeStack(address)', [_account
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -480,7 +480,7 @@ export class DDAIContract extends BaseContract {
             _account: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('distributeStack(address)', [_account
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -497,7 +497,7 @@ export class DDAIContract extends BaseContract {
         getABIEncodedTransactionData(
             _account: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('distributeStack(address)', [_account
     ]);
             return abiEncodedTransactionData;
@@ -508,7 +508,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('distributeStack(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -536,7 +536,7 @@ export class DDAIContract extends BaseContract {
             amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [holder,
     recipient,
     amount
@@ -564,7 +564,7 @@ export class DDAIContract extends BaseContract {
             amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [holder,
     recipient,
     amount
@@ -585,7 +585,7 @@ export class DDAIContract extends BaseContract {
             recipient: string,
             amount: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [holder,
     recipient,
     amount
@@ -600,7 +600,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<boolean
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [holder,
         recipient,
         amount
@@ -630,7 +630,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('getStack(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -657,7 +657,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('decimals()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -683,7 +683,7 @@ export class DDAIContract extends BaseContract {
             _allowed: boolean,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
     _allowed
     ]);
@@ -708,7 +708,7 @@ export class DDAIContract extends BaseContract {
             _allowed: boolean,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
     _allowed
     ]);
@@ -727,7 +727,7 @@ export class DDAIContract extends BaseContract {
             _account: string,
             _allowed: boolean,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
     _allowed
     ]);
@@ -740,7 +740,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setStackApproved(address,bool)', [_account,
         _allowed
         ]);
@@ -768,7 +768,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('mint(address,uint256)', [_receiver,
     _amount
     ]);
@@ -793,7 +793,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('mint(address,uint256)', [_receiver,
     _amount
     ]);
@@ -812,7 +812,7 @@ export class DDAIContract extends BaseContract {
             _receiver: string,
             _amount: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('mint(address,uint256)', [_receiver,
     _amount
     ]);
@@ -825,7 +825,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('mint(address,uint256)', [_receiver,
         _amount
         ]);
@@ -853,7 +853,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('granularity()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -880,7 +880,7 @@ export class DDAIContract extends BaseContract {
             _data: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('addRecipe(address,uint256,bytes)', [_receiver,
     _ratio,
     _data
@@ -908,7 +908,7 @@ export class DDAIContract extends BaseContract {
             _data: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('addRecipe(address,uint256,bytes)', [_receiver,
     _ratio,
     _data
@@ -929,7 +929,7 @@ export class DDAIContract extends BaseContract {
             _ratio: BigNumber,
             _data: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('addRecipe(address,uint256,bytes)', [_receiver,
     _ratio,
     _data
@@ -944,7 +944,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<boolean
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('addRecipe(address,uint256,bytes)', [_receiver,
         _ratio,
         _data
@@ -976,7 +976,7 @@ export class DDAIContract extends BaseContract {
             operatorData: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('operatorSend(address,address,uint256,bytes,bytes)', [sender,
     recipient,
     amount,
@@ -1010,7 +1010,7 @@ export class DDAIContract extends BaseContract {
             operatorData: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('operatorSend(address,address,uint256,bytes,bytes)', [sender,
     recipient,
     amount,
@@ -1035,7 +1035,7 @@ export class DDAIContract extends BaseContract {
             data: string,
             operatorData: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('operatorSend(address,address,uint256,bytes,bytes)', [sender,
     recipient,
     amount,
@@ -1054,7 +1054,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('operatorSend(address,address,uint256,bytes,bytes)', [sender,
         recipient,
         amount,
@@ -1079,6 +1079,32 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public getEthprice = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('getEthprice()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('getEthprice()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public balanceOf = {
         async callAsync(
             _account: string,
@@ -1086,7 +1112,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('balanceOf(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1107,13 +1133,39 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public priceFeed = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<string
+        > {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('priceFeed()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('priceFeed()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public getHubAddr = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('getHubAddr()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -1140,7 +1192,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<[BigNumber, BigNumber, BigNumber]
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('accountDataOf(address)', [index_0
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1161,12 +1213,40 @@ export class DDAIContract extends BaseContract {
             return result;
         },
     };
+    public calcTokenAmount = {
+        async callAsync(
+            _ethAmount: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('calcTokenAmount(uint256)', [_ethAmount
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('calcTokenAmount(uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public preRelayedCall = {
         async sendTransactionAsync(
             context: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('preRelayedCall(bytes)', [context
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1188,7 +1268,7 @@ export class DDAIContract extends BaseContract {
             context: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('preRelayedCall(bytes)', [context
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1205,7 +1285,7 @@ export class DDAIContract extends BaseContract {
         getABIEncodedTransactionData(
             context: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('preRelayedCall(bytes)', [context
     ]);
             return abiEncodedTransactionData;
@@ -1216,7 +1296,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('preRelayedCall(bytes)', [context
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1242,7 +1322,7 @@ export class DDAIContract extends BaseContract {
             _index: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('removeRecipe(uint256)', [_index
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1264,7 +1344,7 @@ export class DDAIContract extends BaseContract {
             _index: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('removeRecipe(uint256)', [_index
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1281,7 +1361,7 @@ export class DDAIContract extends BaseContract {
         getABIEncodedTransactionData(
             _index: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('removeRecipe(uint256)', [_index
     ]);
             return abiEncodedTransactionData;
@@ -1292,7 +1372,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<boolean
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('removeRecipe(uint256)', [_index
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1315,29 +1395,29 @@ export class DDAIContract extends BaseContract {
     };
     public acceptRelayedCall = {
         async callAsync(
-            relay: string,
-            from: string,
-            encodedFunction: string,
-            transactionFee: BigNumber,
-            gasPrice: BigNumber,
-            gasLimit: BigNumber,
-            nonce: BigNumber,
-            approvalData: string,
-            maxPossibleCharge: BigNumber,
+            _relay: string,
+            _from: string,
+            _encodedFunction: string,
+            _transactionFee: BigNumber,
+            _gasPrice: BigNumber,
+            _gasLimit: BigNumber,
+            _nonce: BigNumber,
+            _approvalData: string,
+            _maxPossibleCharge: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<[BigNumber, string]
         > {
-            const self = this as any as DDAIContract;
-            const encodedData = self._strictEncodeArguments('acceptRelayedCall(address,address,bytes,uint256,uint256,uint256,uint256,bytes,uint256)', [relay,
-        from,
-        encodedFunction,
-        transactionFee,
-        gasPrice,
-        gasLimit,
-        nonce,
-        approvalData,
-        maxPossibleCharge
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('acceptRelayedCall(address,address,bytes,uint256,uint256,uint256,uint256,bytes,uint256)', [_relay,
+        _from,
+        _encodedFunction,
+        _transactionFee,
+        _gasPrice,
+        _gasLimit,
+        _nonce,
+        _approvalData,
+        _maxPossibleCharge
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -1362,7 +1442,7 @@ export class DDAIContract extends BaseContract {
             _receiver: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('claimInterest(address)', [_receiver
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1384,7 +1464,7 @@ export class DDAIContract extends BaseContract {
             _receiver: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('claimInterest(address)', [_receiver
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1401,7 +1481,7 @@ export class DDAIContract extends BaseContract {
         getABIEncodedTransactionData(
             _receiver: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('claimInterest(address)', [_receiver
     ]);
             return abiEncodedTransactionData;
@@ -1412,7 +1492,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('claimInterest(address)', [_receiver
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1439,7 +1519,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
     _amount
     ]);
@@ -1464,7 +1544,7 @@ export class DDAIContract extends BaseContract {
             _amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
     _amount
     ]);
@@ -1483,7 +1563,7 @@ export class DDAIContract extends BaseContract {
             _account: string,
             _amount: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
     _amount
     ]);
@@ -1496,7 +1576,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setStack(address,uint256)', [_account,
         _amount
         ]);
@@ -1525,7 +1605,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('getOutStandingInterest(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1551,7 +1631,7 @@ export class DDAIContract extends BaseContract {
             operator: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('authorizeOperator(address)', [operator
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1573,7 +1653,7 @@ export class DDAIContract extends BaseContract {
             operator: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('authorizeOperator(address)', [operator
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1590,7 +1670,7 @@ export class DDAIContract extends BaseContract {
         getABIEncodedTransactionData(
             operator: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('authorizeOperator(address)', [operator
     ]);
             return abiEncodedTransactionData;
@@ -1601,7 +1681,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('authorizeOperator(address)', [operator
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1628,7 +1708,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('symbol()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -1655,7 +1735,7 @@ export class DDAIContract extends BaseContract {
             data: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('send(address,uint256,bytes)', [recipient,
     amount,
     data
@@ -1683,7 +1763,7 @@ export class DDAIContract extends BaseContract {
             data: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('send(address,uint256,bytes)', [recipient,
     amount,
     data
@@ -1704,7 +1784,7 @@ export class DDAIContract extends BaseContract {
             amount: BigNumber,
             data: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('send(address,uint256,bytes)', [recipient,
     amount,
     data
@@ -1719,7 +1799,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('send(address,uint256,bytes)', [recipient,
         amount,
         data
@@ -1749,7 +1829,7 @@ export class DDAIContract extends BaseContract {
             _data: string[],
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
     _ratios,
     _data
@@ -1777,7 +1857,7 @@ export class DDAIContract extends BaseContract {
             _data: string[],
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
     _ratios,
     _data
@@ -1798,7 +1878,7 @@ export class DDAIContract extends BaseContract {
             _ratios: BigNumber[],
             _data: string[],
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
     _ratios,
     _data
@@ -1813,7 +1893,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('setRecipes(address[],uint256[],bytes[])', [_receivers,
         _ratios,
         _data
@@ -1842,7 +1922,7 @@ export class DDAIContract extends BaseContract {
             amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('transfer(address,uint256)', [recipient,
     amount
     ]);
@@ -1867,7 +1947,7 @@ export class DDAIContract extends BaseContract {
             amount: BigNumber,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('transfer(address,uint256)', [recipient,
     amount
     ]);
@@ -1886,7 +1966,7 @@ export class DDAIContract extends BaseContract {
             recipient: string,
             amount: BigNumber,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('transfer(address,uint256)', [recipient,
     amount
     ]);
@@ -1899,7 +1979,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<boolean
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('transfer(address,uint256)', [recipient,
         amount
         ]);
@@ -1927,7 +2007,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('relayHubVersion()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -1954,7 +2034,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<[Array<{receiver: string;ratio: BigNumber;data: string}>, BigNumber]
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('getRecipesOf(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -1982,7 +2062,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('getTotalBalance(address)', [_account
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -2009,7 +2089,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('moneyMarket()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -2037,7 +2117,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<boolean
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('isOperatorFor(address,address)', [operator,
         tokenHolder
         ]);
@@ -2067,7 +2147,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<BigNumber
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('allowance(address,address)', [holder,
         spender
         ]);
@@ -2097,7 +2177,7 @@ export class DDAIContract extends BaseContract {
             preRetVal: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('postRelayedCall(bytes,bool,uint256,bytes32)', [context,
     success,
     actualCharge,
@@ -2128,7 +2208,7 @@ export class DDAIContract extends BaseContract {
             preRetVal: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('postRelayedCall(bytes,bool,uint256,bytes32)', [context,
     success,
     actualCharge,
@@ -2151,7 +2231,7 @@ export class DDAIContract extends BaseContract {
             actualCharge: BigNumber,
             preRetVal: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('postRelayedCall(bytes,bool,uint256,bytes32)', [context,
     success,
     actualCharge,
@@ -2168,7 +2248,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('postRelayedCall(bytes,bool,uint256,bytes32)', [context,
         success,
         actualCharge,
@@ -2197,7 +2277,7 @@ export class DDAIContract extends BaseContract {
             operator: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('revokeOperator(address)', [operator
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -2219,7 +2299,7 @@ export class DDAIContract extends BaseContract {
             operator: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('revokeOperator(address)', [operator
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -2236,7 +2316,7 @@ export class DDAIContract extends BaseContract {
         getABIEncodedTransactionData(
             operator: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('revokeOperator(address)', [operator
     ]);
             return abiEncodedTransactionData;
@@ -2247,7 +2327,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('revokeOperator(address)', [operator
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -2274,7 +2354,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('token()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -2302,7 +2382,7 @@ export class DDAIContract extends BaseContract {
             operatorData: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('operatorBurn(address,uint256,bytes,bytes)', [account,
     amount,
     data,
@@ -2333,7 +2413,7 @@ export class DDAIContract extends BaseContract {
             operatorData: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('operatorBurn(address,uint256,bytes,bytes)', [account,
     amount,
     data,
@@ -2356,7 +2436,7 @@ export class DDAIContract extends BaseContract {
             data: string,
             operatorData: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('operatorBurn(address,uint256,bytes,bytes)', [account,
     amount,
     data,
@@ -2373,7 +2453,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('operatorBurn(address,uint256,bytes,bytes)', [account,
         amount,
         data,
@@ -2403,7 +2483,7 @@ export class DDAIContract extends BaseContract {
             data: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('burn(uint256,bytes)', [amount,
     data
     ]);
@@ -2428,7 +2508,7 @@ export class DDAIContract extends BaseContract {
             data: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('burn(uint256,bytes)', [amount,
     data
     ]);
@@ -2447,7 +2527,7 @@ export class DDAIContract extends BaseContract {
             amount: BigNumber,
             data: string,
         ): string {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('burn(uint256,bytes)', [amount,
     data
     ]);
@@ -2460,7 +2540,7 @@ export class DDAIContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as DDAIContract;
+            const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('burn(uint256,bytes)', [amount,
         data
         ]);
@@ -2491,17 +2571,19 @@ export class DDAIContract extends BaseContract {
             _name: string,
             _symbol: string,
             _operators: string[],
-    ): Promise<DDAIContract> {
+            _priceFeed: string,
+    ): Promise<DDAIGSNBouncerContract> {
         if (_.isUndefined(artifact.compilerOutput)) {
             throw new Error('Compiler output not found in the artifact file');
         }
         const bytecode = artifact.compilerOutput.evm.bytecode.object;
         const abi = artifact.compilerOutput.abi;
-        return DDAIContract.deployAsync(bytecode, abi, provider, txDefaults, _moneyMarket,
+        return DDAIGSNBouncerContract.deployAsync(bytecode, abi, provider, txDefaults, _moneyMarket,
 _token,
 _name,
 _symbol,
-_operators
+_operators,
+_priceFeed
 );
     }
     public static async deployAsync(
@@ -2514,20 +2596,23 @@ _operators
             _name: string,
             _symbol: string,
             _operators: string[],
-    ): Promise<DDAIContract> {
+            _priceFeed: string,
+    ): Promise<DDAIGSNBouncerContract> {
         const constructorAbi = BaseContract._lookupConstructorAbi(abi);
         [_moneyMarket,
 _token,
 _name,
 _symbol,
-_operators
+_operators,
+_priceFeed
 ] = BaseContract._formatABIDataItemList(
             constructorAbi.inputs,
             [_moneyMarket,
 _token,
 _name,
 _symbol,
-_operators
+_operators,
+_priceFeed
 ],
             BaseContract._bigNumberToString,
         );
@@ -2537,7 +2622,8 @@ _operators
 _token,
 _name,
 _symbol,
-_operators
+_operators,
+_priceFeed
 ]);
         const web3Wrapper = new Web3Wrapper(provider);
         const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -2547,17 +2633,18 @@ _operators
         );
         const txHash = await web3Wrapper.sendTransactionAsync(txDataWithDefaults);
         const txReceipt = await web3Wrapper.awaitTransactionSuccessAsync(txHash);
-        const contractInstance = new DDAIContract(abi, txReceipt.contractAddress as string, provider, txDefaults);
+        const contractInstance = new DDAIGSNBouncerContract(abi, txReceipt.contractAddress as string, provider, txDefaults);
         contractInstance.constructorArgs = [_moneyMarket,
 _token,
 _name,
 _symbol,
-_operators
+_operators,
+_priceFeed
 ];
         return contractInstance;
     }
     constructor(abi: ContractAbi, address: string, provider: Provider, txDefaults?: Partial<TxData>) {
-        super('DDAI', abi, address, provider, txDefaults);
+        super('DDAIGSNBouncer', abi, address, provider, txDefaults);
         classUtils.bindAll(this, ['_abiEncoderByFunctionSignature', 'address', 'abi', '_web3Wrapper']);
     }
 } // tslint:disable:max-file-line-count

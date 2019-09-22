@@ -158,34 +158,6 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
         stackPushAllowed[_msgSender()][_account] = true;
     }
 
-    // GSN FUNCTIONALITY should be in a seperate file
-    function acceptRelayedCall(
-        address _relay,
-        address _from,
-        bytes calldata _encodedFunction,
-        uint256 _transactionFee,
-        uint256 _gasPrice,
-        uint256 _gasLimit,
-        uint256 _nonce,
-        bytes calldata _approvalData,
-        uint256 _maxPossibleCharge
-    ) external view returns (uint256, bytes memory) {
-
-        if(_balanceOf(_from) < _maxPossibleCharge) {
-            return(1, "DDAI.acceptRelayedCall: NOT_ENOUGH_DDAI_BALANCE");
-        }
-        // TODO implement check maxPossibleCharge is enough to buy the eth to pay for the tx plus some extra margin
-        return(0, "");
-    }
-
-    // TODO implement these
-    function _preRelayedCall(bytes memory context) internal returns (bytes32) {
-        return(bytes32(0));
-    }
-    function _postRelayedCall(bytes memory context, bool success, uint actualCharge, bytes32 preRetVal) internal {
-
-    }
-
     function _payToRecipes(address _account, uint256 _amount) internal returns(bool) {
         AccountData storage accountData = accountDataOf[_account];
         accountData.stack = accountData.stack.sub(_amount);

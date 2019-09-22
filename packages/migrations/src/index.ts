@@ -1,6 +1,6 @@
 import * as wrappers from '@ddai/contract-wrappers';
 import * as artifacts from '@ddai/contract-artifacts';
-import { getProvider } from '@ddai/utils';
+import { getProvider, toWei } from '@ddai/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { BigNumber, Web3ProviderEngine } from '0x.js';
 import Web3 from 'web3';
@@ -23,6 +23,13 @@ export const migrate = async () => {
         txDefaults
     )
     console.log(`Deployed MockDai at: ${mockDai.address}`);
+
+    const mockPriceFeed = await wrappers.MockUSDFeedContract.deployFrom0xArtifactAsync(
+        artifacts.MockUSDFeed,
+        pe,
+        txDefaults,
+        toWei(210),
+    )
 
     const mockIToken = await wrappers.MockITokenContract.deployFrom0xArtifactAsync(
         artifacts.MockIToken,
