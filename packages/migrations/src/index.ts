@@ -14,6 +14,7 @@ export const migrate = async () => {
         gas: 8000000,
     }
     console.log("Starting Migrations");
+    // console.log(accounts);
 
     await deploy1820(pe, web3, txDefaults);
 

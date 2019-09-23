@@ -2,6 +2,7 @@ import { Web3ProviderEngine, RPCSubprovider, BigNumber, ContractWrappers } from 
 import { Web3Wrapper, AbiDefinition, TxData, Web3JsV1Provider } from '@0x/web3-wrapper';
 import { RevertTraceSubprovider, SolCompilerArtifactAdapter } from '@0x/sol-trace';
 import { CoverageSubprovider } from '@0x/sol-coverage';
+import { MnemonicWalletSubprovider } from '@0x/subproviders';
 import path from 'path';
 
 export const getProvider = (solTrace: boolean = false, solCoverage: boolean = false) => {
@@ -32,7 +33,15 @@ export const getProvider = (solTrace: boolean = false, solCoverage: boolean = fa
         pe.addProvider(revertTraceSubprovider)    
     }
     // const rpcSubProvider = new SubscriptionsSubProvider();
-    pe.addProvider(new RPCSubprovider('http://localhost:8545'));
+    if(process.env.RPC_URL && process.env.MNEMONIC) {
+        const mnemonicProvider = new MnemonicWalletSubprovider({
+            mnemonic: process.env.MNEMONIC
+        })
+        pe.addProvider(mnemonicProvider);
+        pe.addProvider(new RPCSubprovider(process.env.RPC_URL));
+    } else{
+        pe.addProvider(new RPCSubprovider('http://localhost:8545'));
+    }
     // pe.addProvider(rpcSubProvider);
     pe.start();
     const web3: Web3Wrapper = new Web3Wrapper(pe);
