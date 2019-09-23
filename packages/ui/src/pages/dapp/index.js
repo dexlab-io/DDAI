@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button, ActivityTimeline, TimelineMarker, UserSignUpIcon, UserVerifiedIcon } from 'react-rainbow-components';
+import { Button, ActivityTimeline, TimelineMarker } from 'react-rainbow-components';
 import { EthereumHDWallet } from 'eth-dexcore-js';
-import { If } from "../../components";
+import { IF } from "../../components";
 
 class Dapp extends Component {
 
@@ -25,11 +25,11 @@ class Dapp extends Component {
         return (
             <div className="rainbow-p-vertical_large rainbow-align-content_center rainbow-flex_wrap">
 
-                <If what={!web3available}>
+                <IF what={!web3available}>
                     <Button onClick={ () => this.init()} label="Connect metamask" />
-                </If>
+                </IF>
                 
-                <If what={web3available}>
+                <IF what={web3available}>
                     <div className="rainbow-m-around_xx-large">
                         <ActivityTimeline>
                             <TimelineMarker
@@ -44,7 +44,7 @@ class Dapp extends Component {
                             />
                         </ActivityTimeline>
                     </div>
-                </If>
+                </IF>
                 
             </div>
         );
