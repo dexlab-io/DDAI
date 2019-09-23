@@ -28,7 +28,7 @@ import * as ethers from 'ethers';
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
-export class BuyPTokenRecipeContract extends BaseContract {
+export class CompoundRepayRecipeContract extends BaseContract {
     public tokensReceived = {
         /**
          * Sends an Ethereum transaction executing this method with the supplied parameters. This is a read/write
@@ -51,7 +51,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             assert.isBigNumber('_amount', _amount);
             assert.isString('_userData', _userData);
             assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
         _from.toLowerCase(),
         _to.toLowerCase(),
@@ -107,7 +107,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             assert.isBigNumber('_amount', _amount);
             assert.isString('_userData', _userData);
             assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const txHashPromise = self.tokensReceived.sendTransactionAsync(_operator.toLowerCase(),
         _from.toLowerCase(),
         _to.toLowerCase(),
@@ -147,7 +147,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             assert.isBigNumber('_amount', _amount);
             assert.isString('_userData', _userData);
             assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
         _from.toLowerCase(),
         _to.toLowerCase(),
@@ -229,7 +229,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             if (defaultBlock !== undefined) {
                 assert.isBlockParam('defaultBlock', defaultBlock);
             }
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
         _from.toLowerCase(),
         _to.toLowerCase(),
@@ -276,7 +276,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             assert.isBigNumber('_amount', _amount);
             assert.isString('_userData', _userData);
             assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
         _from.toLowerCase(),
         _to.toLowerCase(),
@@ -295,7 +295,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             callData: string
         ): ([string, string, string, BigNumber, string, string]
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncoder = self._lookupAbiEncoder('tokensReceived(address,address,address,uint256,bytes,bytes)');
             // tslint:disable boolean-naming
             const abiDecodedCallData = abiEncoder.strictDecode<[string, string, string, BigNumber, string, string]
@@ -311,7 +311,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             returnData: string
         ): (void
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncoder = self._lookupAbiEncoder('tokensReceived(address,address,address,uint256,bytes,bytes)');
             // tslint:disable boolean-naming
             const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<void
@@ -338,7 +338,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             if (defaultBlock !== undefined) {
                 assert.isBlockParam('defaultBlock', defaultBlock);
             }
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const encodedData = self._strictEncodeArguments('underlying()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -367,7 +367,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
          */
         getABIEncodedTransactionData(
             ): string {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('underlying()', []);
             return abiEncodedTransactionData;
         },
@@ -380,7 +380,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             callData: string
         ): (void
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncoder = self._lookupAbiEncoder('underlying()');
             // tslint:disable boolean-naming
             const abiDecodedCallData = abiEncoder.strictDecode<void
@@ -396,8 +396,93 @@ export class BuyPTokenRecipeContract extends BaseContract {
             returnData: string
         ): (string
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncoder = self._lookupAbiEncoder('underlying()');
+            // tslint:disable boolean-naming
+            const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<string
+        >(returnData);
+            return abiDecodedReturnData;
+        },
+    };
+    public kyberNetwork = {
+        /**
+         * Sends a read-only call to the contract method. Returns the result that would happen if one were to send an 
+         * Ethereum transaction to this method, given the current state of the blockchain. Calls do not cost gas
+         * since they don't modify state.
+         */
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<string
+        > {
+            assert.doesConformToSchema('callData', callData, schemas.callDataSchema, [
+                schemas.addressSchema,
+                schemas.numberSchema,
+                schemas.jsNumber,
+            ]);
+            if (defaultBlock !== undefined) {
+                assert.isBlockParam('defaultBlock', defaultBlock);
+            }
+            const self = this as any as CompoundRepayRecipeContract;
+            const encodedData = self._strictEncodeArguments('kyberNetwork()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            callDataWithDefaults.from = callDataWithDefaults.from ? callDataWithDefaults.from.toLowerCase() : callDataWithDefaults.from;
+        
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('kyberNetwork()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+        /**
+         * Returns the ABI encoded transaction data needed to send an Ethereum transaction calling this method. Before
+         * sending the Ethereum tx, this encoded tx data can first be sent to a separate signing service or can be used
+         * to create a 0x transaction (see protocol spec for more details).
+         * @returns The ABI encoded transaction data as a string
+         */
+        getABIEncodedTransactionData(
+            ): string {
+            const self = this as any as CompoundRepayRecipeContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('kyberNetwork()', []);
+            return abiEncodedTransactionData;
+        },
+        /**
+         * Decode the ABI-encoded transaction data into its input arguments
+         * @param callData The ABI-encoded transaction data
+         * @returns An array representing the input arguments in order. Keynames of nested structs are preserved.
+         */
+        getABIDecodedTransactionData(
+            callData: string
+        ): (void
+        ) {
+            const self = this as any as CompoundRepayRecipeContract;
+            const abiEncoder = self._lookupAbiEncoder('kyberNetwork()');
+            // tslint:disable boolean-naming
+            const abiDecodedCallData = abiEncoder.strictDecode<void
+        >(callData);
+            return abiDecodedCallData;
+        },
+        /**
+         * Decode the ABI-encoded return data from a transaction
+         * @param returnData the data returned after transaction execution
+         * @returns An array representing the output results in order.  Keynames of nested structs are preserved.
+         */
+        getABIDecodedReturnData(
+            returnData: string
+        ): (string
+        ) {
+            const self = this as any as CompoundRepayRecipeContract;
+            const abiEncoder = self._lookupAbiEncoder('kyberNetwork()');
             // tslint:disable boolean-naming
             const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<string
         >(returnData);
@@ -423,7 +508,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             if (defaultBlock !== undefined) {
                 assert.isBlockParam('defaultBlock', defaultBlock);
             }
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const encodedData = self._strictEncodeArguments('token()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -452,7 +537,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
          */
         getABIEncodedTransactionData(
             ): string {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('token()', []);
             return abiEncodedTransactionData;
         },
@@ -465,7 +550,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             callData: string
         ): (void
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncoder = self._lookupAbiEncoder('token()');
             // tslint:disable boolean-naming
             const abiDecodedCallData = abiEncoder.strictDecode<void
@@ -481,7 +566,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             returnData: string
         ): (string
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as CompoundRepayRecipeContract;
             const abiEncoder = self._lookupAbiEncoder('token()');
             // tslint:disable boolean-naming
             const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<string
@@ -496,7 +581,8 @@ public static async deployFrom0xArtifactAsync(
         logDecodeDependencies: { [contractName: string]: (ContractArtifact | SimpleContractArtifact) },
             _token: string,
             _underlying: string,
-    ): Promise<BuyPTokenRecipeContract> {
+            _kyberNetwork: string,
+    ): Promise<CompoundRepayRecipeContract> {
         assert.doesConformToSchema('txDefaults', txDefaults, schemas.txDataSchema, [
             schemas.addressSchema,
             schemas.numberSchema,
@@ -514,8 +600,9 @@ public static async deployFrom0xArtifactAsync(
                 logDecodeDependenciesAbiOnly[key] = logDecodeDependencies[key].compilerOutput.abi;
             }
         }
-        return BuyPTokenRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, logDecodeDependenciesAbiOnly, _token,
-_underlying
+        return CompoundRepayRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, logDecodeDependenciesAbiOnly, _token,
+_underlying,
+_kyberNetwork
 );
     }
     public static async deployAsync(
@@ -526,7 +613,8 @@ _underlying
         logDecodeDependencies: { [contractName: string]: ContractAbi },
             _token: string,
             _underlying: string,
-    ): Promise<BuyPTokenRecipeContract> {
+            _kyberNetwork: string,
+    ): Promise<CompoundRepayRecipeContract> {
         assert.isHexString('bytecode', bytecode);
         assert.doesConformToSchema('txDefaults', txDefaults, schemas.txDataSchema, [
             schemas.addressSchema,
@@ -536,18 +624,21 @@ _underlying
         const provider = providerUtils.standardizeOrThrow(supportedProvider);
         const constructorAbi = BaseContract._lookupConstructorAbi(abi);
         [_token,
-_underlying
+_underlying,
+_kyberNetwork
 ] = BaseContract._formatABIDataItemList(
             constructorAbi.inputs,
             [_token,
-_underlying
+_underlying,
+_kyberNetwork
 ],
             BaseContract._bigNumberToString,
         );
         const iface = new ethers.utils.Interface(abi);
         const deployInfo = iface.deployFunction;
         const txData = deployInfo.encode(bytecode, [_token,
-_underlying
+_underlying,
+_kyberNetwork
 ]);
         const web3Wrapper = new Web3Wrapper(provider);
         const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
@@ -558,10 +649,11 @@ _underlying
         const txHash = await web3Wrapper.sendTransactionAsync(txDataWithDefaults);
         logUtils.log(`transactionHash: ${txHash}`);
         const txReceipt = await web3Wrapper.awaitTransactionSuccessAsync(txHash);
-        logUtils.log(`BuyPTokenRecipe successfully deployed at ${txReceipt.contractAddress}`);
-        const contractInstance = new BuyPTokenRecipeContract(txReceipt.contractAddress as string, provider, txDefaults, logDecodeDependencies);
+        logUtils.log(`CompoundRepayRecipe successfully deployed at ${txReceipt.contractAddress}`);
+        const contractInstance = new CompoundRepayRecipeContract(txReceipt.contractAddress as string, provider, txDefaults, logDecodeDependencies);
         contractInstance.constructorArgs = [_token,
-_underlying
+_underlying,
+_kyberNetwork
 ];
         return contractInstance;
     }
@@ -626,6 +718,21 @@ _underlying
                 constant: true,
                 inputs: [
                 ],
+                name: 'kyberNetwork',
+                outputs: [
+                    {
+                        name: '',
+                        type: 'address',
+                    },
+                ],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function',
+            },
+            { 
+                constant: true,
+                inputs: [
+                ],
                 name: 'token',
                 outputs: [
                     {
@@ -647,6 +754,10 @@ _underlying
                         name: '_underlying',
                         type: 'address',
                     },
+                    {
+                        name: '_kyberNetwork',
+                        type: 'address',
+                    },
                 ],
                 outputs: [
                 ],
@@ -658,7 +769,7 @@ _underlying
         return abi;
     }
     constructor(address: string, supportedProvider: SupportedProvider, txDefaults?: Partial<TxData>, logDecodeDependencies?: { [contractName: string]: ContractAbi }) {
-        super('BuyPTokenRecipe', BuyPTokenRecipeContract.ABI(), address, supportedProvider, txDefaults, logDecodeDependencies);
+        super('CompoundRepayRecipe', CompoundRepayRecipeContract.ABI(), address, supportedProvider, txDefaults, logDecodeDependencies);
         classUtils.bindAll(this, ['_abiEncoderByFunctionSignature', 'address', '_web3Wrapper']);
     }
 } 

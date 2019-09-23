@@ -1335,37 +1335,37 @@
 	},
 	"sources": {
 		"DDAI/DDAI.sol": {
-			"id": 15
+			"id": 16
 		},
 		"interfaces/IDDAI.sol": {
-			"id": 17
+			"id": 19
 		},
 		"interfaces/IMoneyMarket.sol": {
-			"id": 20
+			"id": 22
 		},
 		"openzeppelin-solidity/contracts/token/ERC777/ERC777.sol": {
-			"id": 10
+			"id": 11
 		},
 		"openzeppelin-solidity/contracts/GSN/Context.sol": {
 			"id": 0
 		},
 		"openzeppelin-solidity/contracts/token/ERC777/IERC777.sol": {
-			"id": 11
-		},
-		"openzeppelin-solidity/contracts/token/ERC777/IERC777Recipient.sol": {
 			"id": 12
 		},
-		"openzeppelin-solidity/contracts/token/ERC777/IERC777Sender.sol": {
+		"openzeppelin-solidity/contracts/token/ERC777/IERC777Recipient.sol": {
 			"id": 13
 		},
+		"openzeppelin-solidity/contracts/token/ERC777/IERC777Sender.sol": {
+			"id": 14
+		},
 		"openzeppelin-solidity/contracts/token/ERC20/IERC20.sol": {
-			"id": 9
+			"id": 10
 		},
 		"openzeppelin-solidity/contracts/math/SafeMath.sol": {
 			"id": 7
 		},
 		"openzeppelin-solidity/contracts/utils/Address.sol": {
-			"id": 14
+			"id": 15
 		},
 		"openzeppelin-solidity/contracts/introspection/IERC1820Registry.sol": {
 			"id": 5

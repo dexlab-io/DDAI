@@ -28,8 +28,99 @@ import * as ethers from 'ethers';
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
-export class BuyPTokenRecipeContract extends BaseContract {
-    public tokensReceived = {
+export class ICTokenContract extends BaseContract {
+    public borrowBalanceCurrent = {
+        /**
+         * Sends a read-only call to the contract method. Returns the result that would happen if one were to send an 
+         * Ethereum transaction to this method, given the current state of the blockchain. Calls do not cost gas
+         * since they don't modify state.
+         */
+        async callAsync(
+            _account: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            assert.isString('_account', _account);
+            assert.doesConformToSchema('callData', callData, schemas.callDataSchema, [
+                schemas.addressSchema,
+                schemas.numberSchema,
+                schemas.jsNumber,
+            ]);
+            if (defaultBlock !== undefined) {
+                assert.isBlockParam('defaultBlock', defaultBlock);
+            }
+            const self = this as any as ICTokenContract;
+            const encodedData = self._strictEncodeArguments('borrowBalanceCurrent(address)', [_account.toLowerCase()
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            callDataWithDefaults.from = callDataWithDefaults.from ? callDataWithDefaults.from.toLowerCase() : callDataWithDefaults.from;
+        
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('borrowBalanceCurrent(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+        /**
+         * Returns the ABI encoded transaction data needed to send an Ethereum transaction calling this method. Before
+         * sending the Ethereum tx, this encoded tx data can first be sent to a separate signing service or can be used
+         * to create a 0x transaction (see protocol spec for more details).
+         * @returns The ABI encoded transaction data as a string
+         */
+        getABIEncodedTransactionData(
+                _account: string,
+            ): string {
+            assert.isString('_account', _account);
+            const self = this as any as ICTokenContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('borrowBalanceCurrent(address)', [_account.toLowerCase()
+        ]);
+            return abiEncodedTransactionData;
+        },
+        /**
+         * Decode the ABI-encoded transaction data into its input arguments
+         * @param callData The ABI-encoded transaction data
+         * @returns An array representing the input arguments in order. Keynames of nested structs are preserved.
+         */
+        getABIDecodedTransactionData(
+            callData: string
+        ): (string
+        ) {
+            const self = this as any as ICTokenContract;
+            const abiEncoder = self._lookupAbiEncoder('borrowBalanceCurrent(address)');
+            // tslint:disable boolean-naming
+            const abiDecodedCallData = abiEncoder.strictDecode<string
+        >(callData);
+            return abiDecodedCallData;
+        },
+        /**
+         * Decode the ABI-encoded return data from a transaction
+         * @param returnData the data returned after transaction execution
+         * @returns An array representing the output results in order.  Keynames of nested structs are preserved.
+         */
+        getABIDecodedReturnData(
+            returnData: string
+        ): (BigNumber
+        ) {
+            const self = this as any as ICTokenContract;
+            const abiEncoder = self._lookupAbiEncoder('borrowBalanceCurrent(address)');
+            // tslint:disable boolean-naming
+            const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(returnData);
+            return abiDecodedReturnData;
+        },
+    };
+    public repayBorrowBehalf = {
         /**
          * Sends an Ethereum transaction executing this method with the supplied parameters. This is a read/write
          * Ethereum operation and will cost gas.
@@ -37,27 +128,15 @@ export class BuyPTokenRecipeContract extends BaseContract {
          * @returns The hash of the transaction
          */
         async sendTransactionAsync(
-            _operator: string,
-            _from: string,
-            _to: string,
-            _amount: BigNumber,
-            _userData: string,
-            _operatorData: string,
+            _borrower: string,
+            _repayAmount: BigNumber,
         txData?: Partial<TxData> | undefined,
         ): Promise<string> {
-            assert.isString('_operator', _operator);
-            assert.isString('_from', _from);
-            assert.isString('_to', _to);
-            assert.isBigNumber('_amount', _amount);
-            assert.isString('_userData', _userData);
-            assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
-            const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
-        _from.toLowerCase(),
-        _to.toLowerCase(),
-        _amount,
-        _userData,
-        _operatorData
+            assert.isString('_borrower', _borrower);
+            assert.isBigNumber('_repayAmount', _repayAmount);
+            const self = this as any as ICTokenContract;
+            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address,uint256)', [_borrower.toLowerCase(),
+        _repayAmount
         ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -66,14 +145,10 @@ export class BuyPTokenRecipeContract extends BaseContract {
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
-                self.tokensReceived.estimateGasAsync.bind(
+                self.repayBorrowBehalf.estimateGasAsync.bind(
                     self,
-                    _operator.toLowerCase(),
-                    _from.toLowerCase(),
-                    _to.toLowerCase(),
-                    _amount,
-                    _userData,
-                    _operatorData
+                    _borrower.toLowerCase(),
+                    _repayAmount
                 ),
             );
             if (txDataWithDefaults.from !== undefined) {
@@ -91,29 +166,17 @@ export class BuyPTokenRecipeContract extends BaseContract {
          * @returns A promise that resolves when the transaction is successful
          */
         awaitTransactionSuccessAsync(
-            _operator: string,
-            _from: string,
-            _to: string,
-            _amount: BigNumber,
-            _userData: string,
-            _operatorData: string,
+            _borrower: string,
+            _repayAmount: BigNumber,
             txData?: Partial<TxData>,
             pollingIntervalMs?: number,
             timeoutMs?: number,
         ): PromiseWithTransactionHash<TransactionReceiptWithDecodedLogs> {
-            assert.isString('_operator', _operator);
-            assert.isString('_from', _from);
-            assert.isString('_to', _to);
-            assert.isBigNumber('_amount', _amount);
-            assert.isString('_userData', _userData);
-            assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
-            const txHashPromise = self.tokensReceived.sendTransactionAsync(_operator.toLowerCase(),
-        _from.toLowerCase(),
-        _to.toLowerCase(),
-        _amount,
-        _userData,
-        _operatorData
+            assert.isString('_borrower', _borrower);
+            assert.isBigNumber('_repayAmount', _repayAmount);
+            const self = this as any as ICTokenContract;
+            const txHashPromise = self.repayBorrowBehalf.sendTransactionAsync(_borrower.toLowerCase(),
+        _repayAmount
         , txData);
             return new PromiseWithTransactionHash<TransactionReceiptWithDecodedLogs>(
                 txHashPromise,
@@ -133,27 +196,15 @@ export class BuyPTokenRecipeContract extends BaseContract {
          * @returns The hash of the transaction
          */
         async estimateGasAsync(
-            _operator: string,
-            _from: string,
-            _to: string,
-            _amount: BigNumber,
-            _userData: string,
-            _operatorData: string,
+            _borrower: string,
+            _repayAmount: BigNumber,
             txData?: Partial<TxData> | undefined,
         ): Promise<number> {
-            assert.isString('_operator', _operator);
-            assert.isString('_from', _from);
-            assert.isString('_to', _to);
-            assert.isBigNumber('_amount', _amount);
-            assert.isString('_userData', _userData);
-            assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
-            const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
-        _from.toLowerCase(),
-        _to.toLowerCase(),
-        _amount,
-        _userData,
-        _operatorData
+            assert.isString('_borrower', _borrower);
+            assert.isBigNumber('_repayAmount', _repayAmount);
+            const self = this as any as ICTokenContract;
+            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address,uint256)', [_borrower.toLowerCase(),
+        _repayAmount
         ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -171,30 +222,18 @@ export class BuyPTokenRecipeContract extends BaseContract {
             return gas;
         },
         async validateAndSendTransactionAsync(
-                _operator: string,
-                _from: string,
-                _to: string,
-                _amount: BigNumber,
-                _userData: string,
-                _operatorData: string,
+                _borrower: string,
+                _repayAmount: BigNumber,
             txData?: Partial<TxData> | undefined,
             ): Promise<string> {
-            await (this as any).tokensReceived.callAsync(
-        _operator,
-        _from,
-        _to,
-        _amount,
-        _userData,
-        _operatorData,
+            await (this as any).repayBorrowBehalf.callAsync(
+        _borrower,
+        _repayAmount,
         txData,
             );
-            const txHash =  await (this as any).tokensReceived.sendTransactionAsync(
-        _operator,
-        _from,
-        _to,
-        _amount,
-        _userData,
-        _operatorData,
+            const txHash =  await (this as any).repayBorrowBehalf.sendTransactionAsync(
+        _borrower,
+        _repayAmount,
         txData,
             ); 
             return txHash;
@@ -205,22 +244,14 @@ export class BuyPTokenRecipeContract extends BaseContract {
          * since they don't modify state.
          */
         async callAsync(
-            _operator: string,
-            _from: string,
-            _to: string,
-            _amount: BigNumber,
-            _userData: string,
-            _operatorData: string,
+            _borrower: string,
+            _repayAmount: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<void
+        ): Promise<BigNumber
         > {
-            assert.isString('_operator', _operator);
-            assert.isString('_from', _from);
-            assert.isString('_to', _to);
-            assert.isBigNumber('_amount', _amount);
-            assert.isString('_userData', _userData);
-            assert.isString('_operatorData', _operatorData);
+            assert.isString('_borrower', _borrower);
+            assert.isBigNumber('_repayAmount', _repayAmount);
             assert.doesConformToSchema('callData', callData, schemas.callDataSchema, [
                 schemas.addressSchema,
                 schemas.numberSchema,
@@ -229,13 +260,9 @@ export class BuyPTokenRecipeContract extends BaseContract {
             if (defaultBlock !== undefined) {
                 assert.isBlockParam('defaultBlock', defaultBlock);
             }
-            const self = this as any as BuyPTokenRecipeContract;
-            const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
-        _from.toLowerCase(),
-        _to.toLowerCase(),
-        _amount,
-        _userData,
-        _operatorData
+            const self = this as any as ICTokenContract;
+            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address,uint256)', [_borrower.toLowerCase(),
+        _repayAmount
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -249,9 +276,9 @@ export class BuyPTokenRecipeContract extends BaseContract {
         
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('tokensReceived(address,address,address,uint256,bytes,bytes)');
+            const abiEncoder = self._lookupAbiEncoder('repayBorrowBehalf(address,uint256)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -263,26 +290,14 @@ export class BuyPTokenRecipeContract extends BaseContract {
          * @returns The ABI encoded transaction data as a string
          */
         getABIEncodedTransactionData(
-                _operator: string,
-                _from: string,
-                _to: string,
-                _amount: BigNumber,
-                _userData: string,
-                _operatorData: string,
+                _borrower: string,
+                _repayAmount: BigNumber,
             ): string {
-            assert.isString('_operator', _operator);
-            assert.isString('_from', _from);
-            assert.isString('_to', _to);
-            assert.isBigNumber('_amount', _amount);
-            assert.isString('_userData', _userData);
-            assert.isString('_operatorData', _operatorData);
-            const self = this as any as BuyPTokenRecipeContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator.toLowerCase(),
-        _from.toLowerCase(),
-        _to.toLowerCase(),
-        _amount,
-        _userData,
-        _operatorData
+            assert.isString('_borrower', _borrower);
+            assert.isBigNumber('_repayAmount', _repayAmount);
+            const self = this as any as ICTokenContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('repayBorrowBehalf(address,uint256)', [_borrower.toLowerCase(),
+        _repayAmount
         ]);
             return abiEncodedTransactionData;
         },
@@ -293,12 +308,12 @@ export class BuyPTokenRecipeContract extends BaseContract {
          */
         getABIDecodedTransactionData(
             callData: string
-        ): ([string, string, string, BigNumber, string, string]
+        ): (string
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
-            const abiEncoder = self._lookupAbiEncoder('tokensReceived(address,address,address,uint256,bytes,bytes)');
+            const self = this as any as ICTokenContract;
+            const abiEncoder = self._lookupAbiEncoder('repayBorrowBehalf(address,uint256)');
             // tslint:disable boolean-naming
-            const abiDecodedCallData = abiEncoder.strictDecode<[string, string, string, BigNumber, string, string]
+            const abiDecodedCallData = abiEncoder.strictDecode<string
         >(callData);
             return abiDecodedCallData;
         },
@@ -309,12 +324,12 @@ export class BuyPTokenRecipeContract extends BaseContract {
          */
         getABIDecodedReturnData(
             returnData: string
-        ): (void
+        ): (BigNumber
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
-            const abiEncoder = self._lookupAbiEncoder('tokensReceived(address,address,address,uint256,bytes,bytes)');
+            const self = this as any as ICTokenContract;
+            const abiEncoder = self._lookupAbiEncoder('repayBorrowBehalf(address,uint256)');
             // tslint:disable boolean-naming
-            const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<void
+            const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<BigNumber
         >(returnData);
             return abiDecodedReturnData;
         },
@@ -338,7 +353,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             if (defaultBlock !== undefined) {
                 assert.isBlockParam('defaultBlock', defaultBlock);
             }
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as ICTokenContract;
             const encodedData = self._strictEncodeArguments('underlying()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -367,7 +382,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
          */
         getABIEncodedTransactionData(
             ): string {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as ICTokenContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('underlying()', []);
             return abiEncodedTransactionData;
         },
@@ -380,7 +395,7 @@ export class BuyPTokenRecipeContract extends BaseContract {
             callData: string
         ): (void
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as ICTokenContract;
             const abiEncoder = self._lookupAbiEncoder('underlying()');
             // tslint:disable boolean-naming
             const abiDecodedCallData = abiEncoder.strictDecode<void
@@ -396,93 +411,8 @@ export class BuyPTokenRecipeContract extends BaseContract {
             returnData: string
         ): (string
         ) {
-            const self = this as any as BuyPTokenRecipeContract;
+            const self = this as any as ICTokenContract;
             const abiEncoder = self._lookupAbiEncoder('underlying()');
-            // tslint:disable boolean-naming
-            const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<string
-        >(returnData);
-            return abiDecodedReturnData;
-        },
-    };
-    public token = {
-        /**
-         * Sends a read-only call to the contract method. Returns the result that would happen if one were to send an 
-         * Ethereum transaction to this method, given the current state of the blockchain. Calls do not cost gas
-         * since they don't modify state.
-         */
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<string
-        > {
-            assert.doesConformToSchema('callData', callData, schemas.callDataSchema, [
-                schemas.addressSchema,
-                schemas.numberSchema,
-                schemas.jsNumber,
-            ]);
-            if (defaultBlock !== undefined) {
-                assert.isBlockParam('defaultBlock', defaultBlock);
-            }
-            const self = this as any as BuyPTokenRecipeContract;
-            const encodedData = self._strictEncodeArguments('token()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            callDataWithDefaults.from = callDataWithDefaults.from ? callDataWithDefaults.from.toLowerCase() : callDataWithDefaults.from;
-        
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('token()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<string
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-        /**
-         * Returns the ABI encoded transaction data needed to send an Ethereum transaction calling this method. Before
-         * sending the Ethereum tx, this encoded tx data can first be sent to a separate signing service or can be used
-         * to create a 0x transaction (see protocol spec for more details).
-         * @returns The ABI encoded transaction data as a string
-         */
-        getABIEncodedTransactionData(
-            ): string {
-            const self = this as any as BuyPTokenRecipeContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('token()', []);
-            return abiEncodedTransactionData;
-        },
-        /**
-         * Decode the ABI-encoded transaction data into its input arguments
-         * @param callData The ABI-encoded transaction data
-         * @returns An array representing the input arguments in order. Keynames of nested structs are preserved.
-         */
-        getABIDecodedTransactionData(
-            callData: string
-        ): (void
-        ) {
-            const self = this as any as BuyPTokenRecipeContract;
-            const abiEncoder = self._lookupAbiEncoder('token()');
-            // tslint:disable boolean-naming
-            const abiDecodedCallData = abiEncoder.strictDecode<void
-        >(callData);
-            return abiDecodedCallData;
-        },
-        /**
-         * Decode the ABI-encoded return data from a transaction
-         * @param returnData the data returned after transaction execution
-         * @returns An array representing the output results in order.  Keynames of nested structs are preserved.
-         */
-        getABIDecodedReturnData(
-            returnData: string
-        ): (string
-        ) {
-            const self = this as any as BuyPTokenRecipeContract;
-            const abiEncoder = self._lookupAbiEncoder('token()');
             // tslint:disable boolean-naming
             const abiDecodedReturnData = abiEncoder.strictDecodeReturnValue<string
         >(returnData);
@@ -494,9 +424,7 @@ public static async deployFrom0xArtifactAsync(
         supportedProvider: SupportedProvider,
         txDefaults: Partial<TxData>,
         logDecodeDependencies: { [contractName: string]: (ContractArtifact | SimpleContractArtifact) },
-            _token: string,
-            _underlying: string,
-    ): Promise<BuyPTokenRecipeContract> {
+    ): Promise<ICTokenContract> {
         assert.doesConformToSchema('txDefaults', txDefaults, schemas.txDataSchema, [
             schemas.addressSchema,
             schemas.numberSchema,
@@ -514,9 +442,7 @@ public static async deployFrom0xArtifactAsync(
                 logDecodeDependenciesAbiOnly[key] = logDecodeDependencies[key].compilerOutput.abi;
             }
         }
-        return BuyPTokenRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, logDecodeDependenciesAbiOnly, _token,
-_underlying
-);
+        return ICTokenContract.deployAsync(bytecode, abi, provider, txDefaults, logDecodeDependenciesAbiOnly, );
     }
     public static async deployAsync(
         bytecode: string,
@@ -524,9 +450,7 @@ _underlying
         supportedProvider: SupportedProvider,
         txDefaults: Partial<TxData>,
         logDecodeDependencies: { [contractName: string]: ContractAbi },
-            _token: string,
-            _underlying: string,
-    ): Promise<BuyPTokenRecipeContract> {
+    ): Promise<ICTokenContract> {
         assert.isHexString('bytecode', bytecode);
         assert.doesConformToSchema('txDefaults', txDefaults, schemas.txDataSchema, [
             schemas.addressSchema,
@@ -535,20 +459,14 @@ _underlying
         ]);
         const provider = providerUtils.standardizeOrThrow(supportedProvider);
         const constructorAbi = BaseContract._lookupConstructorAbi(abi);
-        [_token,
-_underlying
-] = BaseContract._formatABIDataItemList(
+        [] = BaseContract._formatABIDataItemList(
             constructorAbi.inputs,
-            [_token,
-_underlying
-],
+            [],
             BaseContract._bigNumberToString,
         );
         const iface = new ethers.utils.Interface(abi);
         const deployInfo = iface.deployFunction;
-        const txData = deployInfo.encode(bytecode, [_token,
-_underlying
-]);
+        const txData = deployInfo.encode(bytecode, []);
         const web3Wrapper = new Web3Wrapper(provider);
         const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
             {data: txData},
@@ -558,11 +476,9 @@ _underlying
         const txHash = await web3Wrapper.sendTransactionAsync(txDataWithDefaults);
         logUtils.log(`transactionHash: ${txHash}`);
         const txReceipt = await web3Wrapper.awaitTransactionSuccessAsync(txHash);
-        logUtils.log(`BuyPTokenRecipe successfully deployed at ${txReceipt.contractAddress}`);
-        const contractInstance = new BuyPTokenRecipeContract(txReceipt.contractAddress as string, provider, txDefaults, logDecodeDependencies);
-        contractInstance.constructorArgs = [_token,
-_underlying
-];
+        logUtils.log(`ICToken successfully deployed at ${txReceipt.contractAddress}`);
+        const contractInstance = new ICTokenContract(txReceipt.contractAddress as string, provider, txDefaults, logDecodeDependencies);
+        contractInstance.constructorArgs = [];
         return contractInstance;
     }
 
@@ -573,35 +489,42 @@ _underlying
     public static ABI(): ContractAbi {
         const abi = [
             { 
+                constant: true,
+                inputs: [
+                    {
+                        name: '_account',
+                        type: 'address',
+                    },
+                ],
+                name: 'borrowBalanceCurrent',
+                outputs: [
+                    {
+                        name: '',
+                        type: 'uint256',
+                    },
+                ],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function',
+            },
+            { 
                 constant: false,
                 inputs: [
                     {
-                        name: '_operator',
+                        name: '_borrower',
                         type: 'address',
                     },
                     {
-                        name: '_from',
-                        type: 'address',
-                    },
-                    {
-                        name: '_to',
-                        type: 'address',
-                    },
-                    {
-                        name: '_amount',
+                        name: '_repayAmount',
                         type: 'uint256',
                     },
-                    {
-                        name: '_userData',
-                        type: 'bytes',
-                    },
-                    {
-                        name: '_operatorData',
-                        type: 'bytes',
-                    },
                 ],
-                name: 'tokensReceived',
+                name: 'repayBorrowBehalf',
                 outputs: [
+                    {
+                        name: '',
+                        type: 'uint256',
+                    },
                 ],
                 payable: false,
                 stateMutability: 'nonpayable',
@@ -622,43 +545,11 @@ _underlying
                 stateMutability: 'view',
                 type: 'function',
             },
-            { 
-                constant: true,
-                inputs: [
-                ],
-                name: 'token',
-                outputs: [
-                    {
-                        name: '',
-                        type: 'address',
-                    },
-                ],
-                payable: false,
-                stateMutability: 'view',
-                type: 'function',
-            },
-            { 
-                inputs: [
-                    {
-                        name: '_token',
-                        type: 'address',
-                    },
-                    {
-                        name: '_underlying',
-                        type: 'address',
-                    },
-                ],
-                outputs: [
-                ],
-                payable: false,
-                stateMutability: 'nonpayable',
-                type: 'constructor',
-            },
         ] as ContractAbi;
         return abi;
     }
     constructor(address: string, supportedProvider: SupportedProvider, txDefaults?: Partial<TxData>, logDecodeDependencies?: { [contractName: string]: ContractAbi }) {
-        super('BuyPTokenRecipe', BuyPTokenRecipeContract.ABI(), address, supportedProvider, txDefaults, logDecodeDependencies);
+        super('ICToken', ICTokenContract.ABI(), address, supportedProvider, txDefaults, logDecodeDependencies);
         classUtils.bindAll(this, ['_abiEncoderByFunctionSignature', 'address', '_web3Wrapper']);
     }
 } 
