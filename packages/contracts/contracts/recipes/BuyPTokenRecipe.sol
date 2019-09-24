@@ -16,7 +16,7 @@ contract BuyPTokenRecipe is BaseRecipe {
         bytes calldata _userData,
         bytes calldata _operatorData
     ) external {
-        _tokensReceived();
+        _tokensReceived(_to);
         token.redeem(address(this), _amount);
         address pTokenAddress = abi.decode(_userData, (address));
         underlying.approve(pTokenAddress, _amount);

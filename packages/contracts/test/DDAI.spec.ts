@@ -14,7 +14,7 @@ let mockDai: wrappers.MockDaiContract;
 let mockIToken: wrappers.MockITokenContract;
 let mockKyberNetwork: wrappers.MockKyberNetworkContract;
 let ddai: wrappers.DDAIContract;
-let buyEthRecipe: wrappers.BuyEthRecipeContract;
+let buyTokenRecipe: wrappers.BuyTokenRecipeContract;
 let buyPTokenRecipe: wrappers.BuyPTokenRecipeContract;
 let mockRecipe: wrappers.MockRecipeContract;
 let snapshot: number;
@@ -50,7 +50,7 @@ describe("DDAI", function( ){
     this.timeout(30000);
 
     before(async () => {
-        ({mockDai, mockIToken, mockKyberNetwork, ddai, buyEthRecipe, buyPTokenRecipe, mockRecipe} = (await migrate()).contractInstances);
+        ({mockDai, mockIToken, mockKyberNetwork, ddai, buyTokenRecipe, buyPTokenRecipe, mockRecipe} = (await migrate()).contractInstances);
         accounts = await web3.getAvailableAddressesAsync();
         user = accounts[0];
         await mockDai.mintTo.sendTransactionAsync(user, initialDaiAmount);
@@ -441,6 +441,21 @@ describe("DDAI", function( ){
 
         const stackSize = await ddai.getStack.callAsync(accounts[1]);
         expect(stackSize, "Stack size invalid").to.bignumber.eq(stackAmount);
+    })
+
+    // Zero transfer should always work as this allows for calling other contracts from ddai paying gas in ddai
+    // Possibly doing smart contract wallet functionality
+    it("Tranferring zero should work", async() => {
+        await mintDDAI(toWei(10));
+        await ddai.transfer.sendTransactionAsync(accounts[1], toWei(0));
+    })
+
+    it("Setting receive to stack should work", async() => {
+        expect(true, "Test not implemented").to.equal(false);
+    })
+
+    it("Receiving ddai to stack when receive to stack is set should work", async() => {
+        expect(true, "Test not implemented").to.equal(false);
     })
 })
 

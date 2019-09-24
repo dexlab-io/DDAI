@@ -9,10 +9,6 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/math/Math.sol";
 
-// TODO Implement user pushing/pulling funds from stack
-// TODO Allow user to allow address to modify stack
-// TODO Allow user to receive funds to stack
-
 contract DDAI is IDDAI, ERC777 {
 
     using SafeMath for uint256;
@@ -36,6 +32,7 @@ contract DDAI is IDDAI, ERC777 {
         uint256 stack; // balance available for recipes
         Recipe[] recipes;
         uint256 totalRatio;
+        bool receiveToStack;
     }
 
     struct Recipe {
@@ -165,6 +162,11 @@ contract DDAI is IDDAI, ERC777 {
         stackPushAllowed[_msgSender()][_account] = true;
     }
 
+    // Allow user to set if they want to receive incoming ddai directly into the stack
+    function setReceiveToStack(bool _value) external {
+        accountDataOf[_msgSender()].receiveToStack = _value;
+    }
+
     function _payToRecipes(address _account, uint256 _amount) internal returns(bool) {
         AccountData storage accountData = accountDataOf[_account];
         accountData.stack = accountData.stack.sub(_amount);
@@ -225,6 +227,13 @@ contract DDAI is IDDAI, ERC777 {
     {
         claimInterest(_from);
         claimInterest(_to);
+
+        AccountData storage accountData = accountDataOf[_to];
+
+        // If account is set up to receive incoming payments to stack increase stack by amount received
+        if(accountData.receiveToStack == true) {
+            accountData.stack = accountData.stack.add(_amount);
+        }
         super._move(_operator, _from, _to, _amount, _userData, _operatorData);
     }
 }

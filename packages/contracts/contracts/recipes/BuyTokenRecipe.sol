@@ -26,7 +26,7 @@ contract BuyTokenRecipe is BaseRecipe {
         bytes calldata _userData,
         bytes calldata _operatorData
     ) external {
-        _tokensReceived();
+        _tokensReceived(_to);
         // burn ddai
         token.redeem(address(this), _amount);
         // approve underlying asset (dai)

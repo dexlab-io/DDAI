@@ -26,7 +26,7 @@ contract CompoundRepayRecipe is BaseRecipe {
         bytes calldata _userData,
         bytes calldata _operatorData
     ) external {
-        _tokensReceived();
+        _tokensReceived(_to);
         // redeem dai from ddai;
         token.redeem(address(this), _amount);
 

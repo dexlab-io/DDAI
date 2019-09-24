@@ -18,7 +18,9 @@ contract BaseRecipe {
         _erc1820.setInterfaceImplementer(address(this), TOKENS_RECIPIENT_INTERFACE_HASH, address(this));
     }
 
-    function _tokensReceived() internal {
+    function _tokensReceived(address _to) internal {
         require(msg.sender == address(token), "BaseRecipe.tokensReceived: MSG_SENDER_NOT_TOKEN");
+        // To Must be this contract as tokens should be received here
+        require(_to == address(this), "BaseRecipe.tokensReceived: TO_SHOULD_BE_THIS");
     }
 }
