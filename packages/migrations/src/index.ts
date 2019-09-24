@@ -1,6 +1,6 @@
 import * as wrappers from '@ddai/contract-wrappers';
 import * as artifacts from '@ddai/contract-artifacts';
-import { getProvider, toWei } from '@ddai/utils';
+import { getProvider, toWei, getDeployArgs } from '@ddai/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { BigNumber, Web3ProviderEngine } from '0x.js';
 import Web3 from 'web3';
@@ -19,38 +19,32 @@ export const migrate = async () => {
     await deploy1820(pe, web3, txDefaults);
 
     const mockDai = await wrappers.MockDaiContract.deployFrom0xArtifactAsync(
-        artifacts.MockDai,
-        pe,
-        txDefaults
+        ...getDeployArgs("MockDai", pe, txDefaults),
     )
     console.log(`Deployed MockDai at: ${mockDai.address}`);
 
     const mockPriceFeed = await wrappers.MockUSDFeedContract.deployFrom0xArtifactAsync(
-        artifacts.MockUSDFeed,
-        pe,
-        txDefaults,
-        toWei(210),
+        ...getDeployArgs("MockUSDFeed", pe, txDefaults),
+        // @ts-ignore
+        toWei(210)
     )
 
     const mockIToken = await wrappers.MockITokenContract.deployFrom0xArtifactAsync(
-        artifacts.MockIToken,
-        pe,
-        txDefaults,
+        ...getDeployArgs("MockIToken", pe, txDefaults),
+        // @ts-ignore
         mockDai.address,
     )
     console.log(`Deployed MockIToken at: ${mockIToken.address}`);
 
     const mockKyberNetwork = await wrappers.MockKyberNetworkContract.deployFrom0xArtifactAsync(
-        artifacts.MockKyberNetwork,
-        pe,
-        txDefaults
+        ...getDeployArgs("MockKyberNetwork", pe, txDefaults),
     )
+
     console.log(`Deployed MockKyberNetwork at: ${mockKyberNetwork.address}`);
     
     const ddai = await wrappers.DDAIContract.deployFrom0xArtifactAsync(
-        artifacts.DDAI,
-        pe,
-        txDefaults,
+        ...getDeployArgs("DDAI", pe, txDefaults),
+        // @ts-ignore
         mockIToken.address,
         mockDai.address,
         "DDAI",
@@ -60,18 +54,16 @@ export const migrate = async () => {
     console.log(`Deployed DDAI at: ${ddai.address}`);
 
     const mockRecipe = await wrappers.MockRecipeContract.deployFrom0xArtifactAsync(
-        artifacts.MockRecipe,
-        pe,
-        txDefaults,
+        ...getDeployArgs("MockRecipe", pe, txDefaults),
+        // @ts-ignore
         ddai.address,
         mockDai.address
     )
     console.log(`Deployed MockRecipe: ${mockRecipe.address}`);
 
     const buyEthRecipe = await wrappers.BuyEthRecipeContract.deployFrom0xArtifactAsync(
-        artifacts.BuyEthRecipe,
-        pe,
-        txDefaults,
+        ...getDeployArgs("BuyEthRecipe", pe, txDefaults),
+        // @ts-ignore
         ddai.address,
         mockDai.address,
         mockKyberNetwork.address
@@ -79,9 +71,8 @@ export const migrate = async () => {
     console.log(`Deployed BuyEthRecipe: ${buyEthRecipe.address}`);
 
     const buyPTokenRecipe = await wrappers.BuyPTokenRecipeContract.deployFrom0xArtifactAsync(
-        artifacts.BuyPTokenRecipe,
-        pe,
-        txDefaults,
+        ...getDeployArgs("BuyPTokenRecipe", pe, txDefaults),
+        // @ts-ignore
         ddai.address,
         mockDai.address
     )

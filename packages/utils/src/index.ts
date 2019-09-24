@@ -3,7 +3,9 @@ import { Web3Wrapper, AbiDefinition, TxData, Web3JsV1Provider } from '@0x/web3-w
 import { RevertTraceSubprovider, SolCompilerArtifactAdapter } from '@0x/sol-trace';
 import { CoverageSubprovider } from '@0x/sol-coverage';
 import { MnemonicWalletSubprovider } from '@0x/subproviders';
+import * as artifacts from '@ddai/contract-artifacts';
 import path from 'path';
+import { ContractArtifact } from "@0x/sol-tracing-utils/node_modules/ethereum-types";
 
 export const getProvider = (solTrace: boolean = false, solCoverage: boolean = false) => {
     const pe: Web3ProviderEngine = new Web3ProviderEngine();
@@ -50,4 +52,21 @@ export const getProvider = (solTrace: boolean = false, solCoverage: boolean = fa
 
 export const toWei = (amount: number | string | BigNumber) => {
     return Web3Wrapper.toWei(new BigNumber(amount));
+}
+
+type DeployArgs = [ ContractArtifact, Web3ProviderEngine, Partial<TxData>, {[contractName: string]: ContractArtifact} ]
+
+export const getDeployArgs = (
+    name: string,
+    pe: Web3ProviderEngine,
+    txDefaults
+): DeployArgs => {
+    return [
+        artifacts[name],
+        pe,
+        txDefaults,
+        {
+            [name]: artifacts[name]
+        }
+    ]
 }
