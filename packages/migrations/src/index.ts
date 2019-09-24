@@ -62,14 +62,14 @@ export const migrate = async () => {
     )
     console.log(`Deployed MockRecipe: ${mockRecipe.address}`);
 
-    const buyEthRecipe = await wrappers.BuyEthRecipeContract.deployFrom0xArtifactAsync(
-        ...getDeployArgs("BuyEthRecipe", pe, txDefaults),
+    const buyTokenRecipe = await wrappers.BuyTokenRecipeContract.deployFrom0xArtifactAsync(
+        ...getDeployArgs("BuyTokenRecipe", pe, txDefaults),
         // @ts-ignore
         ddai.address,
         mockDai.address,
         mockKyberNetwork.address
     )
-    console.log(`Deployed BuyEthRecipe: ${buyEthRecipe.address}`);
+    console.log(`Deployed BuyEthRecipe: ${buyTokenRecipe.address}`);
 
     const buyPTokenRecipe = await wrappers.BuyPTokenRecipeContract.deployFrom0xArtifactAsync(
         ...getDeployArgs("BuyPTokenRecipe", pe, txDefaults),
@@ -84,7 +84,7 @@ export const migrate = async () => {
         mockIToken: mockIToken.address,
         mockKyberNetwork: mockKyberNetwork.address,
         ddai: ddai.address,
-        buyEthRecipe: buyEthRecipe.address,
+        buyTokenRecipe: buyTokenRecipe.address,
         buyPTokenRecipe: buyPTokenRecipe.address,
         mockRecipe: mockRecipe.address,
     }
@@ -94,7 +94,7 @@ export const migrate = async () => {
         mockIToken: mockIToken,
         mockKyberNetwork: mockKyberNetwork,
         ddai: ddai,
-        buyEthRecipe: buyEthRecipe,
+        buyTokenRecipe: buyTokenRecipe,
         buyPTokenRecipe: buyPTokenRecipe,
         mockRecipe: mockRecipe,
     }

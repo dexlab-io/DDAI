@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
-export class BuyEthRecipeContract extends BaseContract {
+export class BuyTokenRecipeContract extends BaseContract {
     public tokensReceived = {
         async sendTransactionAsync(
             _operator: string,
@@ -25,7 +25,7 @@ export class BuyEthRecipeContract extends BaseContract {
             _operatorData: string,
             txData: Partial<TxData> = {},
         ): Promise<string> {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator,
     _from,
     _to,
@@ -62,7 +62,7 @@ export class BuyEthRecipeContract extends BaseContract {
             _operatorData: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator,
     _from,
     _to,
@@ -89,7 +89,7 @@ export class BuyEthRecipeContract extends BaseContract {
             _userData: string,
             _operatorData: string,
         ): string {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const abiEncodedTransactionData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator,
     _from,
     _to,
@@ -110,7 +110,7 @@ export class BuyEthRecipeContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const encodedData = self._strictEncodeArguments('tokensReceived(address,address,address,uint256,bytes,bytes)', [_operator,
         _from,
         _to,
@@ -142,7 +142,7 @@ export class BuyEthRecipeContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const encodedData = self._strictEncodeArguments('underlying()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -168,7 +168,7 @@ export class BuyEthRecipeContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const encodedData = self._strictEncodeArguments('kyberNetwork()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -194,7 +194,7 @@ export class BuyEthRecipeContract extends BaseContract {
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
-            const self = this as any as BuyEthRecipeContract;
+            const self = this as any as BuyTokenRecipeContract;
             const encodedData = self._strictEncodeArguments('token()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -221,13 +221,13 @@ export class BuyEthRecipeContract extends BaseContract {
             _token: string,
             _underlying: string,
             _kyberNetwork: string,
-    ): Promise<BuyEthRecipeContract> {
+    ): Promise<BuyTokenRecipeContract> {
         if (_.isUndefined(artifact.compilerOutput)) {
             throw new Error('Compiler output not found in the artifact file');
         }
         const bytecode = artifact.compilerOutput.evm.bytecode.object;
         const abi = artifact.compilerOutput.abi;
-        return BuyEthRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, _token,
+        return BuyTokenRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, _token,
 _underlying,
 _kyberNetwork
 );
@@ -240,7 +240,7 @@ _kyberNetwork
             _token: string,
             _underlying: string,
             _kyberNetwork: string,
-    ): Promise<BuyEthRecipeContract> {
+    ): Promise<BuyTokenRecipeContract> {
         const constructorAbi = BaseContract._lookupConstructorAbi(abi);
         [_token,
 _underlying,
@@ -267,7 +267,7 @@ _kyberNetwork
         );
         const txHash = await web3Wrapper.sendTransactionAsync(txDataWithDefaults);
         const txReceipt = await web3Wrapper.awaitTransactionSuccessAsync(txHash);
-        const contractInstance = new BuyEthRecipeContract(abi, txReceipt.contractAddress as string, provider, txDefaults);
+        const contractInstance = new BuyTokenRecipeContract(abi, txReceipt.contractAddress as string, provider, txDefaults);
         contractInstance.constructorArgs = [_token,
 _underlying,
 _kyberNetwork
@@ -275,7 +275,7 @@ _kyberNetwork
         return contractInstance;
     }
     constructor(abi: ContractAbi, address: string, provider: Provider, txDefaults?: Partial<TxData>) {
-        super('BuyEthRecipe', abi, address, provider, txDefaults);
+        super('BuyTokenRecipe', abi, address, provider, txDefaults);
         classUtils.bindAll(this, ['_abiEncoderByFunctionSignature', 'address', 'abi', '_web3Wrapper']);
     }
 } // tslint:disable:max-file-line-count

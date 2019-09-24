@@ -14,13 +14,13 @@ interface IDDAI {
     external
     returns (uint256);
 
-    // function addRecipe(
-    //     address _receiver,
-    //     uint256 _ratio,
-    //     bytes _data
-    // )
-    // external
-    // returns(bool);
+    function addRecipe(
+        address _receiver,
+        uint256 _ratio,
+        bytes calldata _data
+    )
+    external
+    returns(bool);
 
     function removeRecipe(
         uint256 index

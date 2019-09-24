@@ -1,6 +1,6 @@
 import * as BaseRecipe from "../artifacts/BaseRecipe.json";
-import * as BuyEthRecipe from "../artifacts/BuyEthRecipe.json";
 import * as BuyPTokenRecipe from "../artifacts/BuyPTokenRecipe.json";
+import * as BuyTokenRecipe from "../artifacts/BuyTokenRecipe.json";
 import * as CompoundRepayRecipe from "../artifacts/CompoundRepayRecipe.json";
 import * as DDAI from "../artifacts/DDAI.json";
 import * as DDAIGSNBouncer from "../artifacts/DDAIGSNBouncer.json";
@@ -21,8 +21,8 @@ import * as MockUSDFeed from "../artifacts/MockUSDFeed.json";
 
 export{
     BaseRecipe,
-    BuyEthRecipe,
     BuyPTokenRecipe,
+    BuyTokenRecipe,
     CompoundRepayRecipe,
     DDAI,
     DDAIGSNBouncer,
