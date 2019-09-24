@@ -6,11 +6,6 @@ import {BigNumber} from '@0x/utils';
 import { migrate } from '@ddai/migrations';
 import * as wrappers from '@ddai/contract-wrappers';
 import { getProvider, toWei } from '@ddai/utils';
-import { Web3Wrapper } from '@0x/web3-wrapper';
-import { AssertionError } from 'assert';
-import { isRejected } from 'q';
-import { IMoneyMarket } from '@ddai/contract-artifacts';
-
 
 chai.use(chaiAsPromised);
 chai.use(chaiBigNumber(BigNumber));
@@ -27,8 +22,8 @@ let accounts: string[];
 let user: string;
 let txData;
 
-// TODO fix sol-trace
-let {pe, web3, coverageSubProvider} = getProvider(false, true);
+// TODO fix sol-trace and sol-coverage
+let {pe, web3, coverageSubProvider} = getProvider(false, false);
 
 const initialDaiAmount = toWei(1000);
 
@@ -73,7 +68,7 @@ describe("DDAI", function( ){
     })
 
     after(async () => {
-        await coverageSubProvider.writeCoverageAsync();
+        // await coverageSubProvider.writeCoverageAsync();
         pe.stop();
     })
 
