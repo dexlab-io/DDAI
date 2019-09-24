@@ -54,7 +54,7 @@ export const toWei = (amount: number | string | BigNumber) => {
     return Web3Wrapper.toWei(new BigNumber(amount));
 }
 
-type DeployArgs = [ ContractArtifact, Web3ProviderEngine, Partial<TxData>, {[contractName: string]: ContractArtifact} ]
+type DeployArgs = [ ContractArtifact, Web3ProviderEngine, Partial<TxData> ]
 
 export const getDeployArgs = (
     name: string,
@@ -65,8 +65,5 @@ export const getDeployArgs = (
         artifacts[name],
         pe,
         txDefaults,
-        {
-            [name]: artifacts[name]
-        }
     ]
 }
