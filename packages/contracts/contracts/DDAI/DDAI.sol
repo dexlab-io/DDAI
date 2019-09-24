@@ -5,7 +5,7 @@ import "../interfaces/IDDAI.sol";
 import "../interfaces/IMoneyMarket.sol";
 import "openzeppelin-solidity/contracts/token/ERC777/ERC777.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
-import "openzeppelin-solidity/contracts/GSN/GSNRecipient.sol";
+
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/math/Math.sol";
 
@@ -13,7 +13,7 @@ import "openzeppelin-solidity/contracts/math/Math.sol";
 // TODO Allow user to allow address to modify stack
 // TODO Allow user to receive funds to stack
 
-contract DDAI is IDDAI, GSNRecipient, ERC777 {
+contract DDAI is IDDAI, ERC777 {
 
     using SafeMath for uint256;
     using Math for uint256;
@@ -23,6 +23,13 @@ contract DDAI is IDDAI, GSNRecipient, ERC777 {
 
     mapping(address => AccountData) public accountDataOf;
     mapping (address => mapping (address => bool)) stackPushAllowed;
+
+    event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);
+    event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);
+    event RecipeAdded(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);
+    event RecipeRemoved(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);
+    event InterestClaimed(address indexed _receiver, uint256 _interestEarned);
+    event StackDistributed(address indexed _receiver, uint256 _amount);
 
     struct AccountData {
         uint256 lastTokenPrice; // Last token price on which interest was claimed

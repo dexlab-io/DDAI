@@ -43,8 +43,9 @@ export const migrate = async () => {
     console.log(`Deployed MockKyberNetwork at: ${mockKyberNetwork.address}`);
     
     const ddai = await wrappers.DDAIContract.deployFrom0xArtifactAsync(
-        ...getDeployArgs("DDAI", pe, txDefaults),
-        // @ts-ignore
+        artifacts.DDAI,
+        pe,
+        txDefaults,
         mockIToken.address,
         mockDai.address,
         "DDAI",

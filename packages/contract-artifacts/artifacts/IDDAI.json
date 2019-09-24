@@ -50,37 +50,6 @@
 				"type": "function"
 			},
 			{
-				"constant": false,
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_receiver",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_ratio",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bytes",
-						"name": "_data",
-						"type": "bytes"
-					}
-				],
-				"name": "addRecipe",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"constant": true,
 				"inputs": [
 					{
@@ -300,9 +269,9 @@
 		}
 	},
 	"sourceCodes": {
-		"interfaces/IDDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IDDAI {\n    function mint(\n        address _receiver,\n        uint256 _amount\n    )\n    external;\n\n    function redeem(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    function addRecipe(\n        address _receiver,\n        uint256 _ratio,\n        bytes calldata _data\n    )\n    external\n    returns(bool);\n\n    function removeRecipe(\n        uint256 index\n    )\n    external\n    returns(bool);\n\n    function balanceOf(address _acount) external view returns(uint256);\n\n    event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);\n    event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);\n    event RecipeAdded(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);\n    event RecipeRemoved(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);\n    event InterestClaimed(address indexed _receiver, uint256 _interestEarned);\n    event StackDistributed(address indexed _receiver, uint256 _amount);\n}"
+		"interfaces/IDDAI.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IDDAI {\n    function mint(\n        address _receiver,\n        uint256 _amount\n    )\n    external;\n\n    function redeem(\n        address _receiver,\n        uint256 _amount\n    )\n    external\n    returns (uint256);\n\n    // function addRecipe(\n    //     address _receiver,\n    //     uint256 _ratio,\n    //     bytes _data\n    // )\n    // external\n    // returns(bool);\n\n    function removeRecipe(\n        uint256 index\n    )\n    external\n    returns(bool);\n\n    function balanceOf(address _acount) external view returns(uint256);\n\n    event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);\n    event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);\n    event RecipeAdded(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);\n    event RecipeRemoved(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);\n    event InterestClaimed(address indexed _receiver, uint256 _interestEarned);\n    event StackDistributed(address indexed _receiver, uint256 _amount);\n}"
 	},
-	"sourceTreeHashHex": "0x981fed7821967cd5d67eeb354b359ae02be33653b8abfec8c5d81d54bf265ce7",
+	"sourceTreeHashHex": "0xa7a61b200061373e47fb6b682455cbf5273ad28b409199db7cbac64a5516fbc7",
 	"compiler": {
 		"name": "solc",
 		"version": "soljson-v0.5.11+commit.c082d0b4.js",

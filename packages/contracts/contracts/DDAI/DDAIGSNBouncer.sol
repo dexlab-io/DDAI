@@ -5,8 +5,9 @@ import './DDAI.sol';
 import '../interfaces/IMakerFeed.sol';
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/GSN/GSNRecipient.sol";
 
-contract DDAIGSNBouncer is DDAI, Ownable  {
+contract DDAIGSNBouncer is DDAI, Ownable, GSNRecipient  {
     using SafeMath for uint256;
 
     IMakerFeed public priceFeed;

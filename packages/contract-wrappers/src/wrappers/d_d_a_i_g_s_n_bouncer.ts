@@ -11,24 +11,31 @@ import * as _ from 'lodash';
 // tslint:enable:no-unused-variable
 
 export type DDAIGSNBouncerEventArgs =
+    | DDAIGSNBouncerRelayHubChangedEventArgs
     | DDAIGSNBouncerOwnershipTransferredEventArgs
+    | DDAIGSNBouncerDDAIMintedEventArgs
+    | DDAIGSNBouncerDDAIRedeemedEventArgs
+    | DDAIGSNBouncerRecipeAddedEventArgs
+    | DDAIGSNBouncerRecipeRemovedEventArgs
+    | DDAIGSNBouncerInterestClaimedEventArgs
+    | DDAIGSNBouncerStackDistributedEventArgs
     | DDAIGSNBouncerTransferEventArgs
     | DDAIGSNBouncerApprovalEventArgs
     | DDAIGSNBouncerSentEventArgs
     | DDAIGSNBouncerMintedEventArgs
     | DDAIGSNBouncerBurnedEventArgs
     | DDAIGSNBouncerAuthorizedOperatorEventArgs
-    | DDAIGSNBouncerRevokedOperatorEventArgs
-    | DDAIGSNBouncerRelayHubChangedEventArgs
-    | DDAIGSNBouncerDDAIMintedEventArgs
-    | DDAIGSNBouncerDDAIRedeemedEventArgs
-    | DDAIGSNBouncerRecipeAddedEventArgs
-    | DDAIGSNBouncerRecipeRemovedEventArgs
-    | DDAIGSNBouncerInterestClaimedEventArgs
-    | DDAIGSNBouncerStackDistributedEventArgs;
+    | DDAIGSNBouncerRevokedOperatorEventArgs;
 
 export enum DDAIGSNBouncerEvents {
+    RelayHubChanged = 'RelayHubChanged',
     OwnershipTransferred = 'OwnershipTransferred',
+    DDAIMinted = 'DDAIMinted',
+    DDAIRedeemed = 'DDAIRedeemed',
+    RecipeAdded = 'RecipeAdded',
+    RecipeRemoved = 'RecipeRemoved',
+    InterestClaimed = 'InterestClaimed',
+    StackDistributed = 'StackDistributed',
     Transfer = 'Transfer',
     Approval = 'Approval',
     Sent = 'Sent',
@@ -36,18 +43,54 @@ export enum DDAIGSNBouncerEvents {
     Burned = 'Burned',
     AuthorizedOperator = 'AuthorizedOperator',
     RevokedOperator = 'RevokedOperator',
-    RelayHubChanged = 'RelayHubChanged',
-    DDAIMinted = 'DDAIMinted',
-    DDAIRedeemed = 'DDAIRedeemed',
-    RecipeAdded = 'RecipeAdded',
-    RecipeRemoved = 'RecipeRemoved',
-    InterestClaimed = 'InterestClaimed',
-    StackDistributed = 'StackDistributed',
+}
+
+export interface DDAIGSNBouncerRelayHubChangedEventArgs extends DecodedLogArgs {
+    oldRelayHub: string;
+    newRelayHub: string;
 }
 
 export interface DDAIGSNBouncerOwnershipTransferredEventArgs extends DecodedLogArgs {
     previousOwner: string;
     newOwner: string;
+}
+
+export interface DDAIGSNBouncerDDAIMintedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+    _operator: string;
+}
+
+export interface DDAIGSNBouncerDDAIRedeemedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+    _operator: string;
+}
+
+export interface DDAIGSNBouncerRecipeAddedEventArgs extends DecodedLogArgs {
+    _account: string;
+    _receiver: string;
+    _ratio: BigNumber;
+    _data: string;
+    _index: BigNumber;
+}
+
+export interface DDAIGSNBouncerRecipeRemovedEventArgs extends DecodedLogArgs {
+    _account: string;
+    _receiver: string;
+    _ratio: BigNumber;
+    _data: string;
+    _index: BigNumber;
+}
+
+export interface DDAIGSNBouncerInterestClaimedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _interestEarned: BigNumber;
+}
+
+export interface DDAIGSNBouncerStackDistributedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
 }
 
 export interface DDAIGSNBouncerTransferEventArgs extends DecodedLogArgs {
@@ -95,49 +138,6 @@ export interface DDAIGSNBouncerAuthorizedOperatorEventArgs extends DecodedLogArg
 export interface DDAIGSNBouncerRevokedOperatorEventArgs extends DecodedLogArgs {
     operator: string;
     tokenHolder: string;
-}
-
-export interface DDAIGSNBouncerRelayHubChangedEventArgs extends DecodedLogArgs {
-    oldRelayHub: string;
-    newRelayHub: string;
-}
-
-export interface DDAIGSNBouncerDDAIMintedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _amount: BigNumber;
-    _operator: string;
-}
-
-export interface DDAIGSNBouncerDDAIRedeemedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _amount: BigNumber;
-    _operator: string;
-}
-
-export interface DDAIGSNBouncerRecipeAddedEventArgs extends DecodedLogArgs {
-    _account: string;
-    _receiver: string;
-    _ratio: BigNumber;
-    _data: string;
-    _index: BigNumber;
-}
-
-export interface DDAIGSNBouncerRecipeRemovedEventArgs extends DecodedLogArgs {
-    _account: string;
-    _receiver: string;
-    _ratio: BigNumber;
-    _data: string;
-    _index: BigNumber;
-}
-
-export interface DDAIGSNBouncerInterestClaimedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _interestEarned: BigNumber;
-}
-
-export interface DDAIGSNBouncerStackDistributedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _amount: BigNumber;
 }
 
 
