@@ -21,13 +21,6 @@ contract DDAI is IDDAI, ERC777 {
     mapping(address => AccountData) public accountDataOf;
     mapping (address => mapping (address => bool)) stackPushAllowed;
 
-    event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);
-    event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);
-    event RecipeAdded(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);
-    event RecipeRemoved(address indexed _account, address indexed _receiver, uint256 _ratio, bytes _data, uint256 _index);
-    event InterestClaimed(address indexed _receiver, uint256 _interestEarned);
-    event StackDistributed(address indexed _receiver, uint256 _amount);
-
     struct AccountData {
         uint256 lastTokenPrice; // Last token price on which interest was claimed
         uint256 stack; // balance available for recipes
