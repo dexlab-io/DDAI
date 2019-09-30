@@ -34,6 +34,7 @@ contract DDAI is IDDAI, ERC777 {
         Recipe[] recipes;
         uint256 totalRatio;
         bool receiveToStack;
+        bool notStackInterest; // flipped to stack interest by default
     }
 
     struct Recipe {
@@ -136,7 +137,7 @@ contract DDAI is IDDAI, ERC777 {
         uint256 currentTokenPrice = moneyMarket.tokenPrice();
         uint256 interestEarned = getOutStandingInterest(_receiver);
         // If any recipe is set push interest to the stack
-        if(accountData.recipes.length != 0) {
+        if(accountData.notStackInterest || accountData.recipes.length != 0) {
             accountData.stack = accountData.stack.add(interestEarned);
         }
         _mint(address(this), _receiver, interestEarned, "", "");
@@ -153,6 +154,10 @@ contract DDAI is IDDAI, ERC777 {
         _payToRecipes(_account, accountData.stack);
     }
 
+    function setStackInterest(bool _value) external {
+        accountDataOf[_msgSender()].notStackInterest = !_value; // Value is flipped to stack interest by default
+    }
+
     function setStack(address _account, uint256 _amount) public {
         require(_msgSender() == _account || stackPushAllowed[_account][_msgSender()], "DDAI.pushToStack: NOT_ALLOWED");
         AccountData storage accountData = accountDataOf[_account];
@@ -160,7 +165,7 @@ contract DDAI is IDDAI, ERC777 {
     }
 
     function setStackApproved(address _account, bool _allowed) external {
-        stackPushAllowed[_msgSender()][_account] = true;
+        stackPushAllowed[_msgSender()][_account] = _allowed;
     }
 
     // Allow user to set if they want to receive incoming ddai directly into the stack
