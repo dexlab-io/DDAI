@@ -2,7 +2,7 @@ pragma solidity >=0.4.21 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 import './DDAI.sol';
-import '../interfaces/IMakerFeed.sol';
+import '../interfaces/IPriceFeed.sol';
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/GSN/GSNRecipient.sol";
@@ -10,7 +10,7 @@ import "openzeppelin-solidity/contracts/GSN/GSNRecipient.sol";
 contract DDAIGSNBouncer is DDAI, Ownable, GSNRecipient  {
     using SafeMath for uint256;
 
-    IMakerFeed public priceFeed;
+    IPriceFeed public priceFeed;
     uint256 public constant FEE_DIVIDER = 1000;
     uint256 fee = 100; // 10% fee for using ddai in the gas station network
 
@@ -24,7 +24,7 @@ contract DDAIGSNBouncer is DDAI, Ownable, GSNRecipient  {
     )
     public
     DDAI(_moneyMarket, _token, _name, _symbol, _operators) {
-        priceFeed = IMakerFeed(_priceFeed);
+        priceFeed = IPriceFeed(_priceFeed);
     }
 
     function() external payable {
@@ -41,9 +41,14 @@ contract DDAIGSNBouncer is DDAI, Ownable, GSNRecipient  {
 
     // allows any token to be withdrawed including ddai gsn fees
     function withdrawToken(address _token) external {
+        require(_token != address(moneyMarket), "DDAIGSNBouncer.withdrawToken: CANNOT_WITHDRAW_MONEY_MARKET_TOKEN");
         claimInterest(address(this));
         IERC20 token = IERC20(token);
         token.transfer(owner(), token.balanceOf(address(this)));
+    }
+
+    function setPriceFeed(address _feed) external onlyOwner {
+        priceFeed = IPriceFeed(_feed);
     }
 
     // GSN FUNCTIONALITY should be in a seperate file

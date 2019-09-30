@@ -1,9 +1,9 @@
 pragma solidity >=0.4.21 <0.6.0;
 pragma experimental ABIEncoderV2;
 
-import '../interfaces/IMakerFeed.sol';
+import '../interfaces/IPriceFeed.sol';
 
-contract MockUSDFeed is IMakerFeed {
+contract MockUSDFeed is IPriceFeed {
 
     uint256 public price;
 
