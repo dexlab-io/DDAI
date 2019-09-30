@@ -28,7 +28,19 @@ interface IDDAI {
     external
     returns(bool);
 
+    function setStack(address _account, uint256 _amount) external;
+    function distributeStack(address _account) external;
+
+    function operatorSend(
+        address sender,
+        address recipient,
+        uint256 amount,
+        bytes calldata data,
+        bytes calldata operatorData
+    ) external;
+
     function balanceOf(address _acount) external view returns(uint256);
+
 
     event DDAIMinted(address indexed _receiver, uint256 _amount, address indexed _operator);
     event DDAIRedeemed(address indexed _receiver, uint256 _amount, address indexed _operator);
