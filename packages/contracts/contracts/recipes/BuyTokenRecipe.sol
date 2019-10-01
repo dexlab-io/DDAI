@@ -1,8 +1,6 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
-import "openzeppelin-solidity/contracts/introspection/IERC1820Registry.sol";
-import "openzeppelin-solidity/contracts/utils/Address.sol";
 import "./BaseRecipe.sol";
 import "../interfaces/IDDAI.sol";
 import "../interfaces/IKyberNetwork.sol";
