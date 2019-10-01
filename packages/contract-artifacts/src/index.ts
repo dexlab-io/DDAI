@@ -2,14 +2,15 @@ import * as BaseRecipe from "../artifacts/BaseRecipe.json";
 import * as BuyPTokenRecipe from "../artifacts/BuyPTokenRecipe.json";
 import * as BuyTokenRecipe from "../artifacts/BuyTokenRecipe.json";
 import * as CompoundRepayRecipe from "../artifacts/CompoundRepayRecipe.json";
+import * as DCA from "../artifacts/DCA.json";
 import * as DDAI from "../artifacts/DDAI.json";
 import * as DDAIGSNBouncer from "../artifacts/DDAIGSNBouncer.json";
 import * as ICToken from "../artifacts/ICToken.json";
 import * as IDDAI from "../artifacts/IDDAI.json";
 import * as IKyberNetwork from "../artifacts/IKyberNetwork.json";
-import * as IMakerFeed from "../artifacts/IMakerFeed.json";
 import * as IMoneyMarket from "../artifacts/IMoneyMarket.json";
 import * as IPToken from "../artifacts/IPToken.json";
+import * as IPriceFeed from "../artifacts/IPriceFeed.json";
 import * as MockDai from "../artifacts/MockDai.json";
 import * as MockIToken from "../artifacts/MockIToken.json";
 import * as MockKyberNetwork from "../artifacts/MockKyberNetwork.json";
@@ -24,14 +25,15 @@ export{
     BuyPTokenRecipe,
     BuyTokenRecipe,
     CompoundRepayRecipe,
+    DCA,
     DDAI,
     DDAIGSNBouncer,
     ICToken,
     IDDAI,
     IKyberNetwork,
-    IMakerFeed,
     IMoneyMarket,
     IPToken,
+    IPriceFeed,
     MockDai,
     MockIToken,
     MockKyberNetwork,

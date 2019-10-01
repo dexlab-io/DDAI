@@ -13,29 +13,23 @@ import * as _ from 'lodash';
 export type DDAIGSNBouncerEventArgs =
     | DDAIGSNBouncerRelayHubChangedEventArgs
     | DDAIGSNBouncerOwnershipTransferredEventArgs
-    | DDAIGSNBouncerDDAIMintedEventArgs
-    | DDAIGSNBouncerDDAIRedeemedEventArgs
-    | DDAIGSNBouncerRecipeAddedEventArgs
-    | DDAIGSNBouncerRecipeRemovedEventArgs
-    | DDAIGSNBouncerInterestClaimedEventArgs
-    | DDAIGSNBouncerStackDistributedEventArgs
     | DDAIGSNBouncerTransferEventArgs
     | DDAIGSNBouncerApprovalEventArgs
     | DDAIGSNBouncerSentEventArgs
     | DDAIGSNBouncerMintedEventArgs
     | DDAIGSNBouncerBurnedEventArgs
     | DDAIGSNBouncerAuthorizedOperatorEventArgs
-    | DDAIGSNBouncerRevokedOperatorEventArgs;
+    | DDAIGSNBouncerRevokedOperatorEventArgs
+    | DDAIGSNBouncerDDAIMintedEventArgs
+    | DDAIGSNBouncerDDAIRedeemedEventArgs
+    | DDAIGSNBouncerRecipeAddedEventArgs
+    | DDAIGSNBouncerRecipeRemovedEventArgs
+    | DDAIGSNBouncerInterestClaimedEventArgs
+    | DDAIGSNBouncerStackDistributedEventArgs;
 
 export enum DDAIGSNBouncerEvents {
     RelayHubChanged = 'RelayHubChanged',
     OwnershipTransferred = 'OwnershipTransferred',
-    DDAIMinted = 'DDAIMinted',
-    DDAIRedeemed = 'DDAIRedeemed',
-    RecipeAdded = 'RecipeAdded',
-    RecipeRemoved = 'RecipeRemoved',
-    InterestClaimed = 'InterestClaimed',
-    StackDistributed = 'StackDistributed',
     Transfer = 'Transfer',
     Approval = 'Approval',
     Sent = 'Sent',
@@ -43,6 +37,12 @@ export enum DDAIGSNBouncerEvents {
     Burned = 'Burned',
     AuthorizedOperator = 'AuthorizedOperator',
     RevokedOperator = 'RevokedOperator',
+    DDAIMinted = 'DDAIMinted',
+    DDAIRedeemed = 'DDAIRedeemed',
+    RecipeAdded = 'RecipeAdded',
+    RecipeRemoved = 'RecipeRemoved',
+    InterestClaimed = 'InterestClaimed',
+    StackDistributed = 'StackDistributed',
 }
 
 export interface DDAIGSNBouncerRelayHubChangedEventArgs extends DecodedLogArgs {
@@ -53,44 +53,6 @@ export interface DDAIGSNBouncerRelayHubChangedEventArgs extends DecodedLogArgs {
 export interface DDAIGSNBouncerOwnershipTransferredEventArgs extends DecodedLogArgs {
     previousOwner: string;
     newOwner: string;
-}
-
-export interface DDAIGSNBouncerDDAIMintedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _amount: BigNumber;
-    _operator: string;
-}
-
-export interface DDAIGSNBouncerDDAIRedeemedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _amount: BigNumber;
-    _operator: string;
-}
-
-export interface DDAIGSNBouncerRecipeAddedEventArgs extends DecodedLogArgs {
-    _account: string;
-    _receiver: string;
-    _ratio: BigNumber;
-    _data: string;
-    _index: BigNumber;
-}
-
-export interface DDAIGSNBouncerRecipeRemovedEventArgs extends DecodedLogArgs {
-    _account: string;
-    _receiver: string;
-    _ratio: BigNumber;
-    _data: string;
-    _index: BigNumber;
-}
-
-export interface DDAIGSNBouncerInterestClaimedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _interestEarned: BigNumber;
-}
-
-export interface DDAIGSNBouncerStackDistributedEventArgs extends DecodedLogArgs {
-    _receiver: string;
-    _amount: BigNumber;
 }
 
 export interface DDAIGSNBouncerTransferEventArgs extends DecodedLogArgs {
@@ -138,6 +100,44 @@ export interface DDAIGSNBouncerAuthorizedOperatorEventArgs extends DecodedLogArg
 export interface DDAIGSNBouncerRevokedOperatorEventArgs extends DecodedLogArgs {
     operator: string;
     tokenHolder: string;
+}
+
+export interface DDAIGSNBouncerDDAIMintedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+    _operator: string;
+}
+
+export interface DDAIGSNBouncerDDAIRedeemedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
+    _operator: string;
+}
+
+export interface DDAIGSNBouncerRecipeAddedEventArgs extends DecodedLogArgs {
+    _account: string;
+    _receiver: string;
+    _ratio: BigNumber;
+    _data: string;
+    _index: BigNumber;
+}
+
+export interface DDAIGSNBouncerRecipeRemovedEventArgs extends DecodedLogArgs {
+    _account: string;
+    _receiver: string;
+    _ratio: BigNumber;
+    _data: string;
+    _index: BigNumber;
+}
+
+export interface DDAIGSNBouncerInterestClaimedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _interestEarned: BigNumber;
+}
+
+export interface DDAIGSNBouncerStackDistributedEventArgs extends DecodedLogArgs {
+    _receiver: string;
+    _amount: BigNumber;
 }
 
 
@@ -1050,6 +1050,82 @@ export class DDAIGSNBouncerContract extends BaseContract {
             return result;
         },
     };
+    public setStackInterest = {
+        async sendTransactionAsync(
+            _value: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setStackInterest(bool)', [_value
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setStackInterest.estimateGasAsync.bind(
+                    self,
+                    _value
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _value: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setStackInterest(bool)', [_value
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _value: boolean,
+        ): string {
+            const self = this as any as DDAIGSNBouncerContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setStackInterest(bool)', [_value
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _value: boolean,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setStackInterest(bool)', [_value
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setStackInterest(bool)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public operatorSend = {
         async sendTransactionAsync(
             sender: string,
@@ -1283,6 +1359,82 @@ export class DDAIGSNBouncerContract extends BaseContract {
             return result;
         },
     };
+    public setPriceFeed = {
+        async sendTransactionAsync(
+            _feed: string,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setPriceFeed(address)', [_feed
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setPriceFeed.estimateGasAsync.bind(
+                    self,
+                    _feed
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _feed: string,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setPriceFeed(address)', [_feed
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _feed: string,
+        ): string {
+            const self = this as any as DDAIGSNBouncerContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setPriceFeed(address)', [_feed
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _feed: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setPriceFeed(address)', [_feed
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setPriceFeed(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public priceFeed = {
         async callAsync(
             callData: Partial<CallData> = {},
@@ -1366,7 +1518,7 @@ export class DDAIGSNBouncerContract extends BaseContract {
             index_0: string,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<[BigNumber, BigNumber, BigNumber]
+        ): Promise<[BigNumber, BigNumber, BigNumber, boolean, boolean]
         > {
             const self = this as any as DDAIGSNBouncerContract;
             const encodedData = self._strictEncodeArguments('accountDataOf(address)', [index_0
@@ -1383,7 +1535,7 @@ export class DDAIGSNBouncerContract extends BaseContract {
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
             const abiEncoder = self._lookupAbiEncoder('accountDataOf(address)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber, BigNumber]
+            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber, BigNumber, boolean, boolean]
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -1925,6 +2077,82 @@ export class DDAIGSNBouncerContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('getOutStandingInterest(address)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public setReceiveToStack = {
+        async sendTransactionAsync(
+            _value: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setReceiveToStack(bool)', [_value
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setReceiveToStack.estimateGasAsync.bind(
+                    self,
+                    _value
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _value: boolean,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setReceiveToStack(bool)', [_value
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _value: boolean,
+        ): string {
+            const self = this as any as DDAIGSNBouncerContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setReceiveToStack(bool)', [_value
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _value: boolean,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DDAIGSNBouncerContract;
+            const encodedData = self._strictEncodeArguments('setReceiveToStack(bool)', [_value
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setReceiveToStack(bool)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

@@ -451,11 +451,40 @@ describe("DDAI", function( ){
     })
 
     it("Setting receive to stack should work", async() => {
-        expect(true, "Test not implemented").to.equal(false);
+        const receiveToStackBefore = (await ddai.accountDataOf.callAsync(user))[3];
+        await ddai.setReceiveToStack.sendTransactionAsync(true);
+        const receiveToStackBetween = (await ddai.accountDataOf.callAsync(user))[3];
+        await ddai.setReceiveToStack.sendTransactionAsync(false);
+        const receiveToStackAfter = (await ddai.accountDataOf.callAsync(user))[3];
+
+        expect(receiveToStackBefore, "receiveToStackBefore should be false").to.eq(false);
+        expect(receiveToStackBetween, "receiveToStackBetween should be false").to.eq(true);
+        expect(receiveToStackAfter, "receiveToStackAfter should be false").to.eq(false);
+    })
+
+    it("Receiving ddai when receive to stack is false should not add it to the stack", async() => {
+        const mintAmount = toWei(10)
+        await mintDDAI(mintAmount);
+
+        ddai.transfer.sendTransactionAsync(accounts[1], mintAmount);
+        const stackSize = await ddai.getStack.callAsync(accounts[1]);
+        const balance = await ddai.balanceOf.callAsync(accounts[1]);
+
+        expect(stackSize, "Stack invalid").to.bignumber.eq(0);
+        expect(balance, "Balance invalid").to.bignumber.eq(mintAmount);
     })
 
     it("Receiving ddai to stack when receive to stack is set should work", async() => {
-        expect(true, "Test not implemented").to.equal(false);
+        const mintAmount = toWei(100.92929);
+        await mintDDAI(mintAmount);
+        await ddai.setReceiveToStack.sendTransactionAsync(true, {from: accounts[1]});
+
+        await ddai.transfer.sendTransactionAsync(accounts[1], mintAmount);
+        const stackSize = await ddai.getStack.callAsync(accounts[1]);
+        const balance = await ddai.balanceOf.callAsync(accounts[1]);
+
+        expect(stackSize, "Stack invalid").to.bignumber.eq(mintAmount);
+        expect(balance, "Balance invalid").to.bignumber.eq(0);
     })
 })
 

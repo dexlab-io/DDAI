@@ -22,7 +22,7 @@ contract MockRecipe is BaseRecipe {
         bytes calldata _userData,
         bytes calldata _operatorData
     ) external {
-        _tokensReceived(_from);
+        _tokensReceived(_to);
         operator = _operator;
         from = _from;
         to = _to;
