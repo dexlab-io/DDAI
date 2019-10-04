@@ -69,7 +69,7 @@ export const migrate = async () => {
         mockDai.address,
         mockKyberNetwork.address
     )
-    console.log(`Deployed BuyEthRecipe: ${buyTokenRecipe.address}`);
+    console.log(`Deployed BuyTokenRecipe: ${buyTokenRecipe.address}`);
 
     const buyPTokenRecipe = await wrappers.BuyPTokenRecipeContract.deployFrom0xArtifactAsync(
         ...getDeployArgs("BuyPTokenRecipe", pe, txDefaults),

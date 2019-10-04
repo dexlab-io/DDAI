@@ -21,6 +21,7 @@
     "watch:contracts": "npm-watch compile:contracts",
     "watch:contracts:complete": "npm-watch export-artifacts-and-wrappers",
     "ganache": "ganache-cli --mnemonic test the system before going to production --deterministic -p 8545 -i 102030 --defaultBalanceEther 1000000000 -l 20000000",
+    "flatten": "soljitsu flatten --src-dir=./contracts --dest-dir=./flats --npm-dir=./node_modules",
     "clean": "rm -rf ./build",
     "compile:contracts": "sol-compiler --contracts-dir ./contracts --artifacts-dir ./build/artifacts",
     "generate:wrappers": "abi-gen --abis './build/artifacts/*.json' --out 'build/wrappers/' --template contract-templates/contract.handlebars --partials './contract-templates/partials/**/*.handlebars'",
@@ -37,6 +38,8 @@
     "chai-bignumber": "^3.0.0",
     "mocha": "^6.2.0",
     "openzeppelin-solidity": "https://github.com/mickdegraaf/openzeppelin-contracts.git#261313b2279f1ca0ddc74396da1292bc81f9638f",
+    "soljitsu": "^1.0.0",
+    "truffle-flattener": "^1.4.2",
     "ts-mocha": "^6.0.0"
   }
 }

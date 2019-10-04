@@ -1,5 +1,6 @@
 import * as BaseRecipe from "../artifacts/BaseRecipe.json";
 import * as BuyPTokenRecipe from "../artifacts/BuyPTokenRecipe.json";
+import * as BuySynthRecipe from "../artifacts/BuySynthRecipe.json";
 import * as BuyTokenRecipe from "../artifacts/BuyTokenRecipe.json";
 import * as CompoundRepayRecipe from "../artifacts/CompoundRepayRecipe.json";
 import * as DCA from "../artifacts/DCA.json";
@@ -11,6 +12,8 @@ import * as IKyberNetwork from "../artifacts/IKyberNetwork.json";
 import * as IMoneyMarket from "../artifacts/IMoneyMarket.json";
 import * as IPToken from "../artifacts/IPToken.json";
 import * as IPriceFeed from "../artifacts/IPriceFeed.json";
+import * as ISynthetix from "../artifacts/ISynthetix.json";
+import * as ISynthetixDepot from "../artifacts/ISynthetixDepot.json";
 import * as MockDai from "../artifacts/MockDai.json";
 import * as MockIToken from "../artifacts/MockIToken.json";
 import * as MockKyberNetwork from "../artifacts/MockKyberNetwork.json";
@@ -23,6 +26,7 @@ import * as MockUSDFeed from "../artifacts/MockUSDFeed.json";
 export{
     BaseRecipe,
     BuyPTokenRecipe,
+    BuySynthRecipe,
     BuyTokenRecipe,
     CompoundRepayRecipe,
     DCA,
@@ -34,6 +38,8 @@ export{
     IMoneyMarket,
     IPToken,
     IPriceFeed,
+    ISynthetix,
+    ISynthetixDepot,
     MockDai,
     MockIToken,
     MockKyberNetwork,

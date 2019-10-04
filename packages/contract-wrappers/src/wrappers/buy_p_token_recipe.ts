@@ -15,6 +15,32 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class BuyPTokenRecipeContract extends BaseContract {
+    public token = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<string
+        > {
+            const self = this as any as BuyPTokenRecipeContract;
+            const encodedData = self._strictEncodeArguments('token()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('token()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public tokensReceived = {
         async sendTransactionAsync(
             _operator: string,
@@ -155,32 +181,6 @@ export class BuyPTokenRecipeContract extends BaseContract {
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
             const abiEncoder = self._lookupAbiEncoder('underlying()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<string
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public token = {
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<string
-        > {
-            const self = this as any as BuyPTokenRecipeContract;
-            const encodedData = self._strictEncodeArguments('token()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('token()');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<string
         >(rawCallResult);

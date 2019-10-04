@@ -14,41 +14,56 @@ import * as _ from 'lodash';
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
-export class BaseRecipeContract extends BaseContract {
-    public token = {
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<string
-        > {
-            const self = this as any as BaseRecipeContract;
-            const encodedData = self._strictEncodeArguments('token()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+export class ISynthetixDepotContract extends BaseContract {
+    public exchangeEtherForSynths = {
+        async sendTransactionAsync(
+            txData: Partial<TxDataPayable> = {},
+        ): Promise<string> {
+            const self = this as any as ISynthetixDepotContract;
+            const encodedData = self._strictEncodeArguments('exchangeEtherForSynths()', []);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
                     to: self.address,
-                    ...callData,
+                    ...txData,
                     data: encodedData,
                 },
                 self._web3Wrapper.getContractDefaults(),
+                self.exchangeEtherForSynths.estimateGasAsync.bind(
+                    self,
+                ),
             );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('token()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<string
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
         },
-    };
-    public underlying = {
+        async estimateGasAsync(
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as ISynthetixDepotContract;
+            const encodedData = self._strictEncodeArguments('exchangeEtherForSynths()', []);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+        ): string {
+            const self = this as any as ISynthetixDepotContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('exchangeEtherForSynths()', []);
+            return abiEncodedTransactionData;
+        },
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<string
+        ): Promise<BigNumber
         > {
-            const self = this as any as BaseRecipeContract;
-            const encodedData = self._strictEncodeArguments('underlying()', []);
+            const self = this as any as ISynthetixDepotContract;
+            const encodedData = self._strictEncodeArguments('exchangeEtherForSynths()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
                     to: self.address,
@@ -59,9 +74,9 @@ export class BaseRecipeContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('underlying()');
+            const abiEncoder = self._lookupAbiEncoder('exchangeEtherForSynths()');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<string
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -71,41 +86,29 @@ export class BaseRecipeContract extends BaseContract {
         artifact: ContractArtifact | SimpleContractArtifact | any,
         provider: Provider,
         txDefaults: Partial<TxData>,
-            _token: string,
-            _underlying: string,
-    ): Promise<BaseRecipeContract> {
+    ): Promise<ISynthetixDepotContract> {
         if (_.isUndefined(artifact.compilerOutput)) {
             throw new Error('Compiler output not found in the artifact file');
         }
         const bytecode = artifact.compilerOutput.evm.bytecode.object;
         const abi = artifact.compilerOutput.abi;
-        return BaseRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, _token,
-_underlying
-);
+        return ISynthetixDepotContract.deployAsync(bytecode, abi, provider, txDefaults, );
     }
     public static async deployAsync(
         bytecode: string,
         abi: ContractAbi,
         provider: Provider,
         txDefaults: Partial<TxData>,
-            _token: string,
-            _underlying: string,
-    ): Promise<BaseRecipeContract> {
+    ): Promise<ISynthetixDepotContract> {
         const constructorAbi = BaseContract._lookupConstructorAbi(abi);
-        [_token,
-_underlying
-] = BaseContract._formatABIDataItemList(
+        [] = BaseContract._formatABIDataItemList(
             constructorAbi.inputs,
-            [_token,
-_underlying
-],
+            [],
             BaseContract._bigNumberToString,
         );
         const iface = new ethers.utils.Interface(abi);
         const deployInfo = iface.deployFunction;
-        const txData = deployInfo.encode(bytecode, [_token,
-_underlying
-]);
+        const txData = deployInfo.encode(bytecode, []);
         const web3Wrapper = new Web3Wrapper(provider);
         const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
             {data: txData},
@@ -114,14 +117,12 @@ _underlying
         );
         const txHash = await web3Wrapper.sendTransactionAsync(txDataWithDefaults);
         const txReceipt = await web3Wrapper.awaitTransactionSuccessAsync(txHash);
-        const contractInstance = new BaseRecipeContract(abi, txReceipt.contractAddress as string, provider, txDefaults);
-        contractInstance.constructorArgs = [_token,
-_underlying
-];
+        const contractInstance = new ISynthetixDepotContract(abi, txReceipt.contractAddress as string, provider, txDefaults);
+        contractInstance.constructorArgs = [];
         return contractInstance;
     }
     constructor(abi: ContractAbi, address: string, provider: Provider, txDefaults?: Partial<TxData>) {
-        super('BaseRecipe', abi, address, provider, txDefaults);
+        super('ISynthetixDepot', abi, address, provider, txDefaults);
         classUtils.bindAll(this, ['_abiEncoderByFunctionSignature', 'address', 'abi', '_web3Wrapper']);
     }
 } // tslint:disable:max-file-line-count
