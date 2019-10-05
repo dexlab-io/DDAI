@@ -5,12 +5,13 @@
   "license": "MIT",
   "scripts": {
     "migrate": "ts-node ./src/run.ts",
-    "migrate:kovan": "RPC_URL='https://kovan.infura.io/v3/ffa6c1dc83e44e6c9971d4706311d5ab' MNEMONIC='cancel shove stomach taxi despair swarm endorse during only upper license remember patch cost hunt' yarn migrate"    
+    "migrate:using-env": "USE_CONFIG=1 yarn migrate"
   },
   "dependencies": {
     "@ddai/contract-artifacts": "0.1.0",
     "@ddai/contract-wrappers": "0.1.0",
     "@ddai/utils": "0.1.0",
+    "dotenv": "^8.1.0",
     "web3": "^1.2.1"
   }
 }

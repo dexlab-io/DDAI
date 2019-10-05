@@ -5,6 +5,8 @@ import { Web3Wrapper } from '@0x/web3-wrapper';
 import { BigNumber, Web3ProviderEngine } from '0x.js';
 import Web3 from 'web3';
 
+process.env.USE_CONFIG && require('dotenv').config();
+
 
 export const migrate = async () => {
     const { pe, web3 } = await getProvider(false);
@@ -18,36 +20,61 @@ export const migrate = async () => {
 
     await deploy1820(pe, web3, txDefaults);
 
-    const mockDai = await wrappers.MockDaiContract.deployFrom0xArtifactAsync(
-        ...getDeployArgs("MockDai", pe, txDefaults),
-    )
-    console.log(`Deployed MockDai at: ${mockDai.address}`);
+    let mockDai;
+    let daiAddress;
+    if(process.env.DAI) {
+        daiAddress = process.env.DAI;
+        console.log(`Using DAI deployed at: ${process.env.DAI}`);
+    } else {
+        mockDai = await wrappers.MockDaiContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockDai", pe, txDefaults),
+        )
+        console.log(`Deployed MockDai at: ${mockDai.address}`);
+        daiAddress = mockDai.address
+    }
 
     const mockPriceFeed = await wrappers.MockUSDFeedContract.deployFrom0xArtifactAsync(
         ...getDeployArgs("MockUSDFeed", pe, txDefaults),
         // @ts-ignore
         toWei(210)
     )
+    // IDAI
 
-    const mockIToken = await wrappers.MockITokenContract.deployFrom0xArtifactAsync(
-        ...getDeployArgs("MockIToken", pe, txDefaults),
-        // @ts-ignore
-        mockDai.address,
-    )
-    console.log(`Deployed MockIToken at: ${mockIToken.address}`);
+    let mockIToken;
+    let iTokenAddress;
+    if(process.env.IDAI) {
+        iTokenAddress = process.env.IDAI
+        console.log(`Using IDAI deployed at: ${process.env.IDAI}`);
+    } else {
+        mockIToken = await wrappers.MockITokenContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockIToken", pe, txDefaults),
+            // @ts-ignore
+            daiAddress,
+        )
+        iTokenAddress = mockIToken.address;
+        console.log(`Deployed MockIToken at: ${mockIToken.address}`);
+    }
 
-    const mockKyberNetwork = await wrappers.MockKyberNetworkContract.deployFrom0xArtifactAsync(
-        ...getDeployArgs("MockKyberNetwork", pe, txDefaults),
-    )
-
-    console.log(`Deployed MockKyberNetwork at: ${mockKyberNetwork.address}`);
+    let kyberAddress;
+    let mockKyberNetwork;
+    if(process.env.KYBER_NETWORK) {
+        kyberAddress = process.env.KYBER_NETWORK.toLowerCase();
+        console.log(`Using Kyber network deployed at: ${process.env.KYBER_NETWORK}`);
+    } else {
+        const mockKyberNetwork = await wrappers.MockKyberNetworkContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockKyberNetwork", pe, txDefaults),
+        )
+        console.log(`Deployed MockKyberNetwork at: ${mockKyberNetwork.address}`);
+        kyberAddress = mockKyberNetwork.address;
+    }
     
+
     const ddai = await wrappers.DDAIContract.deployFrom0xArtifactAsync(
         artifacts.DDAI,
         pe,
         txDefaults,
-        mockIToken.address,
-        mockDai.address,
+        iTokenAddress,
+        daiAddress,
         "DDAI",
         "DDAI",
         []
@@ -58,7 +85,7 @@ export const migrate = async () => {
         ...getDeployArgs("MockRecipe", pe, txDefaults),
         // @ts-ignore
         ddai.address,
-        mockDai.address
+        daiAddress
     )
     console.log(`Deployed MockRecipe: ${mockRecipe.address}`);
 
@@ -66,8 +93,8 @@ export const migrate = async () => {
         ...getDeployArgs("BuyTokenRecipe", pe, txDefaults),
         // @ts-ignore
         ddai.address,
-        mockDai.address,
-        mockKyberNetwork.address
+        daiAddress,
+        kyberAddress
     )
     console.log(`Deployed BuyTokenRecipe: ${buyTokenRecipe.address}`);
 
@@ -75,14 +102,14 @@ export const migrate = async () => {
         ...getDeployArgs("BuyPTokenRecipe", pe, txDefaults),
         // @ts-ignore
         ddai.address,
-        mockDai.address
+        daiAddress
     )
     console.log(`Deployed buyPTokenRecipe: ${buyPTokenRecipe.address}`);
 
     const contractAddresses = {
-        mockDai: mockDai.address,
-        mockIToken: mockIToken.address,
-        mockKyberNetwork: mockKyberNetwork.address,
+        mockDai: daiAddress,
+        mockIToken: iTokenAddress,
+        mockKyberNetwork: kyberAddress,
         ddai: ddai.address,
         buyTokenRecipe: buyTokenRecipe.address,
         buyPTokenRecipe: buyPTokenRecipe.address,
