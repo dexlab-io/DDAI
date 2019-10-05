@@ -15,73 +15,14 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class MockSynthetixContract extends BaseContract {
-    public setPrice = {
-        async sendTransactionAsync(
-            _currencyKey: string,
-            _price: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
-    _price
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.setPrice.estimateGasAsync.bind(
-                    self,
-                    _currencyKey,
-                    _price
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            _currencyKey: string,
-            _price: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
-    _price
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            _currencyKey: string,
-            _price: BigNumber,
-        ): string {
-            const self = this as any as MockSynthetixContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
-    _price
-    ]);
-            return abiEncodedTransactionData;
-        },
+    public COLLATERAL_RATIO = {
         async callAsync(
-            _currencyKey: string,
-            _price: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<void
+        ): Promise<BigNumber
         > {
             const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
-        _price
-        ]);
+            const encodedData = self._strictEncodeArguments('COLLATERAL_RATIO()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
                     to: self.address,
@@ -92,9 +33,9 @@ export class MockSynthetixContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('setPrice(bytes4,uint256)');
+            const abiEncoder = self._lookupAbiEncoder('COLLATERAL_RATIO()');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -203,34 +144,6 @@ export class MockSynthetixContract extends BaseContract {
             return result;
         },
     };
-    public tokenPrice = {
-        async callAsync(
-            index_0: string,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<BigNumber
-        > {
-            const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('tokenPrice(bytes4)', [index_0
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('tokenPrice(bytes4)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<BigNumber
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
     public keyToToken = {
         async callAsync(
             index_0: string,
@@ -259,14 +172,73 @@ export class MockSynthetixContract extends BaseContract {
             return result;
         },
     };
-    public COLLATERAL_RATIO = {
+    public setPrice = {
+        async sendTransactionAsync(
+            _currencyKey: string,
+            _price: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as MockSynthetixContract;
+            const encodedData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
+    _price
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setPrice.estimateGasAsync.bind(
+                    self,
+                    _currencyKey,
+                    _price
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _currencyKey: string,
+            _price: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as MockSynthetixContract;
+            const encodedData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
+    _price
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _currencyKey: string,
+            _price: BigNumber,
+        ): string {
+            const self = this as any as MockSynthetixContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
+    _price
+    ]);
+            return abiEncodedTransactionData;
+        },
         async callAsync(
+            _currencyKey: string,
+            _price: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<BigNumber
+        ): Promise<void
         > {
             const self = this as any as MockSynthetixContract;
-            const encodedData = self._strictEncodeArguments('COLLATERAL_RATIO()', []);
+            const encodedData = self._strictEncodeArguments('setPrice(bytes4,uint256)', [_currencyKey,
+        _price
+        ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
                     to: self.address,
@@ -277,9 +249,9 @@ export class MockSynthetixContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('COLLATERAL_RATIO()');
+            const abiEncoder = self._lookupAbiEncoder('setPrice(bytes4,uint256)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -306,6 +278,34 @@ export class MockSynthetixContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('snx()');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public tokenPrice = {
+        async callAsync(
+            index_0: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as MockSynthetixContract;
+            const encodedData = self._strictEncodeArguments('tokenPrice(bytes4)', [index_0
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('tokenPrice(bytes4)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

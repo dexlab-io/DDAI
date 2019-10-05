@@ -318,6 +318,35 @@ describe("DDAI", function( ){
         expect(recipes[1], "Total ratio should be zero").to.bignumber.eq(0);
     })
 
+    it("Minting and setting recipes in one transaction should work", async() => {
+        const mintAmount = toWei(10);
+        await mockDai.approve.sendTransactionAsync(ddai.address, mintAmount);
+
+        const {addresses, ratios, data} = getRecipeParams(3);
+        await ddai.mintAndSetRecipes.sendTransactionAsync(mintAmount, addresses, ratios, data);
+
+        const recipe1 = mockRecipes[0];
+        const recipe2 = mockRecipes[1];
+        const recipe3 = mockRecipes[2];
+
+        const recipes = await ddai.getRecipesOf.callAsync(user);
+        expect(recipes[0].length, "There should be 3 recipes").to.eq(3);
+        
+        expect(recipes[0][0].receiver, "Receiver incorrect").to.eq(recipe1.address);
+        expect(recipes[0][0].ratio, "Ratio incorrect").to.bignumber.eq(recipe1.ratio);
+        expect(recipes[0][0].data, "Data incorrect").to.eq(recipe1.data);
+
+        expect(recipes[0][1].receiver, "Receiver incorrect").to.eq(recipe2.address);
+        expect(recipes[0][1].ratio, "Ratio incorrect").to.bignumber.eq(recipe2.ratio);
+        expect(recipes[0][1].data, "Data incorrect").to.eq(recipe2.data);
+
+        expect(recipes[0][2].receiver, "Receiver incorrect").to.eq(recipe3.address);
+        expect(recipes[0][2].ratio, "Ratio incorrect").to.bignumber.eq(recipe3.ratio);
+        expect(recipes[0][2].data, "Data incorrect").to.eq(recipe3.data);
+
+        expect(recipes[1]).to.bignumber.eq(recipe1.ratio.plus(recipe3.ratio).plus(recipe2.ratio));
+    })
+
     it("Claiming interest with no active recipes should work", async() => {
         const mintAmount = toWei(222.338);
         const newTokenPrice = toWei(2.349);
@@ -486,9 +515,16 @@ describe("DDAI", function( ){
         expect(stackSize, "Stack invalid").to.bignumber.eq(mintAmount);
         expect(balance, "Balance invalid").to.bignumber.eq(0);
     })
+
+    it("Getting interest rate should work", async() => {
+        const supplyInterestRateDDAI = await ddai.supplyInterestRate.callAsync();
+        const interestRateSupplyMoneyMarket = await mockIToken.supplyInterestRate.callAsync();
+
+        expect(supplyInterestRateDDAI, "Interest rate mismatch").to.bignumber.eq(interestRateSupplyMoneyMarket);
+    })
 })
 
-async function setRecipes(count: number) {
+function getRecipeParams(count:number) {
     const addresses:string[] = [];
     const ratios:BigNumber[] = [];
     const data:string[] = [];
@@ -498,7 +534,11 @@ async function setRecipes(count: number) {
         ratios.push(mockRecipes[i].ratio);
         data.push(mockRecipes[i].data);
     }
+    return({addresses, ratios, data});
+}
 
+async function setRecipes(count: number) {
+    const {addresses, ratios, data} = getRecipeParams(count);
     await ddai.setRecipes.sendTransactionAsync(addresses, ratios, data);
 }
 

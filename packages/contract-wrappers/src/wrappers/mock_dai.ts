@@ -11,18 +11,12 @@ import * as _ from 'lodash';
 // tslint:enable:no-unused-variable
 
 export type MockDaiEventArgs =
-    | MockDaiTransferEventArgs
-    | MockDaiApprovalEventArgs;
+    | MockDaiApprovalEventArgs
+    | MockDaiTransferEventArgs;
 
 export enum MockDaiEvents {
-    Transfer = 'Transfer',
     Approval = 'Approval',
-}
-
-export interface MockDaiTransferEventArgs extends DecodedLogArgs {
-    from: string;
-    to: string;
-    value: BigNumber;
+    Transfer = 'Transfer',
 }
 
 export interface MockDaiApprovalEventArgs extends DecodedLogArgs {
@@ -31,11 +25,47 @@ export interface MockDaiApprovalEventArgs extends DecodedLogArgs {
     value: BigNumber;
 }
 
+export interface MockDaiTransferEventArgs extends DecodedLogArgs {
+    from: string;
+    to: string;
+    value: BigNumber;
+}
+
 
 /* istanbul ignore next */
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class MockDaiContract extends BaseContract {
+    public allowance = {
+        async callAsync(
+            owner: string,
+            spender: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('allowance(address,address)', [owner,
+        spender
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('allowance(address,address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public approve = {
         async sendTransactionAsync(
             spender: string,
@@ -116,296 +146,6 @@ export class MockDaiContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('approve(address,uint256)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<boolean
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public totalSupply = {
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<BigNumber
-        > {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('totalSupply()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('totalSupply()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<BigNumber
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public transferFrom = {
-        async sendTransactionAsync(
-            sender: string,
-            recipient: string,
-            amount: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
-    recipient,
-    amount
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.transferFrom.estimateGasAsync.bind(
-                    self,
-                    sender,
-                    recipient,
-                    amount
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            sender: string,
-            recipient: string,
-            amount: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
-    recipient,
-    amount
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            sender: string,
-            recipient: string,
-            amount: BigNumber,
-        ): string {
-            const self = this as any as MockDaiContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
-    recipient,
-    amount
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            sender: string,
-            recipient: string,
-            amount: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<boolean
-        > {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
-        recipient,
-        amount
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('transferFrom(address,address,uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<boolean
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public increaseAllowance = {
-        async sendTransactionAsync(
-            spender: string,
-            addedValue: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
-    addedValue
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.increaseAllowance.estimateGasAsync.bind(
-                    self,
-                    spender,
-                    addedValue
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            spender: string,
-            addedValue: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
-    addedValue
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            spender: string,
-            addedValue: BigNumber,
-        ): string {
-            const self = this as any as MockDaiContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
-    addedValue
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            spender: string,
-            addedValue: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<boolean
-        > {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
-        addedValue
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('increaseAllowance(address,uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<boolean
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public mintTo = {
-        async sendTransactionAsync(
-            _receiver: string,
-            _amount: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
-    _amount
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.mintTo.estimateGasAsync.bind(
-                    self,
-                    _receiver,
-                    _amount
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            _receiver: string,
-            _amount: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
-    _amount
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            _receiver: string,
-            _amount: BigNumber,
-        ): string {
-            const self = this as any as MockDaiContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
-    _amount
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            _receiver: string,
-            _amount: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<void
-        > {
-            const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
-        _amount
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('mintTo(address,uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -609,6 +349,202 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
+    public increaseAllowance = {
+        async sendTransactionAsync(
+            spender: string,
+            addedValue: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
+    addedValue
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.increaseAllowance.estimateGasAsync.bind(
+                    self,
+                    spender,
+                    addedValue
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            spender: string,
+            addedValue: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
+    addedValue
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            spender: string,
+            addedValue: BigNumber,
+        ): string {
+            const self = this as any as MockDaiContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
+    addedValue
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            spender: string,
+            addedValue: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<boolean
+        > {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('increaseAllowance(address,uint256)', [spender,
+        addedValue
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('increaseAllowance(address,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<boolean
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public mintTo = {
+        async sendTransactionAsync(
+            _receiver: string,
+            _amount: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
+    _amount
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.mintTo.estimateGasAsync.bind(
+                    self,
+                    _receiver,
+                    _amount
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _receiver: string,
+            _amount: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
+    _amount
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _receiver: string,
+            _amount: BigNumber,
+        ): string {
+            const self = this as any as MockDaiContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
+    _amount
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _receiver: string,
+            _amount: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('mintTo(address,uint256)', [_receiver,
+        _amount
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('mintTo(address,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public totalSupply = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('totalSupply()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('totalSupply()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public transfer = {
         async sendTransactionAsync(
             recipient: string,
@@ -694,17 +630,81 @@ export class MockDaiContract extends BaseContract {
             return result;
         },
     };
-    public allowance = {
+    public transferFrom = {
+        async sendTransactionAsync(
+            sender: string,
+            recipient: string,
+            amount: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
+    recipient,
+    amount
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.transferFrom.estimateGasAsync.bind(
+                    self,
+                    sender,
+                    recipient,
+                    amount
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            sender: string,
+            recipient: string,
+            amount: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as MockDaiContract;
+            const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
+    recipient,
+    amount
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            sender: string,
+            recipient: string,
+            amount: BigNumber,
+        ): string {
+            const self = this as any as MockDaiContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
+    recipient,
+    amount
+    ]);
+            return abiEncodedTransactionData;
+        },
         async callAsync(
-            owner: string,
-            spender: string,
+            sender: string,
+            recipient: string,
+            amount: BigNumber,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
-        ): Promise<BigNumber
+        ): Promise<boolean
         > {
             const self = this as any as MockDaiContract;
-            const encodedData = self._strictEncodeArguments('allowance(address,address)', [owner,
-        spender
+            const encodedData = self._strictEncodeArguments('transferFrom(address,address,uint256)', [sender,
+        recipient,
+        amount
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -716,9 +716,9 @@ export class MockDaiContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('allowance(address,address)');
+            const abiEncoder = self._lookupAbiEncoder('transferFrom(address,address,uint256)');
             // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+            const result = abiEncoder.strictDecodeReturnValue<boolean
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

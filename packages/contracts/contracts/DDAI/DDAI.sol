@@ -50,7 +50,7 @@ contract DDAI is IDDAI, ERC777 {
         moneyMarket = IMoneyMarket(_moneyMarket);
     }
 
-    function mint(address _receiver, uint256 _amount) external {
+    function mint(address _receiver, uint256 _amount) public {
         claimInterest(_receiver);
         // Pull underlying token
         require(token.transferFrom(_msgSender(), address(this), _amount), "DDAI.mint: TRANSFER_FAILED");
@@ -61,6 +61,11 @@ contract DDAI is IDDAI, ERC777 {
         // Mint DDAI
         _mint(_msgSender(), _receiver, _amount, "", "");
         emit DDAIMinted(_receiver, _amount, _msgSender());
+    }
+
+    function mintAndSetRecipes(uint256 _amount, address[] memory _receivers, uint256[] memory _ratios, bytes[] memory _data) public {
+        mint(_msgSender(), _amount);
+        setRecipes(_receivers, _ratios, _data);
     }
 
     function redeem(address _receiver, uint256 _amount) external returns(uint256) {
@@ -209,6 +214,10 @@ contract DDAI is IDDAI, ERC777 {
     function getOutStandingInterest(address _account) public view returns(uint256) {
         AccountData storage accountData = accountDataOf[_account];
         return _balanceOf(_account).mul(moneyMarket.tokenPrice() - accountData.lastTokenPrice).div(10 ** 18);
+    }
+
+    function supplyInterestRate() external view returns (uint256) {
+        return moneyMarket.supplyInterestRate();
     }
 
     function _balanceOf(address _account) internal view returns(uint256) {

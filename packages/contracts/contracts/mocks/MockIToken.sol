@@ -50,4 +50,8 @@ contract MockIToken is IMoneyMarket, ERC20 {
     function tokenPrice() external view returns (uint256 price) {
         return currentTokenPrice;
     }
+
+    function supplyInterestRate() external view returns (uint256) {
+        return 8 * 10**18;
+    }
 }

@@ -15,21 +15,45 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class MockKyberNetworkContract extends BaseContract {
-    public searchBestRate = {
+    public REVERT_HINT = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<BigNumber
+        > {
+            const self = this as any as MockKyberNetworkContract;
+            const encodedData = self._strictEncodeArguments('REVERT_HINT()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('REVERT_HINT()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public findBestRate = {
         async callAsync(
             src: string,
             dest: string,
             srcAmount: BigNumber,
-            usePermissionLess: boolean,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<[BigNumber, BigNumber]
         > {
             const self = this as any as MockKyberNetworkContract;
-            const encodedData = self._strictEncodeArguments('searchBestRate(address,address,uint256,bool)', [src,
+            const encodedData = self._strictEncodeArguments('findBestRate(address,address,uint256)', [src,
         dest,
-        srcAmount,
-        usePermissionLess
+        srcAmount
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -41,7 +65,7 @@ export class MockKyberNetworkContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('searchBestRate(address,address,uint256,bool)');
+            const abiEncoder = self._lookupAbiEncoder('findBestRate(address,address,uint256)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber]
         >(rawCallResult);
@@ -81,32 +105,6 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public REVERT_HINT = {
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<BigNumber
-        > {
-            const self = this as any as MockKyberNetworkContract;
-            const encodedData = self._strictEncodeArguments('REVERT_HINT()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('REVERT_HINT()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<BigNumber
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
     public getExpectedRate = {
         async callAsync(
             src: string,
@@ -139,38 +137,6 @@ export class MockKyberNetworkContract extends BaseContract {
             return result;
         },
     };
-    public findBestRate = {
-        async callAsync(
-            src: string,
-            dest: string,
-            srcAmount: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<[BigNumber, BigNumber]
-        > {
-            const self = this as any as MockKyberNetworkContract;
-            const encodedData = self._strictEncodeArguments('findBestRate(address,address,uint256)', [src,
-        dest,
-        srcAmount
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('findBestRate(address,address,uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber]
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
     public pairRate = {
         async callAsync(
             index_0: string,
@@ -194,6 +160,134 @@ export class MockKyberNetworkContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('pairRate(bytes32)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<BigNumber
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public searchBestRate = {
+        async callAsync(
+            src: string,
+            dest: string,
+            srcAmount: BigNumber,
+            usePermissionLess: boolean,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<[BigNumber, BigNumber]
+        > {
+            const self = this as any as MockKyberNetworkContract;
+            const encodedData = self._strictEncodeArguments('searchBestRate(address,address,uint256,bool)', [src,
+        dest,
+        srcAmount,
+        usePermissionLess
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('searchBestRate(address,address,uint256,bool)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber]
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public setPairRate = {
+        async sendTransactionAsync(
+            src: string,
+            dest: string,
+            rate: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as MockKyberNetworkContract;
+            const encodedData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
+    dest,
+    rate
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.setPairRate.estimateGasAsync.bind(
+                    self,
+                    src,
+                    dest,
+                    rate
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            src: string,
+            dest: string,
+            rate: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as MockKyberNetworkContract;
+            const encodedData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
+    dest,
+    rate
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            src: string,
+            dest: string,
+            rate: BigNumber,
+        ): string {
+            const self = this as any as MockKyberNetworkContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
+    dest,
+    rate
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            src: string,
+            dest: string,
+            rate: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as MockKyberNetworkContract;
+            const encodedData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
+        dest,
+        rate
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('setPairRate(address,address,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;
@@ -324,100 +418,6 @@ export class MockKyberNetworkContract extends BaseContract {
             const abiEncoder = self._lookupAbiEncoder('trade(address,uint256,address,address,uint256,uint256,address)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<BigNumber
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public setPairRate = {
-        async sendTransactionAsync(
-            src: string,
-            dest: string,
-            rate: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as MockKyberNetworkContract;
-            const encodedData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
-    dest,
-    rate
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.setPairRate.estimateGasAsync.bind(
-                    self,
-                    src,
-                    dest,
-                    rate
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            src: string,
-            dest: string,
-            rate: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as MockKyberNetworkContract;
-            const encodedData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
-    dest,
-    rate
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            src: string,
-            dest: string,
-            rate: BigNumber,
-        ): string {
-            const self = this as any as MockKyberNetworkContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
-    dest,
-    rate
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            src: string,
-            dest: string,
-            rate: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<void
-        > {
-            const self = this as any as MockKyberNetworkContract;
-            const encodedData = self._strictEncodeArguments('setPairRate(address,address,uint256)', [src,
-        dest,
-        rate
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('setPairRate(address,address,uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

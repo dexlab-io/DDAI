@@ -28,4 +28,9 @@ interface IMoneyMarket {
         external
         view
         returns (uint256 price);
+
+    function supplyInterestRate()
+        external
+        view
+        returns (uint256);
 }

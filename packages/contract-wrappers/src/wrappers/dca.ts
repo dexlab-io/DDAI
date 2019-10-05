@@ -15,6 +15,342 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class DCAContract extends BaseContract {
+    public dataOf = {
+        async callAsync(
+            index_0: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]
+        > {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('dataOf(address)', [index_0
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('dataOf(address)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public ddai = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<string
+        > {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('ddai()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('ddai()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public poke = {
+        async sendTransactionAsync(
+            _account: string,
+            _minFee: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('poke(address,uint256)', [_account,
+    _minFee
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.poke.estimateGasAsync.bind(
+                    self,
+                    _account,
+                    _minFee
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _account: string,
+            _minFee: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('poke(address,uint256)', [_account,
+    _minFee
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _account: string,
+            _minFee: BigNumber,
+        ): string {
+            const self = this as any as DCAContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('poke(address,uint256)', [_account,
+    _minFee
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _account: string,
+            _minFee: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<boolean
+        > {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('poke(address,uint256)', [_account,
+        _minFee
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('poke(address,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<boolean
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public pokeBatch = {
+        async sendTransactionAsync(
+            _accounts: string[],
+            _minFee: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
+    _minFee
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.pokeBatch.estimateGasAsync.bind(
+                    self,
+                    _accounts,
+                    _minFee
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _accounts: string[],
+            _minFee: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
+    _minFee
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _accounts: string[],
+            _minFee: BigNumber,
+        ): string {
+            const self = this as any as DCAContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
+    _minFee
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _accounts: string[],
+            _minFee: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
+        _minFee
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('pokeBatch(address[],uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public set = {
+        async sendTransactionAsync(
+            _amount: BigNumber,
+            _next: BigNumber,
+            _interval: BigNumber,
+            _totalAmount: BigNumber,
+            _feePerInterval: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
+    _next,
+    _interval,
+    _totalAmount,
+    _feePerInterval
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.set.estimateGasAsync.bind(
+                    self,
+                    _amount,
+                    _next,
+                    _interval,
+                    _totalAmount,
+                    _feePerInterval
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _amount: BigNumber,
+            _next: BigNumber,
+            _interval: BigNumber,
+            _totalAmount: BigNumber,
+            _feePerInterval: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
+    _next,
+    _interval,
+    _totalAmount,
+    _feePerInterval
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _amount: BigNumber,
+            _next: BigNumber,
+            _interval: BigNumber,
+            _totalAmount: BigNumber,
+            _feePerInterval: BigNumber,
+        ): string {
+            const self = this as any as DCAContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
+    _next,
+    _interval,
+    _totalAmount,
+    _feePerInterval
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _amount: BigNumber,
+            _next: BigNumber,
+            _interval: BigNumber,
+            _totalAmount: BigNumber,
+            _feePerInterval: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<void
+        > {
+            const self = this as any as DCAContract;
+            const encodedData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
+        _next,
+        _interval,
+        _totalAmount,
+        _feePerInterval
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('set(uint256,uint256,uint256,uint256,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<void
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public tokensReceived = {
         async sendTransactionAsync(
             _operator: string,
@@ -129,342 +465,6 @@ export class DCAContract extends BaseContract {
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
             const abiEncoder = self._lookupAbiEncoder('tokensReceived(address,address,address,uint256,bytes,bytes)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public pokeBatch = {
-        async sendTransactionAsync(
-            _accounts: string[],
-            _minFee: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
-    _minFee
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.pokeBatch.estimateGasAsync.bind(
-                    self,
-                    _accounts,
-                    _minFee
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            _accounts: string[],
-            _minFee: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
-    _minFee
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            _accounts: string[],
-            _minFee: BigNumber,
-        ): string {
-            const self = this as any as DCAContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
-    _minFee
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            _accounts: string[],
-            _minFee: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<void
-        > {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('pokeBatch(address[],uint256)', [_accounts,
-        _minFee
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('pokeBatch(address[],uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<void
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public ddai = {
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<string
-        > {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('ddai()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('ddai()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<string
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public dataOf = {
-        async callAsync(
-            index_0: string,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]
-        > {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('dataOf(address)', [index_0
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('dataOf(address)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public poke = {
-        async sendTransactionAsync(
-            _account: string,
-            _minFee: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('poke(address,uint256)', [_account,
-    _minFee
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.poke.estimateGasAsync.bind(
-                    self,
-                    _account,
-                    _minFee
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            _account: string,
-            _minFee: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('poke(address,uint256)', [_account,
-    _minFee
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            _account: string,
-            _minFee: BigNumber,
-        ): string {
-            const self = this as any as DCAContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('poke(address,uint256)', [_account,
-    _minFee
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            _account: string,
-            _minFee: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<boolean
-        > {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('poke(address,uint256)', [_account,
-        _minFee
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('poke(address,uint256)');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<boolean
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public set = {
-        async sendTransactionAsync(
-            _amount: BigNumber,
-            _next: BigNumber,
-            _interval: BigNumber,
-            _totalAmount: BigNumber,
-            _feePerInterval: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<string> {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
-    _next,
-    _interval,
-    _totalAmount,
-    _feePerInterval
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-                self.set.estimateGasAsync.bind(
-                    self,
-                    _amount,
-                    _next,
-                    _interval,
-                    _totalAmount,
-                    _feePerInterval
-                ),
-            );
-            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
-            return txHash;
-        },
-        async estimateGasAsync(
-            _amount: BigNumber,
-            _next: BigNumber,
-            _interval: BigNumber,
-            _totalAmount: BigNumber,
-            _feePerInterval: BigNumber,
-            txData: Partial<TxData> = {},
-        ): Promise<number> {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
-    _next,
-    _interval,
-    _totalAmount,
-    _feePerInterval
-    ]);
-            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...txData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
-            return gas;
-        },
-        getABIEncodedTransactionData(
-            _amount: BigNumber,
-            _next: BigNumber,
-            _interval: BigNumber,
-            _totalAmount: BigNumber,
-            _feePerInterval: BigNumber,
-        ): string {
-            const self = this as any as DCAContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
-    _next,
-    _interval,
-    _totalAmount,
-    _feePerInterval
-    ]);
-            return abiEncodedTransactionData;
-        },
-        async callAsync(
-            _amount: BigNumber,
-            _next: BigNumber,
-            _interval: BigNumber,
-            _totalAmount: BigNumber,
-            _feePerInterval: BigNumber,
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<void
-        > {
-            const self = this as any as DCAContract;
-            const encodedData = self._strictEncodeArguments('set(uint256,uint256,uint256,uint256,uint256)', [_amount,
-        _next,
-        _interval,
-        _totalAmount,
-        _feePerInterval
-        ]);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('set(uint256,uint256,uint256,uint256,uint256)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<void
         >(rawCallResult);
