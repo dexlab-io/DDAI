@@ -135,6 +135,11 @@ contract DDAI is IDDAI, ERC777 {
         AccountData storage accountData = accountDataOf[_receiver];
         uint256 currentTokenPrice = moneyMarket.tokenPrice();
         uint256 interestEarned = getOutStandingInterest(_receiver);
+
+        // If there is nothing to claim return
+        if(interestEarned == 0) {
+            return;
+        }
         // If any recipe is set push interest to the stack
         if(accountData.notStackInterest || accountData.recipes.length != 0) {
             accountData.stack = accountData.stack.add(interestEarned);

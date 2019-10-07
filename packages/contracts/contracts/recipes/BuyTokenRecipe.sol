@@ -27,14 +27,15 @@ contract BuyTokenRecipe is BaseRecipe {
         _tokensReceived(_to);
         // burn ddai
         token.redeem(address(this), _amount);
-        // approve underlying asset (dai)
-        underlying.approve(address(kyberNetwork), _amount);
+        // // approve underlying asset (dai)
+        // underlying.approve(address(kyberNetwork), _amount);
         // TODO getting min conversionrate from makerdao or kyber price oracle
         // TODO set walletID for fees
-        uint256 minRate = 0;
-        address walletID = address(0);
-        (address outputToken, address receiver) = abi.decode(_userData, (address, address));
-        // exchange and send eth to from address
-        kyberNetwork.trade(address(underlying), _amount, outputToken, receiver.toPayable(), uint256(-1), minRate, walletID);
+        // uint256 minRate = 0;
+        // address walletID = address(0);
+        // (address outputToken, address receiver) = abi.decode(_userData, (address, address));
+        // // exchange and send eth to from address
+        // kyberNetwork.trade(address(underlying), _amount, outputToken, receiver.toPayable(), uint256(-1), minRate, walletID);
     }
+
 }

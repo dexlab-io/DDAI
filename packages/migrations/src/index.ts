@@ -44,7 +44,7 @@ export const migrate = async () => {
     let iTokenAddress;
     if(process.env.IDAI) {
         iTokenAddress = process.env.IDAI
-        console.log(`Using IDAI deployed at: ${process.env.IDAI}`);
+        console.log(`Using Fulcrum IDAI deployed at: ${process.env.IDAI}`);
     } else {
         mockIToken = await wrappers.MockITokenContract.deployFrom0xArtifactAsync(
             ...getDeployArgs("MockIToken", pe, txDefaults),

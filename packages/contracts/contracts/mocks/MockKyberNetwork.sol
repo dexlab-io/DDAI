@@ -2,7 +2,7 @@ pragma solidity >=0.4.21 <0.6.0;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
-// Modified version of https://github.com/KyberNetwork/smart-contracts/blob/master/contracts/mockContracts/MockExchange.sol
+// Modified version of https://github.com/KyberNetwork/smart-contracts/blob/master/contracts/mockContracts/MockKyberNetwork.sol
 
 
 /// this mock is used when only simple actions are required. no reserves are involved.
@@ -11,7 +11,7 @@ contract MockKyberNetwork {
 
     mapping(bytes32=>uint) public pairRate; //rate in precision units. i.e. if rate is 10**18 its same as 1:1
     uint constant PRECISION = 10 ** 18;
-    ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
+    ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
 
     function() external payable {}
 

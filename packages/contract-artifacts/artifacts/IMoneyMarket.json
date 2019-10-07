@@ -128,6 +128,12 @@
 				"object": "0x",
 				"opcodes": "",
 				"sourceMap": ""
+			},
+			"deployedBytecode": {
+				"linkReferences": {},
+				"object": "0x",
+				"opcodes": "",
+				"sourceMap": ""
 			}
 		}
 	},
@@ -151,7 +157,10 @@
 				"*": {
 					"*": [
 						"abi",
-						"evm.bytecode.object"
+						"evm.bytecode.object",
+						"evm.bytecode.sourceMap",
+						"evm.deployedBytecode.object",
+						"evm.deployedBytecode.sourceMap"
 					]
 				}
 			},

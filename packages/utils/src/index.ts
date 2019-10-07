@@ -18,7 +18,6 @@ export const getProvider = (solTrace: boolean = false, solCoverage: boolean = fa
         const projectRoot = path.dirname(require.resolve('@ddai/contracts/package.json'));
         console.log(projectRoot);
         artifactAdapter = new SolCompilerArtifactAdapter(`${projectRoot}/build/artifacts`, `${projectRoot}/contracts`);
-        artifactAdapter.collectContractsDataAsync().then(console.log);
     }
     if(solCoverage) {
         console.log("Setting up sol-coverage");
@@ -30,8 +29,7 @@ export const getProvider = (solTrace: boolean = false, solCoverage: boolean = fa
     if(solTrace) {
         console.log("Setting up sol-trace");
         // TODO should not use hard coded address
-        const isVerbose = true;
-        const revertTraceSubprovider = new RevertTraceSubprovider(artifactAdapter, defaultFromAddress, isVerbose);
+        const revertTraceSubprovider = new RevertTraceSubprovider(artifactAdapter, defaultFromAddress);
         pe.addProvider(revertTraceSubprovider)    
     }
     // const rpcSubProvider = new SubscriptionsSubProvider();
