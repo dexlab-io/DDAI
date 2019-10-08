@@ -47,9 +47,9 @@ contract DDAIGSNBouncer is DDAI, Ownable, GSNRecipient  {
         token.transfer(owner(), token.balanceOf(address(this)));
     }
 
-    function setPriceFeed(address _feed) external onlyOwner {
-        priceFeed = IPriceFeed(_feed);
-    }
+    // function setPriceFeed(address _feed) external onlyOwner {
+    //     priceFeed = IPriceFeed(_feed);
+    // }
 
     // GSN FUNCTIONALITY should be in a seperate file
     function acceptRelayedCall(

@@ -37,8 +37,7 @@ export const migrate = async () => {
         ...getDeployArgs("MockUSDFeed", pe, txDefaults),
         // @ts-ignore
         toWei(210)
-    )
-    // IDAI
+    ) 
 
     let mockIToken;
     let iTokenAddress;
