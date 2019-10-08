@@ -46,7 +46,7 @@ const mockRecipes = [
 ]
 
 
-describe("DDAI", function( ){
+describe("DDAI", function(){
     this.timeout(30000);
 
     before(async () => {

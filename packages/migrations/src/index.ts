@@ -61,7 +61,7 @@ export const migrate = async () => {
         kyberAddress = process.env.KYBER_NETWORK.toLowerCase();
         console.log(`Using Kyber network deployed at: ${process.env.KYBER_NETWORK}`);
     } else {
-        const mockKyberNetwork = await wrappers.MockKyberNetworkContract.deployFrom0xArtifactAsync(
+        mockKyberNetwork = await wrappers.MockKyberNetworkContract.deployFrom0xArtifactAsync(
             ...getDeployArgs("MockKyberNetwork", pe, txDefaults),
         )
         console.log(`Deployed MockKyberNetwork at: ${mockKyberNetwork.address}`);

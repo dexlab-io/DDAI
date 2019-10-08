@@ -52,6 +52,10 @@ export const toWei = (amount: number | string | BigNumber) => {
     return Web3Wrapper.toWei(new BigNumber(amount));
 }
 
+export const fromWei = (amount: number | string | BigNumber) => {
+    return Web3Wrapper.toUnitAmount(new BigNumber(amount), 18);
+}
+
 type DeployArgs = [ ContractArtifact, Web3ProviderEngine, Partial<TxData> ]
 
 export const getDeployArgs = (

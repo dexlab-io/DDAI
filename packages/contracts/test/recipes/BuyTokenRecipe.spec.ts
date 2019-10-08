@@ -5,8 +5,9 @@ import chaiBigNumber from 'chai-bignumber';
 import {BigNumber} from '@0x/utils';
 import { migrate } from '@ddai/migrations';
 import * as wrappers from '@ddai/contract-wrappers';
-import { getProvider, toWei } from '@ddai/utils';
+import { getProvider, toWei, fromWei } from '@ddai/utils';
 import * as abi from 'ethereumjs-abi';
+import { Web3Wrapper } from '@0x/web3-wrapper';
 chai.use(chaiAsPromised);
 chai.use(chaiBigNumber(BigNumber));
 
@@ -26,6 +27,7 @@ let txData;
 let {pe, web3, coverageSubProvider} = getProvider(true, false);
 
 const initialDaiAmount = toWei(1000);
+const ETH_PRICE = 200;
 const ETH_TOKEN_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE".toLowerCase();
 
 describe("BuyTokenRecipe", function(){
@@ -38,11 +40,19 @@ describe("BuyTokenRecipe", function(){
         await mockDai.mintTo.sendTransactionAsync(user, initialDaiAmount);
         await mockDai.approve.sendTransactionAsync(ddai.address, initialDaiAmount);
         await ddai.mint.sendTransactionAsync(user, initialDaiAmount);
-        
+        await mockKyberNetwork.setPairRate.sendTransactionAsync(mockDai.address, ETH_TOKEN_ADDRESS, toWei(1 / ETH_PRICE));
         txData = {
             from: user,
             gas: 8000000
         }
+        await web3.sendTransactionAsync(
+            {
+                ...txData,
+                to: mockKyberNetwork.address,
+                value: toWei(100)
+            }
+        )
+        
         snapshot = await web3.takeSnapshotAsync();
     })
 
@@ -55,16 +65,29 @@ describe("BuyTokenRecipe", function(){
         pe.stop();
     })
 
-
-    // it.only("Sending ddai should not cause issues", async() => {
-    //     await ddai.redeem.sendTransactionAsync(accounts[1], toWei(100));
-    // })
-
     it("Buying ETH by sending ddai should work", async() => {
-        const userData = "0x" + abi.rawEncode(["address", "address"], [ETH_TOKEN_ADDRESS, user]).toString("hex");
-        console.log(userData);
-        await ddai.send.sendTransactionAsync(buyTokenRecipe.address, toWei(10), userData);
-        // await ddai.addRecipe.sendTransactionAsync(buyTokenRecipe.address, new BigNumber(100), );
+        const userData = "0x" + abi.rawEncode(["address", "address"], [ETH_TOKEN_ADDRESS, accounts[1]]).toString("hex");
+        
+        const ethBalanceBefore = await web3.getBalanceInWeiAsync(accounts[1]);
+        await ddai.send.sendTransactionAsync(buyTokenRecipe.address, toWei(ETH_PRICE), userData);
+        const ethBalanceAfter = await web3.getBalanceInWeiAsync(accounts[1]);
+        expect(ethBalanceAfter, "Should have bought 1 eth").to.bignumber.eq(ethBalanceBefore.plus(toWei(1)));
+    })
+
+    it("Buying ETH by distributing the stack should work", async() => {
+        const userData = "0x" + abi.rawEncode(["address", "address"], [ETH_TOKEN_ADDRESS, accounts[1]]).toString("hex");
+
+        const ddaiAmount = toWei(ETH_PRICE);
+        
+        await ddai.transfer.sendTransactionAsync(accounts[1], ddaiAmount);
+        await ddai.addRecipe.sendTransactionAsync(buyTokenRecipe.address, toWei(1), userData, {from: accounts[1]});
+        await ddai.setStack.sendTransactionAsync(accounts[1], ddaiAmount, {from: accounts[1]});
+
+        const ethBalanceBefore = await web3.getBalanceInWeiAsync(accounts[1]);
+        await ddai.distributeStack.sendTransactionAsync(accounts[1]);
+        const ethBalanceAfter = await web3.getBalanceInWeiAsync(accounts[1]);
+
+        expect(ethBalanceAfter, "Should have bought 1 eth").to.bignumber.eq(ethBalanceBefore.plus(toWei(1)));
     })
 })
 

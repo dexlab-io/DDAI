@@ -39,9 +39,9 @@ contract MockKyberNetwork {
 
         walletId;
 
-        require(rate > 0);
-        require(rate > minConversionRate);
-        require(dest == ETH_TOKEN_ADDRESS);
+        require(rate > 0, "RATE_ZERO");
+        require(rate > minConversionRate, "RATE_TOO_LOW");
+        require(dest == ETH_TOKEN_ADDRESS, "ONLY_ETH_SUPPORTED");
 
         uint destAmount = srcAmount * rate / PRECISION;
         uint actualSrcAmount = srcAmount;
@@ -51,7 +51,7 @@ contract MockKyberNetwork {
             actualSrcAmount = maxDestAmount * PRECISION / rate;
         }
 
-        require(src.transferFrom(msg.sender, address(this), actualSrcAmount));
+        require(src.transferFrom(msg.sender, address(this), actualSrcAmount), "TRANSFER_FAILED");
         destAddress.transfer(destAmount);
 
         return destAmount;
