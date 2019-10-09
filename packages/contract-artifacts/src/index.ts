@@ -14,6 +14,7 @@ import * as IPToken from "../artifacts/IPToken.json";
 import * as IPriceFeed from "../artifacts/IPriceFeed.json";
 import * as ISynthetix from "../artifacts/ISynthetix.json";
 import * as ISynthetixDepot from "../artifacts/ISynthetixDepot.json";
+import * as MockCToken from "../artifacts/MockCToken.json";
 import * as MockDai from "../artifacts/MockDai.json";
 import * as MockIToken from "../artifacts/MockIToken.json";
 import * as MockKyberNetwork from "../artifacts/MockKyberNetwork.json";
@@ -40,6 +41,7 @@ export{
     IPriceFeed,
     ISynthetix,
     ISynthetixDepot,
+    MockCToken,
     MockDai,
     MockIToken,
     MockKyberNetwork,

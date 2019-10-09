@@ -54,8 +54,23 @@ export const migrate = async () => {
         console.log(`Deployed MockIToken at: ${mockIToken.address}`);
     }
 
-    let kyberAddress;
+    let mockCDai;
+    let cDaiAddress;
+    if(process.env.CDAI) {
+        cDaiAddress = process.env.CDAI.toLowerCase();
+        console.log(`Using CDAI network deployed at: ${process.env.CDAI}`);
+    } else {
+        mockCDai = await wrappers.MockCTokenContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockCToken", pe, txDefaults),
+            // @ts-ignore
+            daiAddress
+        );
+        cDaiAddress = mockCDai.address;
+        console.log(`Deployed mockCDai at: ${mockCDai.address}`);
+    }
+
     let mockKyberNetwork;
+    let kyberAddress;
     if(process.env.KYBER_NETWORK) {
         kyberAddress = process.env.KYBER_NETWORK.toLowerCase();
         console.log(`Using Kyber network deployed at: ${process.env.KYBER_NETWORK}`);
@@ -66,7 +81,6 @@ export const migrate = async () => {
         console.log(`Deployed MockKyberNetwork at: ${mockKyberNetwork.address}`);
         kyberAddress = mockKyberNetwork.address;
     }
-    
 
     const ddai = await wrappers.DDAIContract.deployFrom0xArtifactAsync(
         artifacts.DDAI,
@@ -79,6 +93,15 @@ export const migrate = async () => {
         []
     )
     console.log(`Deployed DDAI at: ${ddai.address}`);
+    
+    const compoundRepayRecipe = await wrappers.CompoundRepayRecipeContract.deployFrom0xArtifactAsync(
+        ...getDeployArgs("CompoundRepayRecipe", pe, txDefaults),
+        // @ts-ignore
+        ddai.address,
+        daiAddress,
+        kyberAddress
+    )
+    console.log(`Deployed CompoundRepayRecipe at: ${compoundRepayRecipe.address}`);
 
     const mockRecipe = await wrappers.MockRecipeContract.deployFrom0xArtifactAsync(
         ...getDeployArgs("MockRecipe", pe, txDefaults),
@@ -109,8 +132,10 @@ export const migrate = async () => {
         mockDai: daiAddress,
         mockIToken: iTokenAddress,
         mockKyberNetwork: kyberAddress,
+        mockCDai: cDaiAddress,
         ddai: ddai.address,
         buyTokenRecipe: buyTokenRecipe.address,
+        compoundRepayRecipe: compoundRepayRecipe.address,
         buyPTokenRecipe: buyPTokenRecipe.address,
         mockRecipe: mockRecipe.address,
     }
@@ -119,8 +144,10 @@ export const migrate = async () => {
         mockDai: mockDai,
         mockIToken: mockIToken,
         mockKyberNetwork: mockKyberNetwork,
+        mockCDai: mockCDai,
         ddai: ddai,
         buyTokenRecipe: buyTokenRecipe,
+        compoundRepayRecipe: compoundRepayRecipe,
         buyPTokenRecipe: buyPTokenRecipe,
         mockRecipe: mockRecipe,
     }

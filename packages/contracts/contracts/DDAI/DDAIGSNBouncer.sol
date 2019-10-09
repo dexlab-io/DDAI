@@ -36,7 +36,7 @@ contract DDAIGSNBouncer is DDAI, Ownable, GSNRecipient  {
 
     function withdrawEther(uint256 _amount) external onlyOwner {
         // withdraw ether to owner
-        _withdrawDeposits(IRelayHub(getHubAddr()).balanceOf(address(this)), msg.sender);
+        _withdrawDeposits(IRelayHub(getHubAddr()).balanceOf(address(this)).min(_amount), msg.sender);
     }
 
     // allows any token to be withdrawed including ddai gsn fees

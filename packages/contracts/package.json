@@ -27,7 +27,8 @@
     "generate:wrappers": "abi-gen --abis './build/artifacts/*.json' --out 'build/wrappers/' --template contract-templates/contract.handlebars --partials './contract-templates/partials/**/*.handlebars'",
     "export-artifacts-and-wrappers": "yarn compile:contracts && yarn generate:wrappers && cd ../contract-artifacts && yarn generate && cd ../contract-wrappers && yarn generate && cd ../contracts",
     "test:DDAI": "ts-mocha ./test/DDAI.spec.ts",
-    "test:BuyTokenRecipe": "ts-mocha ./test/recipes/BuyTokenRecipe.spec.ts"
+    "test:BuyTokenRecipe": "ts-mocha ./test/recipes/BuyTokenRecipe.spec.ts",
+    "test:CompoundRepayRecipe": "ts-mocha ./test/recipes/CompoundRepayRecipe.spec.ts"
   },
   "dependencies": {
     "@0x/abi-gen": "2.0.10",

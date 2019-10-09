@@ -40,9 +40,9 @@
 		}
 	},
 	"sourceCodes": {
-		"interfaces/IPriceFeed.sol": "pragma solidity >=0.4.21 <0.6.0;\npragma experimental ABIEncoderV2;\n\ninterface IPriceFeed {\n    function read() external view returns(bytes32);\n}"
+		"interfaces/IPriceFeed.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IPriceFeed {\n    function read() external view returns(bytes32);\n}"
 	},
-	"sourceTreeHashHex": "0x86f31bb6817c3bccec7f7d08d7884bd807ed7b4888bec5599698db91b3329747",
+	"sourceTreeHashHex": "0x5ea133596d7534338c5d456edbe4b97c5aafcd4f7efede475e4f3b42ac5a3f4b",
 	"compiler": {
 		"name": "solc",
 		"version": "soljson-v0.5.12+commit.7709ece9.js",
