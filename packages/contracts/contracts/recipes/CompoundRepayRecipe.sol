@@ -2,6 +2,7 @@ pragma solidity >=0.4.21 <0.6.0;
 
 import "./BaseRecipe.sol";
 import "../interfaces/ICToken.sol";
+import "../interfaces/ICEToken.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/IKyberNetwork.sol";
 import "openzeppelin-solidity/contracts/math/Math.sol";
@@ -13,6 +14,7 @@ contract CompoundRepayRecipe is BaseRecipe {
     using Address for address;
 
     IKyberNetwork public kyberNetwork;
+    address constant internal ETH_TOKEN_ADDRESS = address(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
 
     constructor(address _token, address _underlying, address _kyberNetwork) BaseRecipe(_token, _underlying) public {
         kyberNetwork = IKyberNetwork(_kyberNetwork);
@@ -43,6 +45,9 @@ contract CompoundRepayRecipe is BaseRecipe {
             // // TODO getting min conversionrate from makerdao or kyber price oracle
             // // TODO set walletID for fees
             // uint256 minRate = 0;
+            if(address(compoundUnderlying) == address(0)) {
+                compoundUnderlying = IERC20(ETH_TOKEN_ADDRESS);
+            }
             // split out because stack to deep error
             underlyingAmount = buyUnderlying(_amount, compoundUnderlying, _from);
         }
@@ -51,13 +56,23 @@ contract CompoundRepayRecipe is BaseRecipe {
         // cannot repay more than borrowed
         uint256 payoffAmount = underlyingAmount.min(borrowedBalance);
 
-        compoundUnderlying.approve(address(iToken), payoffAmount);
-        iToken.repayBorrowBehalf(borrower, payoffAmount);
+        if(address(compoundUnderlying) != ETH_TOKEN_ADDRESS) {
+            compoundUnderlying.approve(address(iToken), payoffAmount);
+            iToken.repayBorrowBehalf(borrower, payoffAmount);
+            // If any tokens left return them to the user
+            if(payoffAmount < underlyingAmount) {
+                compoundUnderlying.transfer(_from, underlyingAmount - payoffAmount);
+            }
+        } else {
+            //compound underlying is eth
+            ICEToken iceToken = ICEToken(iTokenAddress);
+            iceToken.repayBorrowBehalf.value(payoffAmount)(borrower);
 
-        // If any tokens left return them to the user
-        if(payoffAmount < underlyingAmount) {
-            compoundUnderlying.transfer(_from, underlyingAmount - payoffAmount);
+            if(address(this).balance > 0) {
+                _from.toPayable().transfer(address(this).balance);
+            }
         }
+
     }
 
     function buyUnderlying(uint256 _amount, IERC20 _compoundUnderlying, address _from) internal returns(uint256) {

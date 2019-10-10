@@ -6,6 +6,7 @@ export * from "./wrappers/compound_repay_recipe";
 export * from "./wrappers/d_d_a_i_g_s_n_bouncer";
 export * from "./wrappers/dca";
 export * from "./wrappers/ddai";
+export * from "./wrappers/i_c_e_token";
 export * from "./wrappers/i_c_token";
 export * from "./wrappers/i_kyber_network";
 export * from "./wrappers/i_money_market";

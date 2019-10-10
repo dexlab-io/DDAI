@@ -6,6 +6,7 @@ import * as CompoundRepayRecipe from "../artifacts/CompoundRepayRecipe.json";
 import * as DCA from "../artifacts/DCA.json";
 import * as DDAI from "../artifacts/DDAI.json";
 import * as DDAIGSNBouncer from "../artifacts/DDAIGSNBouncer.json";
+import * as ICEToken from "../artifacts/ICEToken.json";
 import * as ICToken from "../artifacts/ICToken.json";
 import * as IDDAI from "../artifacts/IDDAI.json";
 import * as IKyberNetwork from "../artifacts/IKyberNetwork.json";
@@ -33,6 +34,7 @@ export{
     DCA,
     DDAI,
     DDAIGSNBouncer,
+    ICEToken,
     ICToken,
     IDDAI,
     IKyberNetwork,
