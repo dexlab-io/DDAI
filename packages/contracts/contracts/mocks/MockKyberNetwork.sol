@@ -1,6 +1,7 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./MockToken.sol";
 
 // Modified version of https://github.com/KyberNetwork/smart-contracts/blob/master/contracts/mockContracts/MockKyberNetwork.sol
 
@@ -41,7 +42,7 @@ contract MockKyberNetwork {
 
         require(rate > 0, "RATE_ZERO");
         require(rate > minConversionRate, "RATE_TOO_LOW");
-        require(dest == ETH_TOKEN_ADDRESS, "ONLY_ETH_SUPPORTED");
+        // require(dest == ETH_TOKEN_ADDRESS, "ONLY_ETH_SUPPORTED");
 
         uint destAmount = srcAmount * rate / PRECISION;
         uint actualSrcAmount = srcAmount;
@@ -52,7 +53,12 @@ contract MockKyberNetwork {
         }
 
         require(src.transferFrom(msg.sender, address(this), actualSrcAmount), "TRANSFER_FAILED");
-        destAddress.transfer(destAmount);
+
+        if(dest == ETH_TOKEN_ADDRESS) {
+            destAddress.transfer(destAmount);
+        } else {
+            MockToken(address(dest)).mintTo(destAddress, destAmount);
+        }
 
         return destAmount;
     }

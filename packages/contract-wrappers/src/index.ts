@@ -15,6 +15,7 @@ export * from "./wrappers/i_price_feed";
 export * from "./wrappers/i_synthetix";
 export * from "./wrappers/i_synthetix_depot";
 export * from "./wrappers/iddai";
+export * from "./wrappers/mock_c_e_token";
 export * from "./wrappers/mock_c_token";
 export * from "./wrappers/mock_dai";
 export * from "./wrappers/mock_i_token";

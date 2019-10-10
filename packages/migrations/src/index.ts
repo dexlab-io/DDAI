@@ -33,6 +33,19 @@ export const migrate = async () => {
         daiAddress = mockDai.address
     }
 
+    let mockRep;
+    let repAddress;
+    if(process.env.REP) {
+        repAddress = process.env.REP;
+        console.log(`Using REP deployed at: ${process.env.REP}`);
+    } else {
+        mockRep = await wrappers.MockTokenContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockToken", pe, txDefaults),
+        )
+        console.log(`Deployed MockRep at: ${mockRep.address}`);
+        repAddress = mockRep.address;
+    }
+
     const mockPriceFeed = await wrappers.MockUSDFeedContract.deployFrom0xArtifactAsync(
         ...getDeployArgs("MockUSDFeed", pe, txDefaults),
         // @ts-ignore
@@ -68,6 +81,37 @@ export const migrate = async () => {
         cDaiAddress = mockCDai.address;
         console.log(`Deployed mockCDai at: ${mockCDai.address}`);
     }
+
+    let mockCEth;
+    let cEthAddress;
+    if(process.env.CETH) {
+        cEthAddress = process.env.CETH.toLowerCase();
+        console.log(`Using CETH deployed at: ${process.env.CETH}`);
+    } else {
+        mockCEth = await wrappers.MockCTokenContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockCToken", pe, txDefaults),
+            // @ts-ignore
+            "0x0000000000000000000000000000000000000000"
+        )
+        cEthAddress = mockCEth.address;
+        console.log(`Deployed mockCEth at: ${mockCEth.address}`);
+    }
+
+    let mockCRep;
+    let cRepAddress;
+    if(process.env.CREP) {
+        cRepAddress = process.env.CREP.toLowerCase();
+        console.log(`Using CREP deployed at: ${process.env.CREP}`);
+    } else {
+        mockCRep = await wrappers.MockCTokenContract.deployFrom0xArtifactAsync(
+            ...getDeployArgs("MockCToken", pe, txDefaults),
+            // @ts-ignore
+            repAddress
+        )
+        cRepAddress = mockCRep.address;
+        console.log(`Deployed mockCrep at: ${mockCRep.address}`);
+    }
+
 
     let mockKyberNetwork;
     let kyberAddress;
@@ -130,9 +174,12 @@ export const migrate = async () => {
 
     const contractAddresses = {
         mockDai: daiAddress,
+        mockRep: repAddress,
         mockIToken: iTokenAddress,
         mockKyberNetwork: kyberAddress,
         mockCDai: cDaiAddress,
+        mockCEth: cEthAddress,
+        mockCRep: cRepAddress,
         ddai: ddai.address,
         buyTokenRecipe: buyTokenRecipe.address,
         compoundRepayRecipe: compoundRepayRecipe.address,
@@ -142,9 +189,12 @@ export const migrate = async () => {
 
     const contractInstances = {
         mockDai: mockDai,
+        mockRep: mockRep,
         mockIToken: mockIToken,
         mockKyberNetwork: mockKyberNetwork,
         mockCDai: mockCDai,
+        mockCEth: mockCEth,
+        mockCRep: mockCRep,
         ddai: ddai,
         buyTokenRecipe: buyTokenRecipe,
         compoundRepayRecipe: compoundRepayRecipe,

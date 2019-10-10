@@ -761,11 +761,11 @@ export class MockCTokenContract extends BaseContract {
     };
     public repayBorrowBehalf1 = {
         async sendTransactionAsync(
-            index_0: string,
+            borrower: string,
             txData: Partial<TxDataPayable> = {},
         ): Promise<string> {
             const self = this as any as MockCTokenContract;
-            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address)', [index_0
+            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address)', [borrower
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -776,18 +776,18 @@ export class MockCTokenContract extends BaseContract {
                 self._web3Wrapper.getContractDefaults(),
                 self.repayBorrowBehalf1.estimateGasAsync.bind(
                     self,
-                    index_0
+                    borrower
                 ),
             );
             const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
             return txHash;
         },
         async estimateGasAsync(
-            index_0: string,
+            borrower: string,
             txData: Partial<TxData> = {},
         ): Promise<number> {
             const self = this as any as MockCTokenContract;
-            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address)', [index_0
+            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address)', [borrower
     ]);
             const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
@@ -801,21 +801,21 @@ export class MockCTokenContract extends BaseContract {
             return gas;
         },
         getABIEncodedTransactionData(
-            index_0: string,
+            borrower: string,
         ): string {
             const self = this as any as MockCTokenContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('repayBorrowBehalf(address)', [index_0
+            const abiEncodedTransactionData = self._strictEncodeArguments('repayBorrowBehalf(address)', [borrower
     ]);
             return abiEncodedTransactionData;
         },
         async callAsync(
-            index_0: string,
+            borrower: string,
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<void
         > {
             const self = this as any as MockCTokenContract;
-            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address)', [index_0
+            const encodedData = self._strictEncodeArguments('repayBorrowBehalf(address)', [borrower
         ]);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
