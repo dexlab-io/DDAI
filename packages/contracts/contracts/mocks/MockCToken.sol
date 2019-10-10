@@ -34,8 +34,8 @@ contract MockCToken is ICToken, ERC20 {
         return repayBorrowBehalf(msg.sender, _repayAmount);
     }
 
-    function repayBorrowBehalf(address) public payable {
-        borrowBalances[msg.sender] -= msg.value;
+    function repayBorrowBehalf(address borrower) public payable {
+        borrowBalances[borrower] -= msg.value;
         require(errorCode == 0, "MockCToken.repayBorrowBehalf: ERROR_CODE_INVALID");
     }
 

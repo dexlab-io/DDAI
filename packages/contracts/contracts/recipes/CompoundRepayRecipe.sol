@@ -49,7 +49,7 @@ contract CompoundRepayRecipe is BaseRecipe {
                 compoundUnderlying = IERC20(ETH_TOKEN_ADDRESS);
             }
             // split out because stack to deep error
-            underlyingAmount = buyUnderlying(_amount, compoundUnderlying, _from);
+            underlyingAmount = buyUnderlying(_amount, compoundUnderlying, address(this));
         }
 
         uint256 borrowedBalance = iToken.borrowBalanceCurrent(borrower);
@@ -64,7 +64,7 @@ contract CompoundRepayRecipe is BaseRecipe {
                 compoundUnderlying.transfer(_from, underlyingAmount - payoffAmount);
             }
         } else {
-            //compound underlying is eth
+            // //compound underlying is eth
             ICEToken iceToken = ICEToken(iTokenAddress);
             iceToken.repayBorrowBehalf.value(payoffAmount)(borrower);
 
@@ -75,7 +75,12 @@ contract CompoundRepayRecipe is BaseRecipe {
 
     }
 
+    function() external payable {
+        // NIENTE
+    }
+
     function buyUnderlying(uint256 _amount, IERC20 _compoundUnderlying, address _from) internal returns(uint256) {
+        underlying.approve(address(kyberNetwork), _amount);
         return kyberNetwork.trade(address(underlying), _amount, address(_compoundUnderlying), _from.toPayable(), uint256(-1), 0, address(0));
     }
 }
