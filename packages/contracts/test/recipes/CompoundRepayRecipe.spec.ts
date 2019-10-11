@@ -25,7 +25,7 @@ let user: string;
 let txData;
 
 // TODO fix sol-trace and sol-coverage
-let {pe, web3, coverageSubProvider} = getProvider(true, false);
+let {pe, web3, coverageSubProvider} = getProvider(true, true);
 
 const initialDaiAmount = toWei(1000);
 const ETH_PRICE = 200;
@@ -64,6 +64,7 @@ describe("CompoundRepayRecipe", function(){
     })
 
     after(async() => {
+        await coverageSubProvider.writeCoverageAsync();
         pe.stop();
     })
 

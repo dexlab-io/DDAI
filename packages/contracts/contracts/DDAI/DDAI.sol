@@ -213,6 +213,7 @@ contract DDAI is IDDAI, ERC777 {
         if(accountData.stack >= balance) {
             return 0;
         }
+        // TODO check this possible overflow
         return (_balanceOf(_account) - accountDataOf[_account].stack);
     }
 
