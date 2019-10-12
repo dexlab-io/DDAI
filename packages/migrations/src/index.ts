@@ -4,6 +4,7 @@ import { getProvider, toWei, getDeployArgs } from '@ddai/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { BigNumber, Web3ProviderEngine } from '0x.js';
 import Web3 from 'web3';
+import * as abi from 'ethereumjs-abi';
 
 process.env.USE_CONFIG && require('dotenv').config();
 
@@ -201,6 +202,16 @@ export const migrate = async () => {
         buyPTokenRecipe: buyPTokenRecipe,
         mockRecipe: mockRecipe,
     }
+
+
+    // mockDai = new wrappers.MockDaiContract(artifacts.MockDai.compilerOutput.abi, daiAddress, pe, txDefaults);
+
+    // await mockDai.approve.sendTransactionAsync(ddai.address, toWei(1));
+    // await ddai.mint.sendTransactionAsync(accounts[0], toWei(1));
+    // const ETH_TOKEN_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE".toLowerCase();
+    // const userData = "0x" + abi.rawEncode(["address", "address"], [ETH_TOKEN_ADDRESS, accounts[0]]).toString("hex");
+
+    // await ddai.send.sendTransactionAsync(accounts[0], toWei(1), userData);
 
     pe.stop();
     return {contractAddresses, contractInstances};

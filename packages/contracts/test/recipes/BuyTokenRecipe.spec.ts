@@ -65,8 +65,10 @@ describe("BuyTokenRecipe", function(){
         pe.stop();
     })
 
-    it("Buying ETH by sending ddai should work", async() => {
+    it.only("Buying ETH by sending ddai should work", async() => {
         const userData = "0x" + abi.rawEncode(["address", "address"], [ETH_TOKEN_ADDRESS, accounts[1]]).toString("hex");
+
+        console.log(userData);
         
         const ethBalanceBefore = await web3.getBalanceInWeiAsync(accounts[1]);
         await ddai.send.sendTransactionAsync(buyTokenRecipe.address, toWei(ETH_PRICE), userData);

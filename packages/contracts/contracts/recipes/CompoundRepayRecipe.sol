@@ -49,7 +49,7 @@ contract CompoundRepayRecipe is BaseRecipe {
                 compoundUnderlying = IERC20(ETH_TOKEN_ADDRESS);
             }
             // split out because stack to deep error
-            underlyingAmount = buyUnderlying(_amount, compoundUnderlying, address(this));
+            buyUnderlying(_amount, compoundUnderlying, address(this));
         }
 
         uint256 borrowedBalance = iToken.borrowBalanceCurrent(borrower);

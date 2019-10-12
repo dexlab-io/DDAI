@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "migrate": "ts-node ./src/run.ts",
-    "migrate:using-env": "USE_CONFIG=1 yarn migrate"
+    "migrate:using-env": "USE_CONFIG=1 yarn migrate",
+    "migrate:buyTokenRecipe": "USE_CONFIG=1 yarn ts-node ./src/migrateBuyTokenRecipe.ts"
   },
   "dependencies": {
     "@ddai/contract-artifacts": "0.1.0",

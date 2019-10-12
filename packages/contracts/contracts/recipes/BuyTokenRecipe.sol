@@ -35,7 +35,7 @@ contract BuyTokenRecipe is BaseRecipe {
         address walletID = address(0);
         (address outputToken, address receiver) = abi.decode(_userData, (address, address));
         // exchange and send eth to from address
-        kyberNetwork.trade(address(underlying), _amount, outputToken, receiver.toPayable(), uint256(-1), minRate, walletID);
+        kyberNetwork.trade(address(underlying), underlying.balanceOf(address(this)), outputToken, receiver.toPayable(), uint256(-1), minRate, walletID);
     }
 
 }

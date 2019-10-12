@@ -19,7 +19,8 @@ contract BaseRecipe {
     }
 
     function _tokensReceived(address _to) internal view {
-        require(msg.sender == address(token), "BaseRecipe.tokensReceived: MSG_SENDER_NOT_TOKEN");
+        // TODO think about why do we need this :P
+        // require(msg.sender == address(token), "BaseRecipe.tokensReceived: MSG_SENDER_NOT_TOKEN");
         // To Must be this contract as tokens should be received here
         require(_to == address(this), "BaseRecipe.tokensReceived: TO_SHOULD_BE_THIS");
     }
