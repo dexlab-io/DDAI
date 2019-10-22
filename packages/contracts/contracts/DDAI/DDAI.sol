@@ -68,6 +68,11 @@ contract DDAI is IDDAI, ERC777 {
         setRecipes(_receivers, _ratios, _data);
     }
 
+    function mintAndDistribute(address _receiver, uint256 _amount) public {
+        mint(_receiver, _amount);
+        setAndDistributeStack(_receiver, accountDataOf[_receiver].stack.add(_amount));
+    }
+
     function redeem(address _receiver, uint256 _amount) external returns(uint256) {
         claimInterest(_msgSender());
 
@@ -174,6 +179,11 @@ contract DDAI is IDDAI, ERC777 {
         require(_msgSender() == _account || stackPushAllowed[_account][_msgSender()], "DDAI.pushToStack: NOT_ALLOWED");
         AccountData storage accountData = accountDataOf[_account];
         accountData.stack = _amount;
+    }
+
+    function setAndDistributeStack(address _account, uint256 _amount) public {
+        setStack(_account, _amount);
+        distributeStack(_account);
     }
 
     function setStackApproved(address _account, bool _allowed) external {
