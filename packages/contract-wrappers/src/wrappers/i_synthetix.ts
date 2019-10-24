@@ -24,7 +24,7 @@ export class ISynthetixContract extends BaseContract {
             txData: Partial<TxData> = {},
         ): Promise<string> {
             const self = this as any as ISynthetixContract;
-            const encodedData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+            const encodedData = self._strictEncodeArguments('exchange(bytes32,uint256,bytes32,address)', [_sourceCurrencyKey,
     _sourceAmount,
     _destinationCurrencyKey,
     _destinationAddress
@@ -55,7 +55,7 @@ export class ISynthetixContract extends BaseContract {
             txData: Partial<TxData> = {},
         ): Promise<number> {
             const self = this as any as ISynthetixContract;
-            const encodedData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+            const encodedData = self._strictEncodeArguments('exchange(bytes32,uint256,bytes32,address)', [_sourceCurrencyKey,
     _sourceAmount,
     _destinationCurrencyKey,
     _destinationAddress
@@ -78,7 +78,7 @@ export class ISynthetixContract extends BaseContract {
             _destinationAddress: string,
         ): string {
             const self = this as any as ISynthetixContract;
-            const abiEncodedTransactionData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+            const abiEncodedTransactionData = self._strictEncodeArguments('exchange(bytes32,uint256,bytes32,address)', [_sourceCurrencyKey,
     _sourceAmount,
     _destinationCurrencyKey,
     _destinationAddress
@@ -95,7 +95,7 @@ export class ISynthetixContract extends BaseContract {
         ): Promise<boolean
         > {
             const self = this as any as ISynthetixContract;
-            const encodedData = self._strictEncodeArguments('exchange(bytes4,uint256,bytes4,address)', [_sourceCurrencyKey,
+            const encodedData = self._strictEncodeArguments('exchange(bytes32,uint256,bytes32,address)', [_sourceCurrencyKey,
         _sourceAmount,
         _destinationCurrencyKey,
         _destinationAddress
@@ -110,9 +110,37 @@ export class ISynthetixContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('exchange(bytes4,uint256,bytes4,address)');
+            const abiEncoder = self._lookupAbiEncoder('exchange(bytes32,uint256,bytes32,address)');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<boolean
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
+    public synths = {
+        async callAsync(
+            _key: string,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<string
+        > {
+            const self = this as any as ISynthetixContract;
+            const encodedData = self._strictEncodeArguments('synths(bytes32)', [_key
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('synths(bytes32)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<string
         >(rawCallResult);
             // tslint:enable boolean-naming
             return result;

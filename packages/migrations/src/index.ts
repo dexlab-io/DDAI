@@ -172,6 +172,21 @@ export const migrate = async () => {
         daiAddress
     )
     console.log(`Deployed buyPTokenRecipe: ${buyPTokenRecipe.address}`);
+    
+    // TODO create mock contracts for synthetix
+    const depotAddress = process.env.SYNTHETIX_DEPOT;
+    const synthetixAddress = process.env.SYNTHETIX;
+
+    const buySynthRecipe = await wrappers.BuySynthRecipeContract.deployFrom0xArtifactAsync(
+        ...getDeployArgs("BuySynthRecipe", pe, txDefaults),
+        // @ts-ignore
+        ddai.address,
+        daiAddress,
+        kyberAddress,
+        depotAddress,
+        synthetixAddress
+    );
+    console.log(`Deployed BuySynthRecipe: ${buySynthRecipe.address}`);
 
     const contractAddresses = {
         mockDai: daiAddress,
@@ -202,16 +217,6 @@ export const migrate = async () => {
         buyPTokenRecipe: buyPTokenRecipe,
         mockRecipe: mockRecipe,
     }
-
-
-    // mockDai = new wrappers.MockDaiContract(artifacts.MockDai.compilerOutput.abi, daiAddress, pe, txDefaults);
-
-    // await mockDai.approve.sendTransactionAsync(ddai.address, toWei(1));
-    // await ddai.mint.sendTransactionAsync(accounts[0], toWei(1));
-    // const ETH_TOKEN_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE".toLowerCase();
-    // const userData = "0x" + abi.rawEncode(["address", "address"], [ETH_TOKEN_ADDRESS, accounts[0]]).toString("hex");
-
-    // await ddai.send.sendTransactionAsync(accounts[0], toWei(1), userData);
 
     pe.stop();
     return {contractAddresses, contractInstances};

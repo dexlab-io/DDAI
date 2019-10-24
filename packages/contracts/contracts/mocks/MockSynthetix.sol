@@ -23,7 +23,7 @@ contract MockSynthetix {
         bytes4 _destinationCurrencyKey,
         address _destinationAddress
     ) external returns (bool) {
-
+        
     }
 
     // function issueMaxSynths(bytes4 _currencyKey) external {

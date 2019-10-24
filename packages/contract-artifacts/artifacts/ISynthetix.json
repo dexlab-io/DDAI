@@ -7,9 +7,9 @@
 				"constant": false,
 				"inputs": [
 					{
-						"internalType": "bytes4",
+						"internalType": "bytes32",
 						"name": "_sourceCurrencyKey",
-						"type": "bytes4"
+						"type": "bytes32"
 					},
 					{
 						"internalType": "uint256",
@@ -17,9 +17,9 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bytes4",
+						"internalType": "bytes32",
 						"name": "_destinationCurrencyKey",
-						"type": "bytes4"
+						"type": "bytes32"
 					},
 					{
 						"internalType": "address",
@@ -37,6 +37,27 @@
 				],
 				"payable": false,
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "_key",
+						"type": "bytes32"
+					}
+				],
+				"name": "synths",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -57,13 +78,13 @@
 	},
 	"sources": {
 		"interfaces/ISynthetix.sol": {
-			"id": 25
+			"id": 5
 		}
 	},
 	"sourceCodes": {
-		"interfaces/ISynthetix.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ncontract ISynthetix {\n    function exchange(\n        bytes4 _sourceCurrencyKey,\n        uint256 _sourceAmount,\n        bytes4 _destinationCurrencyKey,\n        address _destinationAddress\n    ) external returns (bool);\n}"
+		"interfaces/ISynthetix.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ncontract ISynthetix {\n    function exchange(\n        bytes32 _sourceCurrencyKey,\n        uint256 _sourceAmount,\n        bytes32 _destinationCurrencyKey,\n        address _destinationAddress\n    ) external returns (bool);\n\n    function synths(bytes32 _key) external view returns (address);\n}"
 	},
-	"sourceTreeHashHex": "0x515c6bccbd3b7f08b98d50771520b1ddbff5af72a4d4d3c0eece2cce56e32292",
+	"sourceTreeHashHex": "0xfae728e4cbe7e0cbb029393e2e8c6a7b1fb828962a8c4195dbc17de21d37e232",
 	"compiler": {
 		"name": "solc",
 		"version": "soljson-v0.5.12+commit.7709ece9.js",

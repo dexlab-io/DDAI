@@ -16,9 +16,7 @@ contract BuySynthRecipe is BaseRecipe {
     ISynthetixDepot public synthDepot;
     ISynthetix public synthetix;
     // TODO replace this constant with the actual susd currency key
-    bytes4 constant public S_USD_KEY = 0x0000ffff;
-    address constant public S_USD_ADDRESS = address(0x1337);
-    
+    bytes32 constant public S_USD_KEY = 0x7355534400000000000000000000000000000000000000000000000000000000;
     address constant internal ETH_TOKEN_ADDRESS = address(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
 
     constructor(
@@ -51,7 +49,7 @@ contract BuySynthRecipe is BaseRecipe {
         uint256 minRate = 0;
         address walletID = address(0);
 
-        (bytes4 targetSynth, address receiver) = abi.decode(_userData, (bytes4, address));
+        (bytes32 targetSynth, address receiver) = abi.decode(_userData, (bytes32, address));
 
         address payable selfPayable = address(this).toPayable();
 
@@ -64,7 +62,7 @@ contract BuySynthRecipe is BaseRecipe {
         if(targetSynth != S_USD_KEY) {
             require(synthetix.exchange(S_USD_KEY, sourceSynthAmount, targetSynth, receiver), "BuySynthRecipe.tokensReceived: SYNTH_EXCHANGE_FAILED");
         } else {
-            require(IERC20(S_USD_ADDRESS).transfer(_from, sourceSynthAmount), "BuySynthRecipe.tokensReceived: TRANSFER_FAILED");
+            require(IERC20(synthetix.synths(S_USD_KEY)).transfer(_from, sourceSynthAmount), "BuySynthRecipe.tokensReceived: TRANSFER_FAILED");
         }
     }
 }
