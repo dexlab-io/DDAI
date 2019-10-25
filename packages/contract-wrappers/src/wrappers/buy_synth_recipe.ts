@@ -15,14 +15,14 @@ import * as _ from 'lodash';
 // tslint:disable:no-parameter-reassignment
 // tslint:disable-next-line:class-name
 export class BuySynthRecipeContract extends BaseContract {
-    public S_USD_KEY = {
+    public S_ETH_KEY = {
         async callAsync(
             callData: Partial<CallData> = {},
             defaultBlock?: BlockParam,
         ): Promise<string
         > {
             const self = this as any as BuySynthRecipeContract;
-            const encodedData = self._strictEncodeArguments('S_USD_KEY()', []);
+            const encodedData = self._strictEncodeArguments('S_ETH_KEY()', []);
             const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
                 {
                     to: self.address,
@@ -33,7 +33,7 @@ export class BuySynthRecipeContract extends BaseContract {
             );
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('S_USD_KEY()');
+            const abiEncoder = self._lookupAbiEncoder('S_ETH_KEY()');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<string
         >(rawCallResult);
@@ -60,32 +60,6 @@ export class BuySynthRecipeContract extends BaseContract {
             const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
             BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
             const abiEncoder = self._lookupAbiEncoder('kyberNetwork()');
-            // tslint:disable boolean-naming
-            const result = abiEncoder.strictDecodeReturnValue<string
-        >(rawCallResult);
-            // tslint:enable boolean-naming
-            return result;
-        },
-    };
-    public synthDepot = {
-        async callAsync(
-            callData: Partial<CallData> = {},
-            defaultBlock?: BlockParam,
-        ): Promise<string
-        > {
-            const self = this as any as BuySynthRecipeContract;
-            const encodedData = self._strictEncodeArguments('synthDepot()', []);
-            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
-                {
-                    to: self.address,
-                    ...callData,
-                    data: encodedData,
-                },
-                self._web3Wrapper.getContractDefaults(),
-            );
-            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
-            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
-            const abiEncoder = self._lookupAbiEncoder('synthDepot()');
             // tslint:disable boolean-naming
             const result = abiEncoder.strictDecodeReturnValue<string
         >(rawCallResult);
@@ -292,6 +266,32 @@ export class BuySynthRecipeContract extends BaseContract {
             return result;
         },
     };
+    public uniswapExchange = {
+        async callAsync(
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<string
+        > {
+            const self = this as any as BuySynthRecipeContract;
+            const encodedData = self._strictEncodeArguments('uniswapExchange()', []);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('uniswapExchange()');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<string
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public static async deployFrom0xArtifactAsync(
         artifact: ContractArtifact | SimpleContractArtifact | any,
         provider: Provider,
@@ -299,7 +299,7 @@ export class BuySynthRecipeContract extends BaseContract {
             _token: string,
             _underlying: string,
             _kyberNetwork: string,
-            _synthDepot: string,
+            _uniswapExchange: string,
             _synthetix: string,
     ): Promise<BuySynthRecipeContract> {
         if (_.isUndefined(artifact.compilerOutput)) {
@@ -310,7 +310,7 @@ export class BuySynthRecipeContract extends BaseContract {
         return BuySynthRecipeContract.deployAsync(bytecode, abi, provider, txDefaults, _token,
 _underlying,
 _kyberNetwork,
-_synthDepot,
+_uniswapExchange,
 _synthetix
 );
     }
@@ -322,21 +322,21 @@ _synthetix
             _token: string,
             _underlying: string,
             _kyberNetwork: string,
-            _synthDepot: string,
+            _uniswapExchange: string,
             _synthetix: string,
     ): Promise<BuySynthRecipeContract> {
         const constructorAbi = BaseContract._lookupConstructorAbi(abi);
         [_token,
 _underlying,
 _kyberNetwork,
-_synthDepot,
+_uniswapExchange,
 _synthetix
 ] = BaseContract._formatABIDataItemList(
             constructorAbi.inputs,
             [_token,
 _underlying,
 _kyberNetwork,
-_synthDepot,
+_uniswapExchange,
 _synthetix
 ],
             BaseContract._bigNumberToString,
@@ -346,7 +346,7 @@ _synthetix
         const txData = deployInfo.encode(bytecode, [_token,
 _underlying,
 _kyberNetwork,
-_synthDepot,
+_uniswapExchange,
 _synthetix
 ]);
         const web3Wrapper = new Web3Wrapper(provider);
@@ -361,7 +361,7 @@ _synthetix
         contractInstance.constructorArgs = [_token,
 _underlying,
 _kyberNetwork,
-_synthDepot,
+_uniswapExchange,
 _synthetix
 ];
         return contractInstance;

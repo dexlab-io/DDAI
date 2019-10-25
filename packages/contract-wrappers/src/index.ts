@@ -14,6 +14,7 @@ export * from "./wrappers/i_p_token";
 export * from "./wrappers/i_price_feed";
 export * from "./wrappers/i_synthetix";
 export * from "./wrappers/i_synthetix_depot";
+export * from "./wrappers/i_uniswap";
 export * from "./wrappers/iddai";
 export * from "./wrappers/kyber_test";
 export * from "./wrappers/mock_c_e_token";

@@ -174,7 +174,7 @@ export const migrate = async () => {
     console.log(`Deployed buyPTokenRecipe: ${buyPTokenRecipe.address}`);
     
     // TODO create mock contracts for synthetix
-    const depotAddress = process.env.SYNTHETIX_DEPOT;
+    const uniswapPoolAddress = process.env.UNISWAP_EXCHANGE;
     const synthetixAddress = process.env.SYNTHETIX;
 
     const buySynthRecipe = await wrappers.BuySynthRecipeContract.deployFrom0xArtifactAsync(
@@ -183,7 +183,7 @@ export const migrate = async () => {
         ddai.address,
         daiAddress,
         kyberAddress,
-        depotAddress,
+        uniswapPoolAddress,
         synthetixAddress
     );
     console.log(`Deployed BuySynthRecipe: ${buySynthRecipe.address}`);

@@ -5,29 +5,30 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./BaseRecipe.sol";
 import "../interfaces/IDDAI.sol";
 import "../interfaces/IKyberNetwork.sol";
-import "../interfaces/ISynthetixDepot.sol";
+// import "../interfaces/ISynthetixDepot.sol";
 import "../interfaces/ISynthetix.sol";
+import "../interfaces/IUniswap.sol";
 
 
 contract BuySynthRecipe is BaseRecipe {
     using Address for address;
 
     IKyberNetwork public kyberNetwork;
-    ISynthetixDepot public synthDepot;
+    IUniswap public uniswapExchange;
     ISynthetix public synthetix;
     // TODO replace this constant with the actual susd currency key
-    bytes32 constant public S_USD_KEY = 0x7355534400000000000000000000000000000000000000000000000000000000;
+    bytes32 constant public S_ETH_KEY = 0x7345544800000000000000000000000000000000000000000000000000000000;
     address constant internal ETH_TOKEN_ADDRESS = address(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
 
     constructor(
         address _token,
         address _underlying,
         address _kyberNetwork,
-        address _synthDepot,
+        address _uniswapExchange,
         address _synthetix
     ) BaseRecipe(_token, _underlying) public {
         kyberNetwork = IKyberNetwork(_kyberNetwork);
-        synthDepot = ISynthetixDepot(_synthDepot);
+        uniswapExchange = IUniswap(_uniswapExchange);
         synthetix = ISynthetix(_synthetix);
     }
 
@@ -51,18 +52,23 @@ contract BuySynthRecipe is BaseRecipe {
 
         (bytes32 targetSynth, address receiver) = abi.decode(_userData, (bytes32, address));
 
-        address payable selfPayable = address(this).toPayable();
-
         // Exchange dai to eth
-        kyberNetwork.trade(address(underlying), _amount, ETH_TOKEN_ADDRESS, selfPayable, uint256(-1), minRate, walletID);
+        kyberNetwork.trade(address(underlying), underlying.balanceOf(address(this)), ETH_TOKEN_ADDRESS, address(this), uint256(-1), minRate, walletID);
         // exchange eth to susd
-        uint256 sourceSynthAmount = synthDepot.exchangeEtherForSynths.value(selfPayable.balance)();
+
+        uint256 sourceSynthAmount = uniswapExchange.ethToTokenSwapInput.value(address(this).balance)(1, block.timestamp + 1);
+
+        // uint256 sourceSynthAmount = synthDepot.exchangeEtherForSynths.value(address(this).balance)();
 
         // exchange susd for other synth if susd is not the target asset
-        if(targetSynth != S_USD_KEY) {
-            require(synthetix.exchange(S_USD_KEY, sourceSynthAmount, targetSynth, receiver), "BuySynthRecipe.tokensReceived: SYNTH_EXCHANGE_FAILED");
+        if(targetSynth != S_ETH_KEY) {
+            require(synthetix.exchange(S_ETH_KEY, sourceSynthAmount, targetSynth, receiver), "BuySynthRecipe.tokensReceived: SYNTH_EXCHANGE_FAILED");
         } else {
-            require(IERC20(synthetix.synths(S_USD_KEY)).transfer(_from, sourceSynthAmount), "BuySynthRecipe.tokensReceived: TRANSFER_FAILED");
+            require(IERC20(synthetix.synths(S_ETH_KEY)).transfer(_from, sourceSynthAmount), "BuySynthRecipe.tokensReceived: TRANSFER_FAILED");
         }
+    }
+
+    function() external payable {
+
     }
 }
