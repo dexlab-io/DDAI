@@ -118,6 +118,91 @@ export class IPTokenContract extends BaseContract {
             return result;
         },
     };
+    public transfer = {
+        async sendTransactionAsync(
+            _to: string,
+            _value: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<string> {
+            const self = this as any as IPTokenContract;
+            const encodedData = self._strictEncodeArguments('transfer(address,uint256)', [_to,
+    _value
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+                self.transfer.estimateGasAsync.bind(
+                    self,
+                    _to,
+                    _value
+                ),
+            );
+            const txHash = await self._web3Wrapper.sendTransactionAsync(txDataWithDefaults);
+            return txHash;
+        },
+        async estimateGasAsync(
+            _to: string,
+            _value: BigNumber,
+            txData: Partial<TxData> = {},
+        ): Promise<number> {
+            const self = this as any as IPTokenContract;
+            const encodedData = self._strictEncodeArguments('transfer(address,uint256)', [_to,
+    _value
+    ]);
+            const txDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...txData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const gas = await self._web3Wrapper.estimateGasAsync(txDataWithDefaults);
+            return gas;
+        },
+        getABIEncodedTransactionData(
+            _to: string,
+            _value: BigNumber,
+        ): string {
+            const self = this as any as IPTokenContract;
+            const abiEncodedTransactionData = self._strictEncodeArguments('transfer(address,uint256)', [_to,
+    _value
+    ]);
+            return abiEncodedTransactionData;
+        },
+        async callAsync(
+            _to: string,
+            _value: BigNumber,
+            callData: Partial<CallData> = {},
+            defaultBlock?: BlockParam,
+        ): Promise<boolean
+        > {
+            const self = this as any as IPTokenContract;
+            const encodedData = self._strictEncodeArguments('transfer(address,uint256)', [_to,
+        _value
+        ]);
+            const callDataWithDefaults = await BaseContract._applyDefaultsToTxDataAsync(
+                {
+                    to: self.address,
+                    ...callData,
+                    data: encodedData,
+                },
+                self._web3Wrapper.getContractDefaults(),
+            );
+            const rawCallResult = await self._web3Wrapper.callAsync(callDataWithDefaults, defaultBlock);
+            BaseContract._throwIfRevertWithReasonCallResult(rawCallResult);
+            const abiEncoder = self._lookupAbiEncoder('transfer(address,uint256)');
+            // tslint:disable boolean-naming
+            const result = abiEncoder.strictDecodeReturnValue<boolean
+        >(rawCallResult);
+            // tslint:enable boolean-naming
+            return result;
+        },
+    };
     public static async deployFrom0xArtifactAsync(
         artifact: ContractArtifact | SimpleContractArtifact | any,
         provider: Provider,

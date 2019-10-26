@@ -11,4 +11,9 @@ interface IPToken {
     external
     returns (uint256);
 
+    function transfer(
+        address _to,
+        uint256 _value)
+    external
+    returns (bool);
 }

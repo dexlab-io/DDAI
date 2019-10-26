@@ -38,6 +38,32 @@
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"evm": {
@@ -57,13 +83,13 @@
 	},
 	"sources": {
 		"interfaces/IPToken.sol": {
-			"id": 23
+			"id": 4
 		}
 	},
 	"sourceCodes": {
-		"interfaces/IPToken.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IPToken {\n\n    function mintWithToken(\n        address _receiver,\n        address _depositTokenAddress,\n        uint256 _depositAmount,\n        uint256 _maxPriceAllowed\n    )\n    external\n    returns (uint256);\n\n}"
+		"interfaces/IPToken.sol": "pragma solidity >=0.4.21 <0.6.0;\n\ninterface IPToken {\n\n    function mintWithToken(\n        address _receiver,\n        address _depositTokenAddress,\n        uint256 _depositAmount,\n        uint256 _maxPriceAllowed\n    )\n    external\n    returns (uint256);\n\n    function transfer(\n        address _to,\n        uint256 _value)\n    external\n    returns (bool);\n}"
 	},
-	"sourceTreeHashHex": "0xef1f44b78636632d377c9000862e131b1c53d84a00820a0b12bb698022aa4c14",
+	"sourceTreeHashHex": "0xbf0ccc5572ceece0c13c860791f3a3dcdb749de6aee418e4df640390e34e0718",
 	"compiler": {
 		"name": "solc",
 		"version": "soljson-v0.5.12+commit.7709ece9.js",

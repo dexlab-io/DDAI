@@ -139,16 +139,11 @@ contract DDAI is IDDAI, ERC777 {
     function claimInterest(address _receiver) public {
         AccountData storage accountData = accountDataOf[_receiver];
         uint256 currentTokenPrice = moneyMarket.tokenPrice();
-        
-        // Set token price if it was not set yet
-        if(accountData.lastTokenPrice == 0) {
-            accountData.lastTokenPrice = currentTokenPrice;
-        }
-        
         uint256 interestEarned = getOutStandingInterest(_receiver);
 
         // If there is nothing to claim return
         if(interestEarned == 0) {
+            accountData.lastTokenPrice = currentTokenPrice;
             return;
         }
         // If any recipe is set push interest to the stack

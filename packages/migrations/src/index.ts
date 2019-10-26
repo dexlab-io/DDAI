@@ -173,9 +173,9 @@ export const migrate = async () => {
     )
     console.log(`Deployed buyPTokenRecipe: ${buyPTokenRecipe.address}`);
     
-    // TODO create mock contracts for synthetix
-    const uniswapPoolAddress = process.env.UNISWAP_EXCHANGE;
-    const synthetixAddress = process.env.SYNTHETIX;
+    // TODO create mock contracts for synthetix and uniswap
+    const uniswapPoolAddress = (process.env.UNISWAP_EXCHANGE != undefined) ? process.env.UNISWAP_EXCHANGE : "0x0000000000000000000000000000000000000000";
+    const synthetixAddress = (process.env.SYNTHETIX != undefined) ? process.env.SYNTHETIX : "0x0000000000000000000000000000000000000000";
 
     const buySynthRecipe = await wrappers.BuySynthRecipeContract.deployFrom0xArtifactAsync(
         ...getDeployArgs("BuySynthRecipe", pe, txDefaults),

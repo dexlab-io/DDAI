@@ -6,6 +6,7 @@ import {BigNumber} from '@0x/utils';
 import { migrate } from '@ddai/migrations';
 import * as wrappers from '@ddai/contract-wrappers';
 import { getProvider, toWei } from '@ddai/utils';
+import { DDAIContract } from '@ddai/contract-wrappers';
 
 chai.use(chaiAsPromised);
 chai.use(chaiBigNumber(BigNumber));
@@ -382,6 +383,21 @@ describe("DDAI", function(){
         expect(ddaiBalance, "DDAI balance incorrect").to.bignumber.eq(mintAmount); 
         expect(stackSize, "Stacksize incorrect").to.bignumber.eq(expectedAmount.minus(mintAmount));
         expect(totalSupply, "DDAI supply incorrect").to.bignumber.eq(expectedAmount);
+    })
+
+    it.only("Claiming interest multiple times should work", async() => {
+        const mintAmount = toWei(23.33993);
+        const newTokenPrice0 = toWei(7.2);
+        const newTokenPrice1 = toWei(14.4);
+
+        await mintDDAI(mintAmount);
+
+        await setRecipes(1);
+        await mockIToken.setTokenPrice.sendTransactionAsync(newTokenPrice0);
+        await ddai.distributeStack.sendTransactionAsync(user);
+        await ddai.transfer.sendTransactionAsync(accounts[1], toWei(2));
+        await mockIToken.setTokenPrice.sendTransactionAsync(newTokenPrice1);
+        await ddai.distributeStack.sendTransactionAsync(user);
     })
     
     it("Distributing stack to non smart contract addresses should work", async() => {

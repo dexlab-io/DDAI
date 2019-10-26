@@ -17,11 +17,14 @@ contract BuyPTokenRecipe is BaseRecipe {
         bytes calldata _operatorData
     ) external {
         _tokensReceived(_to);
-        token.redeem(address(this), _amount);
+        token.redeem(address(this), token.balanceOf(address(this)));
+        uint256 underlyingAmount = underlying.balanceOf(address(this));
         address pTokenAddress = abi.decode(_userData, (address));
-        underlying.approve(pTokenAddress, _amount);
+        underlying.approve(pTokenAddress, underlyingAmount);
         IPToken pToken = IPToken(pTokenAddress);
         // TODO consider getting max price from some oracle
-        pToken.mintWithToken(_from, address(underlying),  _amount, 0);
+        pToken.mintWithToken(_from, address(underlying), underlyingAmount, 0);
     }
+
+    function() external payable {}
 }
