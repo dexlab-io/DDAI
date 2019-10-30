@@ -63,6 +63,8 @@ contract BuySynthRecipe is BaseRecipe {
         // exchange susd for other synth if susd is not the target asset
         if(targetSynth != S_ETH_KEY) {
             require(synthetix.exchange(S_ETH_KEY, sourceSynthAmount, targetSynth, receiver), "BuySynthRecipe.tokensReceived: SYNTH_EXCHANGE_FAILED");
+            IERC20 synth = IERC20(synthetix.synths(targetSynth));
+            synth.transfer(receiver, synth.balanceOf(address(this)));
         } else {
             require(IERC20(synthetix.synths(S_ETH_KEY)).transfer(_from, sourceSynthAmount), "BuySynthRecipe.tokensReceived: TRANSFER_FAILED");
         }

@@ -6,7 +6,8 @@
   "scripts": {
     "migrate": "ts-node ./src/run.ts",
     "migrate:using-env": "USE_CONFIG=1 yarn migrate",
-    "migrate:buyTokenRecipe": "USE_CONFIG=1 yarn ts-node ./src/migrateBuyTokenRecipe.ts"
+    "migrate:buyTokenRecipe": "USE_CONFIG=1 yarn ts-node ./src/migrateBuyTokenRecipe.ts",
+    "migrate:synthRecipe": "USE_CONFIG=1 yarn ts-node ./src/migrateSynthRecipe.ts"
   },
   "dependencies": {
     "@ddai/contract-artifacts": "0.1.0",
