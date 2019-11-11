@@ -4,7 +4,6 @@ import { getProvider, toWei, getDeployArgs } from '@ddai/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { BigNumber, Web3ProviderEngine } from '0x.js';
 import Web3 from 'web3';
-import * as abi from 'ethereumjs-abi';
 
 process.env.USE_CONFIG && require('dotenv').config();
 
