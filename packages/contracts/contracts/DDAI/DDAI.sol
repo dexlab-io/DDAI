@@ -74,17 +74,7 @@ contract DDAI is IDDAI, ERC777 {
     }
 
     function redeem(address _receiver, uint256 _amount) external returns(uint256) {
-        claimInterest(_msgSender());
-
-        uint256 redeemAmount = _amount.min(_balanceOf(_msgSender()));
-        _burn(_msgSender(), _msgSender(), redeemAmount, "", "");
-
-        uint256 burnAmount = redeemAmount.mul(10**18).div(moneyMarket.tokenPrice());
-        require(moneyMarket.burn(_receiver, burnAmount) >= redeemAmount - 1, "DDAI.redeem: MONEY_MARKET_NOT_LIQUID");
-
-        emit DDAIRedeemed(_receiver, redeemAmount, _msgSender());
-
-        return redeemAmount;
+        return _redeemFrom(_msgSender(), _receiver, _amount);
     }
 
     function addRecipe(address _receiver, uint256 _ratio, bytes memory _data) public returns(bool) {
@@ -197,10 +187,14 @@ contract DDAI is IDDAI, ERC777 {
             return true;
         }
 
+        // Redeem from the money market once for all recipes to save gas
+        uint256 daiAmount = _redeemFrom(_account, address(this), _amount);
+
         for(uint256 i = 0;  i < accountData.recipes.length; i ++) {
             Recipe memory recipe = accountData.recipes[i];
-            uint256 recipeAmount = _amount * recipe.ratio / accountData.totalRatio;
-            _send(address(this), _account, recipe.receiver, recipeAmount, recipe.data, "", false);
+            uint256 recipeAmount = daiAmount * recipe.ratio / accountData.totalRatio;
+            token.transfer(recipe.receiver, recipeAmount);
+            recipe.receiver.call(recipe.data);
         }
 
         return true;
@@ -237,6 +231,20 @@ contract DDAI is IDDAI, ERC777 {
 
     function supplyInterestRate() external view returns (uint256) {
         return moneyMarket.supplyInterestRate();
+    }
+
+    function _redeemFrom(address _from, address _receiver, uint256 _amount) internal returns(uint256) {
+        claimInterest(_from);
+
+        uint256 redeemAmount = _amount.min(_balanceOf(_from));
+        _burn(_msgSender(), _from, redeemAmount, "", "");
+
+        uint256 burnAmount = redeemAmount.mul(10**18).div(moneyMarket.tokenPrice());
+        require(moneyMarket.burn(_receiver, burnAmount) >= redeemAmount - 1, "DDAI.redeem: MONEY_MARKET_NOT_LIQUID");
+
+        emit DDAIRedeemed(_receiver, redeemAmount, _msgSender());
+
+        return redeemAmount;
     }
 
     function _balanceOf(address _account) internal view returns(uint256) {
